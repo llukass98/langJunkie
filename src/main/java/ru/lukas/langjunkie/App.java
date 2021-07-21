@@ -3,12 +3,12 @@ package ru.lukas.langjunkie;
 public class App {
 
     public static void main( String[] args ) {
-	Dictionary dict = BAmoozDictionary.getInstance();
-	Dictionary dict2 = FarsidicDictionary.getInstance();
-	Dictionary dict3 = FarsidictionaryDictionary.getInstance();
-	Dictionary dict4 = AbadisDictionary.getInstance();
-	Dictionary dict5 = FarsidicsDictionary.getInstance();
-	Dictionary dict6 = DictionaryFarsiDictionary.getInstance();				
+	Dictionary dict  = new BAmoozDictionary();
+	Dictionary dict2 = new FarsidicDictionary();
+	Dictionary dict3 = new FarsidictionaryDictionary();
+	Dictionary dict4 = new AbadisDictionary();
+	Dictionary dict5 = new FarsidicsDictionary();
+	Dictionary dict6 = new DictionaryFarsiDictionary();				
 
 	System.out.println(dict.search(args[0]));
 	System.out.println(dict2.search(args[0]));

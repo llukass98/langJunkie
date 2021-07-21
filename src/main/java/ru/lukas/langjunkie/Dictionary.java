@@ -1,6 +1,7 @@
 package ru.lukas.langjunkie;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
+import java.util.ArrayList;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import org.jsoup.Jsoup;
@@ -13,18 +14,18 @@ abstract class Dictionary {
     protected String language;
     protected String dictionaryName;
     
-    abstract public LinkedHashMap search(String word);
+    abstract public HashMap search(String word);
     
     public String getLanguage() {
-	return this.language;
+	return language;
     }
 
     public String getLink() {
-	return this.link;
+	return link;
     }
 
-    public String getDictionaryName() {
-	return this.dictionaryName;
+    public String getName() {
+	return dictionaryName;
     }    
 
     protected Document makeRequest(String url)
@@ -53,8 +54,15 @@ abstract class Dictionary {
 	    .header("Accept-Language", "en-US,en;q=0.5")
 	    .header("Host", url.split("//")[1].split("/")[0])
 	    .followRedirects(true)
-	    .timeout(4*1000);  
-	
+	    .timeout(4*1000);  	
+    }
+
+    protected ArrayList<String> parseExamples(Document html) {
+	return new ArrayList<String>();
+    }
+
+    protected ArrayList<String> parseSynonyms(Document html) {
+	return new ArrayList<String>();
     }
   
 }
