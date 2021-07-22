@@ -27,7 +27,13 @@ class AbadisDictionary extends Dictionary {
 	    Element blockOfDefinitions = doc.getElementById("Means");;	    
 
 	    for (Element element : blockOfDefinitions.getElementsByClass("NoLinkColor")) {
-		definitions.add(element.text());
+		String definition = element.text();
+
+		if (definition.charAt(0) == '[') {
+		    definitions.add(definition.split("]")[1].trim());
+		} else {
+		    definitions.add(definition.trim());
+		}
 	    }
 	    // ==============================
 	    examples = parseExamples(doc);
@@ -55,11 +61,12 @@ class AbadisDictionary extends Dictionary {
 	ArrayList<String> result = new ArrayList<String>();
 
 	try {
+	    String searchedWord = html.getElementsByTag("h1").first().text();
 	    Element block = html.getElementById("FaToEnSyn");
-	    
+
 	    for (Element element : block.getElementsByClass("Mean")) {		
 		for (String synonym : element.text().split("\\،")) {
-		    result.add(synonym.trim());
+		    if (!synonym.trim().equals(searchedWord)) result.add(synonym.trim());
 		}
 	    }
 	    
