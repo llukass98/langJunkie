@@ -27,7 +27,13 @@ class AbadisDictionary extends Dictionary {
 	    Element blockOfDefinitions = doc.getElementById("Means");;	    
 
 	    for (Element element : blockOfDefinitions.getElementsByClass("NoLinkColor")) {
-		definitions.add(element.text());
+		String definition = element.text();
+
+		if (definition.charAt(0) == '[') {
+		    definitions.add(definition.split("]")[1].trim());
+		} else {
+		    definitions.add(definition.trim());
+		}
 	    }
 	    // ==============================
 	    examples = parseExamples(doc);
