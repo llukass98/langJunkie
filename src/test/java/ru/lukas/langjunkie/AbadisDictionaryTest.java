@@ -5,6 +5,7 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.CoreMatchers.endsWith;
@@ -37,7 +38,7 @@ public class AbadisDictionaryTest {
     public static void generalSetUp() throws Exception {
 	notMockedDictionary = new AbadisDictionary();
 	doc = Jsoup.parse(html);
-	word = "wonder";
+	word = new StringBuilder("عشق").reverse().toString();
 	mockedDic = mock(AbadisDictionary.class);
 
 	doCallRealMethod().when(mockedDic).search(anyString());
@@ -109,6 +110,13 @@ public class AbadisDictionaryTest {
 	assertThat((String) synonyms.get(0), equalTo(synonymStart));
 	assertThat((String) synonyms.get(synonyms.size()-1), equalTo(synonymEnd));
 	assertThat(synonyms, hasItem(randomValue));		
+    }
+
+    @Test
+    public void synonymsValueShouldNotContainSearchedWord() {
+	ArrayList<String> synonyms = (ArrayList<String>) notMockedDictionary.parseSynonyms(doc);
+	
+	assertThat(synonyms, not(hasItem(word)));
     }
     
     @Test

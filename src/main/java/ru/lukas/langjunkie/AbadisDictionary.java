@@ -55,11 +55,12 @@ class AbadisDictionary extends Dictionary {
 	ArrayList<String> result = new ArrayList<String>();
 
 	try {
+	    String searchedWord = html.getElementsByTag("h1").first().text();
 	    Element block = html.getElementById("FaToEnSyn");
-	    
+
 	    for (Element element : block.getElementsByClass("Mean")) {		
 		for (String synonym : element.text().split("\\،")) {
-		    result.add(synonym.trim());
+		    if (!synonym.trim().equals(searchedWord)) result.add(synonym.trim());
 		}
 	    }
 	    
