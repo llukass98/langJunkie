@@ -9,7 +9,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 class BAmoozDictionary extends Dictionary {
-
     public BAmoozDictionary() {
 	language       = "faen";
 	link           = "https://dic.b-amooz.com";
@@ -26,7 +25,6 @@ class BAmoozDictionary extends Dictionary {
 	    for (Element element : doc.getElementsByClass("chip")) {
 		definitions.add(element.text().split("\\.")[1]);
 	    }
-
 	} catch (SocketTimeoutException | HttpStatusException ste) {
 	    // TODO: log the exception	    
 	} catch (IOException e) {
@@ -35,6 +33,7 @@ class BAmoozDictionary extends Dictionary {
 	    result.put("language",      language);
 	    result.put("name",          dictionaryName);
 	    result.put("link",          link);
+
 	    result.put("searched_word", word);
 	    result.put("results",       definitions);
 	    result.put("examples",      new ArrayList<String>());
@@ -43,5 +42,4 @@ class BAmoozDictionary extends Dictionary {
 	    return result;
 	}
     }
-    
 }

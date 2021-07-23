@@ -9,7 +9,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 class FarsidictionaryDictionary extends Dictionary {
-
     public FarsidictionaryDictionary() {
 	language       = "faen";
 	link           = "https://www.farsidictionary.net";
@@ -31,7 +30,6 @@ class FarsidictionaryDictionary extends Dictionary {
 	    for (Element element : elems) {
 		definitions.add(element.text().trim());
 	    }
-
 	} catch (SocketTimeoutException ste) {
 	    // TODO: log the exception	    	    
 	} catch (IOException e) {
@@ -48,5 +46,4 @@ class FarsidictionaryDictionary extends Dictionary {
 	    return result;
 	}
     }
-    
 }

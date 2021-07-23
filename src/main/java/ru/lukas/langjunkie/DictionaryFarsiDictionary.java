@@ -8,7 +8,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 class DictionaryFarsiDictionary extends Dictionary {
-
     public DictionaryFarsiDictionary() {
 	language       = "faen";
 	link           = "http://www.dictionary-farsi.com";
@@ -30,7 +29,6 @@ class DictionaryFarsiDictionary extends Dictionary {
 	    for (Element element : doc.getElementsByAttribute("onmouseover")) {		
 		definitions.add(element.text().trim());
 	    }
-			      
 	} catch (SocketTimeoutException ste) {
 	    // TODO: log the exception
 	} catch (Exception e) {
@@ -47,5 +45,4 @@ class DictionaryFarsiDictionary extends Dictionary {
 	    return result;
 	}
     }
-    
 }

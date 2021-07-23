@@ -10,7 +10,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 class FarsidicDictionary extends Dictionary {
-
     public FarsidicDictionary() {
 	language       = "faen";
 	link           = "http://www.farsidic.com/en/Lang/FaEn";
@@ -25,9 +24,9 @@ class FarsidicDictionary extends Dictionary {
 	    String payload = "SearchWord="
 		+URLEncoder.encode(word, StandardCharsets.UTF_8.toString())
 		+"&Criteria=Exact&ShowKeyboard=false";
-
-	    Document doc = makeRequest(link, payload);
 	    
+	    Document doc = makeRequest(link, payload);
+	    // get definitions
 	    for (Element block : doc.getElementsByClass("farsi-mean")) {		;
 		for (String element : block.text().split("\\,")) {
 		    String trimmed = element.trim();
@@ -39,7 +38,6 @@ class FarsidicDictionary extends Dictionary {
 		    }
 		}
 	    }
-	    
 	} catch (SocketTimeoutException ste) {
 	    // TODO: log the exception	    
 	} catch (IOException e) {
@@ -55,6 +53,5 @@ class FarsidicDictionary extends Dictionary {
 
 	    return result;
 	}
-    }
-    
+    }    
 }

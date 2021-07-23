@@ -7,7 +7,6 @@ import java.net.SocketTimeoutException;
 import org.jsoup.nodes.Document;
 
 class FarsidicsDictionary extends Dictionary {
-
     public FarsidicsDictionary() {
 	language        = "faen";
 	link            = "http://www.farsidics.com";
@@ -36,7 +35,6 @@ class FarsidicsDictionary extends Dictionary {
 		    definitions.add(blockOfDefinitions[i].trim());			    		    
 		}
 	    }
-
 	} catch (SocketTimeoutException ste) {
 	    // TODO: log the exception	    
 	} catch (IOException e) {
@@ -53,5 +51,4 @@ class FarsidicsDictionary extends Dictionary {
 	    return result;
 	}
     }
-    
 }

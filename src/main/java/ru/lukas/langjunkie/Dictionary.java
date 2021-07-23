@@ -1,3 +1,4 @@
+
 package ru.lukas.langjunkie;
 
 import java.util.HashMap;
@@ -9,7 +10,6 @@ import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
 
 abstract class Dictionary {
-
     protected String link;
     protected String language;
     protected String dictionaryName;
@@ -64,5 +64,4 @@ abstract class Dictionary {
     protected ArrayList<String> parseSynonyms(Document html) {
 	return new ArrayList<String>();
     }
-  
 }

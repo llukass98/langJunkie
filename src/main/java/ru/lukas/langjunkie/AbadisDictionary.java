@@ -8,7 +8,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 class AbadisDictionary extends Dictionary {
-
     public AbadisDictionary() {
 	language       = "faen";
 	link           = "https://abadis.ir";
@@ -29,16 +28,13 @@ class AbadisDictionary extends Dictionary {
 	    for (Element element : blockOfDefinitions.getElementsByClass("NoLinkColor")) {
 		String definition = element.text();
 
-		if (definition.charAt(0) == '[') {
-		    definitions.add(definition.split("]")[1].trim());
-		} else {
-		    definitions.add(definition.trim());
-		}
+		definitions.add(definition.charAt(0) == '[' ?
+				definition.split("]")[1].trim() :
+				definition.trim());
 	    }
 	    // ==============================
 	    examples = parseExamples(doc);
 	    synonyms = parseSynonyms(doc);
-	    
 	} catch (SocketTimeoutException ste) {
 	    // TODO: log the exception
 	} catch (Exception e) {
@@ -68,8 +64,7 @@ class AbadisDictionary extends Dictionary {
 		for (String synonym : element.text().split("\\،")) {
 		    if (!synonym.trim().equals(searchedWord)) result.add(synonym.trim());
 		}
-	    }
-	    
+	    }	    
 	} catch (NullPointerException e) {
 	    e.printStackTrace();
 	} finally {
@@ -97,6 +92,5 @@ class AbadisDictionary extends Dictionary {
 	} finally {
 	    return result; // return normal results
 	}	    
-    }
-    
+    }    
 }
