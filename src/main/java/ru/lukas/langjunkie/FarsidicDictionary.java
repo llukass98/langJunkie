@@ -33,7 +33,9 @@ class FarsidicDictionary extends Dictionary {
 		    String trimmed = element.trim();
 
 		    if (!definitions.contains(trimmed)) {
-			definitions.add(trimmed);
+			definitions.add(trimmed.charAt(0) == '[' ?
+					trimmed.split("]")[1].trim() :
+					trimmed);
 		    }
 		}
 	    }
