@@ -82,16 +82,20 @@ class AbadisDictionary extends Dictionary {
 	ArrayList<String> result = new ArrayList<String>();
 
 	try {
+	    /* throws NullPointerException if searched word is mistyped,
+	       returns an empty array*/
+	    html.getElementsByTag("h1").first().text();
+	    // if no Exception continue as usual
 	    for (Element element : html.getElementsByClass("Lun")) {
 		for (Element example : element.getElementsByClass("WordB")) {
 		    result.add(example.ownText().trim());
 		}
 	    }
-	    
 	} catch (NullPointerException e) {
 	    e.printStackTrace();
+	    return result; // the searched word is mistyped, return an empty array
 	} finally {
-	    return result;
+	    return result; // return normal results
 	}	    
     }
     
