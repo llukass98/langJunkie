@@ -3,7 +3,7 @@ package ru.lukas.langjunkie;
 public class App {
 
     public static void main( String[] args ) {
-	String word = args.length > 0 ? args[0] : "";
+	String word = args.length > 0 ? String.join(" ", args) : "";
 	Dictionary dict  = new BAmoozDictionary();
 	Dictionary dict2 = new FarsidicDictionary();
 	Dictionary dict3 = new FarsidictionaryDictionary();
