@@ -52,7 +52,10 @@ public class AbadisDictionaryTest {
     public void makeRequestMethodShouldNotBeUsedWithEmptySearchWord() throws Exception {			
 
 	Dictionary emptySearchMock = mock(AbadisDictionary.class);
+
+	doCallRealMethod().when(emptySearchMock).search(anyString());
 	emptySearchMock.search("");
+	
 	verify(emptySearchMock, never()).makeRequest((String) any());
 	
     }

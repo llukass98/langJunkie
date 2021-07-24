@@ -52,7 +52,10 @@ public class DictionaryFarsiDictionaryTest
     public void makeRequestMethodShouldNotBeUsedWithEmptySearchWord() throws Exception {			
 
 	Dictionary emptySearchMock = mock(DictionaryFarsiDictionary.class);
+
+	doCallRealMethod().when(emptySearchMock).search(anyString());
 	emptySearchMock.search("");
+	
 	verify(emptySearchMock, never()).makeRequest((String) any());
 	
     }

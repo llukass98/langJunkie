@@ -50,7 +50,10 @@ public class BAmoozDictionaryTest
     public void makeRequestMethodShouldNotBeUsedWithEmptySearchWord() throws Exception {			
 
 	Dictionary emptySearchMock = mock(BAmoozDictionary.class);
+
+	doCallRealMethod().when(emptySearchMock).search(anyString());
 	emptySearchMock.search("");
+	
 	verify(emptySearchMock, never()).makeRequest((String) any());
 	
     }
