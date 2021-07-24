@@ -18,12 +18,14 @@ class BAmoozDictionary extends Dictionary {
     public HashMap search(String word) {
 	HashMap result = new HashMap();
 	ArrayList<String> definitions = new ArrayList<String>();
-	
+
 	try {
-	    Document doc = makeRequest(link+"/en/dictionary/rw?word="+ word);
+	    if (word.trim().length() > 0) {
+		Document doc = makeRequest(link+"/en/dictionary/rw?word="+ word);
 	    
-	    for (Element element : doc.getElementsByClass("chip")) {
-		definitions.add(element.text().split("\\.")[1]);
+		for (Element element : doc.getElementsByClass("chip")) {
+		    definitions.add(element.text().split("\\.")[1]);
+		}
 	    }
 	} catch (SocketTimeoutException | HttpStatusException ste) {
 	    // TODO: log the exception	    
@@ -33,7 +35,6 @@ class BAmoozDictionary extends Dictionary {
 	    result.put("language",      language);
 	    result.put("name",          dictionaryName);
 	    result.put("link",          link);
-
 	    result.put("searched_word", word);
 	    result.put("results",       definitions);
 	    result.put("examples",      new ArrayList<String>());

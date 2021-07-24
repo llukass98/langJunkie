@@ -21,20 +21,22 @@ class FarsidicDictionary extends Dictionary {
 	ArrayList<String> definitions = new ArrayList<String>();
 	
 	try {
-	    String payload = "SearchWord="
-		+URLEncoder.encode(word, StandardCharsets.UTF_8.toString())
-		+"&Criteria=Exact&ShowKeyboard=false";
+	    if (word.trim().length() > 0) {
+		String payload = "SearchWord="
+		    +URLEncoder.encode(word, StandardCharsets.UTF_8.toString())
+		    +"&Criteria=Exact&ShowKeyboard=false";
 	    
-	    Document doc = makeRequest(link, payload);
-	    // get definitions
-	    for (Element block : doc.getElementsByClass("farsi-mean")) {		;
-		for (String element : block.text().split("\\,")) {
-		    String trimmed = element.trim();
-
-		    if (!definitions.contains(trimmed)) {
-			definitions.add(trimmed.charAt(0) == '[' ?
-					trimmed.split("]")[1].trim() :
-					trimmed);
+		Document doc = makeRequest(link, payload);
+		// get definitions
+		for (Element block : doc.getElementsByClass("farsi-mean")) {
+		    for (String element : block.text().split("\\,")) {
+			String trimmed = element.trim();
+			
+			if (!definitions.contains(trimmed)) {
+			    definitions.add(trimmed.charAt(0) == '[' ?
+					    trimmed.split("]")[1].trim() :
+					    trimmed);
+			}
 		    }
 		}
 	    }

@@ -20,15 +20,17 @@ class FarsidictionaryDictionary extends Dictionary {
 	ArrayList<String> definitions = new ArrayList<String>();
 	
 	try {
-	    Document doc   = makeRequest(link+"/index.php?q="+ word);
-	    Elements elems = doc.getElementById("faen")
-		            .getElementsByAttributeValue("align", "left");
+	    if (word.trim().length() > 0) {
+		Document doc   = makeRequest(link+"/index.php?q="+ word);
+		Elements elems = doc.getElementById("faen")
+		    .getElementsByAttributeValue("align", "left");
 
-	    elems.remove(0);
-	    elems.remove(0);
+		elems.remove(0);
+		elems.remove(0);
 	    
-	    for (Element element : elems) {
-		definitions.add(element.text().trim());
+		for (Element element : elems) {
+		    definitions.add(element.text().trim());
+		}
 	    }
 	} catch (SocketTimeoutException ste) {
 	    // TODO: log the exception	    	    

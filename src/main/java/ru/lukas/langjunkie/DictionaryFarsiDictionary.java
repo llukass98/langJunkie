@@ -19,15 +19,17 @@ class DictionaryFarsiDictionary extends Dictionary {
 	ArrayList<String> definitions = new ArrayList<String>();
 
 	try {
-	    String payload = "submith=ok&text1="
-		+URLEncoder.encode(word, "windows-1256")
-		+"&submit1=Search&r1=p2e";
+	    if (word.trim().length() > 0) {
+		String payload = "submith=ok&text1="
+		    +URLEncoder.encode(word, "windows-1256")
+		    +"&submit1=Search&r1=p2e";
 
-	    Document doc = makeRequest(link, payload);
+		Document doc = makeRequest(link, payload);
 
-	    // get definitions
-	    for (Element element : doc.getElementsByAttribute("onmouseover")) {		
-		definitions.add(element.text().trim());
+		// get definitions
+		for (Element element : doc.getElementsByAttribute("onmouseover")) {		
+		    definitions.add(element.text().trim());
+		}
 	    }
 	} catch (SocketTimeoutException ste) {
 	    // TODO: log the exception

@@ -19,20 +19,22 @@ class FarsidicsDictionary extends Dictionary {
         String blockOfDefinitions[]   = new String[50];
 
 	try {
-	    Document doc = makeRequest(link+"/ajax-searchf.php?keyword="+word);
-	    String text  = doc.body().text();
+	    if (word.trim().length() > 0) {
+		Document doc = makeRequest(link+"/ajax-searchf.php?keyword="+word);
+		String text  = doc.body().text();
 
-	    if (!text.contains("No Results")) {
-		blockOfDefinitions = text.split("\\,");
-		definitions.add(blockOfDefinitions[0].trim().split(" ")[1]);
-		
-		for (int i = 1; i < blockOfDefinitions.length-1; i++) {
-		    if (blockOfDefinitions[i].trim().contains(" ")) {
-			definitions.add(blockOfDefinitions[i].trim().split(" ")[0]);			
-			break;
+		if (!text.contains("No Results")) {
+		    blockOfDefinitions = text.split("\\,");
+		    definitions.add(blockOfDefinitions[0].trim().split(" ")[1]);
+		    
+		    for (int i = 1; i < blockOfDefinitions.length-1; i++) {
+			if (blockOfDefinitions[i].trim().contains(" ")) {
+			    definitions.add(blockOfDefinitions[i].trim().split(" ")[0]);			
+			    break;
+			}
+
+			definitions.add(blockOfDefinitions[i].trim());			    		    
 		    }
-
-		    definitions.add(blockOfDefinitions[i].trim());			    		    
 		}
 	    }
 	} catch (SocketTimeoutException ste) {

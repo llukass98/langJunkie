@@ -21,20 +21,23 @@ class AbadisDictionary extends Dictionary {
 	ArrayList<String> synonyms    = new ArrayList<String>();	
 
 	try {
-	    Document doc = makeRequest(link+"/?lntype=fatoen&word="+word);
-	    // get definitions ==============
-	    Element blockOfDefinitions = doc.getElementById("Means");;	    
+	    if (word.trim().length() > 0) {
+		Document doc = makeRequest(link+"/?lntype=fatoen&word="+word);
+		// get definitions ==============
+		Element blockOfDefinitions = doc.getElementById("Means");;	    
 
-	    for (Element element : blockOfDefinitions.getElementsByClass("NoLinkColor")) {
-		String definition = element.text();
+		for (Element element : blockOfDefinitions.getElementsByClass("NoLinkColor")) {
+		    String definition = element.text();
 
-		definitions.add(definition.charAt(0) == '[' ?
-				definition.split("]")[1].trim() :
-				definition.trim());
+		    definitions.add(definition.charAt(0) == '[' ?
+				    definition.split("]")[1].trim() :
+				    definition.trim());
+		}
+		// ==============================
+
+		examples = parseExamples(doc);
+		synonyms = parseSynonyms(doc);
 	    }
-	    // ==============================
-	    examples = parseExamples(doc);
-	    synonyms = parseSynonyms(doc);
 	} catch (SocketTimeoutException ste) {
 	    // TODO: log the exception
 	} catch (Exception e) {

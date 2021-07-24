@@ -15,6 +15,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.never;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doCallRealMethod;
@@ -42,17 +43,26 @@ public class BAmoozDictionaryTest
 
 	doCallRealMethod().when(mockedDic).search(anyString());
 	when(mockedDic.makeRequest((String) any())).thenReturn(doc);
-
 	result = mockedDic.search(word);
     }
 
     @Test
+    public void makeRequestMethodShouldNotBeUsedWithEmptySearchWord() throws Exception {			
+
+	Dictionary emptySearchMock = mock(BAmoozDictionary.class);
+	emptySearchMock.search("");
+	verify(emptySearchMock, never()).makeRequest((String) any());
+	
+    }
+    
+    @Test
     public void makeRequestMethodShouldBeUsed() throws Exception {			
+
 
 	verify(mockedDic).makeRequest((String) any());
 	
     }
-
+    
     @Test
     public void searchedWordValueShouldBeCorrect() {			
 

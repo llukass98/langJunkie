@@ -15,6 +15,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.never;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doCallRealMethod;
@@ -45,6 +46,15 @@ public class DictionaryFarsiDictionaryTest
 	when(mockedDic.makeRequest((String) any(), anyString())).thenReturn(doc);
 
 	result = mockedDic.search(word);
+    }
+
+    @Test
+    public void makeRequestMethodShouldNotBeUsedWithEmptySearchWord() throws Exception {			
+
+	Dictionary emptySearchMock = mock(DictionaryFarsiDictionary.class);
+	emptySearchMock.search("");
+	verify(emptySearchMock, never()).makeRequest((String) any());
+	
     }
 
     @Test
