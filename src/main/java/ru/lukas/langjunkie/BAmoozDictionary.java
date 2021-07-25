@@ -22,9 +22,16 @@ class BAmoozDictionary extends Dictionary {
 	try {
 	    if (word.trim().length() > 0) {
 		Document doc = makeRequest(link+"/en/dictionary/rw?word="+ word);
-	    
-		for (Element element : doc.getElementsByClass("chip")) {
-		    definitions.add(element.text().split("\\.")[1]);
+		
+		for (Element element : doc.getElementsByClass("word-row-side")) {
+		    if (element.child(0).hasClass("py-4")) continue; // skip first element
+			
+		    for (Element span : element.getElementsByTag("span")) {
+			if (span.hasClass("reverse-translation-index")) continue; // skip numbers
+			if (span.hasClass("ml-n2")) continue; // skip commas
+			if (span.hasClass("text-muted")) continue; // skip spaces and other trash
+			definitions.add(span.text().trim());			
+		    }
 		}
 	    }
 	} catch (SocketTimeoutException | HttpStatusException ste) {
