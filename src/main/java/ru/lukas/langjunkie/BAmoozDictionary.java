@@ -2,7 +2,6 @@ package ru.lukas.langjunkie;
 
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.io.IOException;
 import java.net.SocketTimeoutException;
 import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
@@ -19,6 +18,7 @@ class BAmoozDictionary extends Dictionary {
 	HashMap result = new HashMap();
 	ArrayList<String> definitions = new ArrayList<String>();
 
+	word = word.replace("\"", "").replace("'", "");
 	try {
 	    if (word.trim().length() > 0) {
 		Document doc = makeRequest(link+"/en/dictionary/rw?word="+ word);
@@ -40,7 +40,7 @@ class BAmoozDictionary extends Dictionary {
 	    }
 	} catch (SocketTimeoutException | HttpStatusException ste) {
 	    // TODO: log the exception	    
-	} catch (IOException e) {
+	} catch (Exception e) {
 	    e.printStackTrace();
 	} finally {
 	    result.put("language",      language);

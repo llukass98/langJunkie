@@ -2,7 +2,6 @@ package ru.lukas.langjunkie;
 
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.io.IOException;
 import java.net.SocketTimeoutException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,6 +19,7 @@ class AbadisDictionary extends Dictionary {
 	ArrayList<String> examples    = new ArrayList<String>();	
 	ArrayList<String> synonyms    = new ArrayList<String>();	
 
+	word = word.replace("\"", "").replace("'", "");
 	try {
 	    if (word.trim().length() > 0) {
 		Document doc = makeRequest(link+"/?lntype=fatoen&word="+word);

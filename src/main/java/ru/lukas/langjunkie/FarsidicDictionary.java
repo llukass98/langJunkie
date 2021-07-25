@@ -3,7 +3,6 @@ package ru.lukas.langjunkie;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.net.URLEncoder;
-import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.nio.charset.StandardCharsets;
 import org.jsoup.nodes.Document;
@@ -19,7 +18,8 @@ class FarsidicDictionary extends Dictionary {
     public HashMap search(String word) {
 	HashMap result = new HashMap();
 	ArrayList<String> definitions = new ArrayList<String>();
-	
+
+	word = word.replace("\"", "").replace("'", "");
 	try {
 	    if (word.trim().length() > 0) {
 		String payload = "SearchWord="
@@ -42,7 +42,7 @@ class FarsidicDictionary extends Dictionary {
 	    }
 	} catch (SocketTimeoutException ste) {
 	    // TODO: log the exception	    
-	} catch (IOException e) {
+	} catch (Exception e) {
 	    e.printStackTrace();
 	} finally {
 	    result.put("language",      language);

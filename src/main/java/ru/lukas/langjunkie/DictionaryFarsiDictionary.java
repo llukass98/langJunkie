@@ -18,6 +18,7 @@ class DictionaryFarsiDictionary extends Dictionary {
 	HashMap result = new HashMap();
 	ArrayList<String> definitions = new ArrayList<String>();
 
+	word = word.replace("\"", "").replace("'", "");
 	try {
 	    if (word.trim().length() > 0) {
 		String payload = "submith=ok&text1="

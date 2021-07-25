@@ -2,7 +2,6 @@ package ru.lukas.langjunkie;
 
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.io.IOException;
 import java.net.SocketTimeoutException;
 import org.jsoup.nodes.Document;
 
@@ -18,6 +17,7 @@ class FarsidicsDictionary extends Dictionary {
 	ArrayList<String> definitions = new ArrayList<String>();
         String blockOfDefinitions[]   = new String[50];
 
+	word = word.replace("\"", "").replace("'", "");
 	try {
 	    if (word.trim().length() > 0) {
 		Document doc = makeRequest(link+"/ajax-searchf.php?keyword="+word);
@@ -39,7 +39,7 @@ class FarsidicsDictionary extends Dictionary {
 	    }
 	} catch (SocketTimeoutException ste) {
 	    // TODO: log the exception	    
-	} catch (IOException e) {
+	} catch (Exception e) {
 	    e.printStackTrace();
 	} finally {
 	    result.put("language",      language);
