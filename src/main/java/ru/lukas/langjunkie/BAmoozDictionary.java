@@ -24,6 +24,10 @@ class BAmoozDictionary extends Dictionary {
 		Document doc = makeRequest(link+"/en/dictionary/rw?word="+ word);
 		
 		for (Element element : doc.getElementsByClass("word-row-side")) {
+		    // if english word has been searched throw NullPointerException
+		    // and proceed to finally section of code
+		    doc.getElementsByClass("reverse-word-translation-desc").first().text();
+		    // if no exception continue as usual
 		    if (element.child(0).hasClass("py-4")) continue; // skip first element
 			
 		    for (Element span : element.getElementsByTag("span")) {
