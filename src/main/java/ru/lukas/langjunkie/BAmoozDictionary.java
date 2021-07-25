@@ -7,7 +7,7 @@ import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-class BAmoozDictionary extends Dictionary {
+public class BAmoozDictionary extends Dictionary {
     public BAmoozDictionary() {
 	language       = "faen";
 	link           = "https://dic.b-amooz.com";
@@ -18,7 +18,7 @@ class BAmoozDictionary extends Dictionary {
 	HashMap result = new HashMap();
 	ArrayList<String> definitions = new ArrayList<String>();
 
-	word = word.replace("\"", "").replace("'", "");
+	word = sanitizeInput(word);
 	try {
 	    if (word.trim().length() > 0) {
 		Document doc = makeRequest(link+"/en/dictionary/rw?word="+ word);

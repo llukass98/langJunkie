@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.net.SocketTimeoutException;
 import org.jsoup.nodes.Document;
 
-class FarsidicsDictionary extends Dictionary {
+public class FarsidicsDictionary extends Dictionary {
     public FarsidicsDictionary() {
 	language        = "faen";
 	link            = "http://www.farsidics.com";
@@ -17,7 +17,7 @@ class FarsidicsDictionary extends Dictionary {
 	ArrayList<String> definitions = new ArrayList<String>();
         String blockOfDefinitions[]   = new String[50];
 
-	word = word.replace("\"", "").replace("'", "");
+	word = sanitizeInput(word);
 	try {
 	    if (word.trim().length() > 0) {
 		Document doc = makeRequest(link+"/ajax-searchf.php?keyword="+word);

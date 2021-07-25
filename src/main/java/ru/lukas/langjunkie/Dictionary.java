@@ -1,4 +1,3 @@
-
 package ru.lukas.langjunkie;
 
 import java.util.HashMap;
@@ -9,7 +8,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
 
-abstract class Dictionary {
+public abstract class Dictionary {
     protected String link;
     protected String language;
     protected String dictionaryName;
@@ -63,5 +62,12 @@ abstract class Dictionary {
 
     protected ArrayList<String> parseSynonyms(Document html) {
 	return new ArrayList<String>();
+    }
+
+    protected String sanitizeInput(String input) {
+	input = input.replace("\"", "").replace("'", ""); // remove quotes
+	input = input.trim(); // trim spaces
+
+	return input;
     }
 }

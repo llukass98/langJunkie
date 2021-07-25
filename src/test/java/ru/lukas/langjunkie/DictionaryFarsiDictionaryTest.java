@@ -42,6 +42,7 @@ public class DictionaryFarsiDictionaryTest {
 	mockedDic = mock(DictionaryFarsiDictionary.class);
 
 	doCallRealMethod().when(mockedDic).search(anyString());
+	doCallRealMethod().when(mockedDic).sanitizeInput(anyString());			
 	when(mockedDic.makeRequest((String) any(), anyString())).thenReturn(doc);
 
 	result = mockedDic.search(word);
@@ -52,6 +53,7 @@ public class DictionaryFarsiDictionaryTest {
 	Dictionary emptySearchMock = mock(DictionaryFarsiDictionary.class);
 
 	doCallRealMethod().when(emptySearchMock).search(anyString());
+	doCallRealMethod().when(emptySearchMock).sanitizeInput(anyString());
 	emptySearchMock.search("");
 	
 	verify(emptySearchMock, never()).makeRequest((String) any(), (String) any());
@@ -62,6 +64,7 @@ public class DictionaryFarsiDictionaryTest {
 	Dictionary emptySearchMock = mock(DictionaryFarsiDictionary.class);
 
 	doCallRealMethod().when(emptySearchMock).search(anyString());
+	doCallRealMethod().when(emptySearchMock).sanitizeInput(anyString());	
 	emptySearchMock.search("         ");
 	
 	verify(emptySearchMock, never()).makeRequest((String) any(), (String) any());
@@ -72,6 +75,7 @@ public class DictionaryFarsiDictionaryTest {
 	Dictionary searchWordWithQuotes = mock(DictionaryFarsiDictionary.class);
 
 	doCallRealMethod().when(searchWordWithQuotes).search(anyString());	
+	doCallRealMethod().when(searchWordWithQuotes).sanitizeInput(anyString());	
 	when(searchWordWithQuotes.makeRequest((String) any(), anyString())).thenReturn(doc);
 	searchWordWithQuotes.search("\"wonder\"");
 	
@@ -83,10 +87,35 @@ public class DictionaryFarsiDictionaryTest {
 	Dictionary searchWordWithQuotes = mock(DictionaryFarsiDictionary.class);
 
 	doCallRealMethod().when(searchWordWithQuotes).search(anyString());	
+	doCallRealMethod().when(searchWordWithQuotes).sanitizeInput(anyString());	
 	when(searchWordWithQuotes.makeRequest((String) any(), anyString())).thenReturn(doc);
 	searchWordWithQuotes.search("'wonder'");
 
 	verify(searchWordWithQuotes).makeRequest((String) any(), argThat(s -> !s.contains("=%27")));
+    }
+
+    @Test
+    public void searchedWordInMakeRequestShouldNotContainLeadingSpaces() throws Exception {			
+	Dictionary searchWordWithSpaces = mock(DictionaryFarsiDictionary.class);
+
+	doCallRealMethod().when(searchWordWithSpaces).search(anyString());
+	doCallRealMethod().when(searchWordWithSpaces).sanitizeInput(anyString());	
+	when(searchWordWithSpaces.makeRequest((String) any(), anyString())).thenReturn(doc);
+	searchWordWithSpaces.search("       wonder");
+	
+	verify(searchWordWithSpaces).makeRequest((String) any(), argThat(s -> !s.contains("+")));
+    }
+
+    @Test
+    public void searchedWordInMakeRequestShouldNotContainTrailingSpaces() throws Exception {			
+	Dictionary searchWordWithSpaces = mock(DictionaryFarsiDictionary.class);
+
+	doCallRealMethod().when(searchWordWithSpaces).search(anyString());
+	doCallRealMethod().when(searchWordWithSpaces).sanitizeInput(anyString());		
+	when(searchWordWithSpaces.makeRequest((String) any(), anyString())).thenReturn(doc);
+	searchWordWithSpaces.search("wonder       ");
+	
+	verify(searchWordWithSpaces).makeRequest((String) any(), argThat(s -> !s.contains("+")));
     }
 
     @Test

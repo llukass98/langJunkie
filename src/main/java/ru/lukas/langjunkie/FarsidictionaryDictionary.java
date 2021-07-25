@@ -7,7 +7,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-class FarsidictionaryDictionary extends Dictionary {
+public class FarsidictionaryDictionary extends Dictionary {
     public FarsidictionaryDictionary() {
 	language       = "faen";
 	link           = "https://www.farsidictionary.net";
@@ -18,7 +18,7 @@ class FarsidictionaryDictionary extends Dictionary {
 	HashMap result = new HashMap();
 	ArrayList<String> definitions = new ArrayList<String>();
 
-	word = word.replace("\"", "").replace("'", "");
+	word = sanitizeInput(word);
 	try {
 	    if (word.trim().length() > 0) {
 		Document doc   = makeRequest(link+"/index.php?q="+ word);

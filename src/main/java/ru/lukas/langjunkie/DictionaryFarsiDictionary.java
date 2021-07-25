@@ -7,7 +7,7 @@ import java.net.SocketTimeoutException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-class DictionaryFarsiDictionary extends Dictionary {
+public class DictionaryFarsiDictionary extends Dictionary {
     public DictionaryFarsiDictionary() {
 	language       = "faen";
 	link           = "http://www.dictionary-farsi.com";
@@ -18,7 +18,7 @@ class DictionaryFarsiDictionary extends Dictionary {
 	HashMap result = new HashMap();
 	ArrayList<String> definitions = new ArrayList<String>();
 
-	word = word.replace("\"", "").replace("'", "");
+	word = sanitizeInput(word);
 	try {
 	    if (word.trim().length() > 0) {
 		String payload = "submith=ok&text1="

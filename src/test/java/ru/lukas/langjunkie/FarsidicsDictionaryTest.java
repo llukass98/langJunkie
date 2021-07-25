@@ -42,6 +42,7 @@ public class FarsidicsDictionaryTest {
 	mockedDic = mock(FarsidicsDictionary.class);
 
 	doCallRealMethod().when(mockedDic).search(anyString());
+	doCallRealMethod().when(mockedDic).sanitizeInput(anyString());	
 	when(mockedDic.makeRequest((String) any())).thenReturn(doc);
 
 	result = mockedDic.search(word);
@@ -52,6 +53,7 @@ public class FarsidicsDictionaryTest {
 	Dictionary emptySearchMock = mock(FarsidicsDictionary.class);
 
 	doCallRealMethod().when(emptySearchMock).search(anyString());
+	doCallRealMethod().when(emptySearchMock).sanitizeInput(anyString());
 	emptySearchMock.search("");
 	
 	verify(emptySearchMock, never()).makeRequest((String) any());
@@ -62,6 +64,7 @@ public class FarsidicsDictionaryTest {
 	Dictionary emptySearchMock = mock(FarsidicsDictionary.class);
 
 	doCallRealMethod().when(emptySearchMock).search(anyString());
+	doCallRealMethod().when(emptySearchMock).sanitizeInput(anyString());
 	emptySearchMock.search("         ");
 	
 	verify(emptySearchMock, never()).makeRequest((String) any());
@@ -71,7 +74,8 @@ public class FarsidicsDictionaryTest {
     public void searchedWordInMakeRequestShouldNotContainDoubleQuotes() throws Exception {			
 	Dictionary searchWordWithQuotes = mock(FarsidicsDictionary.class);
 
-	doCallRealMethod().when(searchWordWithQuotes).search(anyString());	
+	doCallRealMethod().when(searchWordWithQuotes).search(anyString());
+	doCallRealMethod().when(searchWordWithQuotes).sanitizeInput(anyString());			
 	when(searchWordWithQuotes.makeRequest((String) any())).thenReturn(doc);
 	searchWordWithQuotes.search("\"wonder\"");
 	
@@ -82,11 +86,36 @@ public class FarsidicsDictionaryTest {
     public void searchedWordInMakeRequestShouldNotContainSingleQuotes() throws Exception {			
 	Dictionary searchWordWithQuotes = mock(FarsidicsDictionary.class);
 
-	doCallRealMethod().when(searchWordWithQuotes).search(anyString());	
+	doCallRealMethod().when(searchWordWithQuotes).search(anyString());
+	doCallRealMethod().when(searchWordWithQuotes).sanitizeInput(anyString());	
 	when(searchWordWithQuotes.makeRequest((String) any())).thenReturn(doc);
 	searchWordWithQuotes.search("'wonder'");
 
 	verify(searchWordWithQuotes).makeRequest(argThat(s -> !s.contains("='")));
+    }
+
+    @Test
+    public void searchedWordInMakeRequestShouldNotContainLeadingSpaces() throws Exception {			
+	Dictionary searchWordWithSpaces = mock(FarsidicsDictionary.class);
+
+	doCallRealMethod().when(searchWordWithSpaces).search(anyString());
+	doCallRealMethod().when(searchWordWithSpaces).sanitizeInput(anyString());	
+	when(searchWordWithSpaces.makeRequest((String) any())).thenReturn(doc);
+	searchWordWithSpaces.search("       wonder");
+	
+	verify(searchWordWithSpaces).makeRequest(argThat(s -> !s.contains(" ")));
+    }
+
+    @Test
+    public void searchedWordInMakeRequestShouldNotContainTrailingSpaces() throws Exception {			
+	Dictionary searchWordWithSpaces = mock(FarsidicsDictionary.class);
+
+	doCallRealMethod().when(searchWordWithSpaces).search(anyString());
+	doCallRealMethod().when(searchWordWithSpaces).sanitizeInput(anyString());		
+	when(searchWordWithSpaces.makeRequest((String) any())).thenReturn(doc);
+	searchWordWithSpaces.search("wonder       ");
+	
+	verify(searchWordWithSpaces).makeRequest(argThat(s -> !s.contains(" ")));
     }
 
     @Test

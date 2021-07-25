@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-class FarsidicDictionary extends Dictionary {
+public class FarsidicDictionary extends Dictionary {
     public FarsidicDictionary() {
 	language       = "faen";
 	link           = "http://www.farsidic.com/en/Lang/FaEn";
@@ -19,7 +19,7 @@ class FarsidicDictionary extends Dictionary {
 	HashMap result = new HashMap();
 	ArrayList<String> definitions = new ArrayList<String>();
 
-	word = word.replace("\"", "").replace("'", "");
+	word = sanitizeInput(word);
 	try {
 	    if (word.trim().length() > 0) {
 		String payload = "SearchWord="

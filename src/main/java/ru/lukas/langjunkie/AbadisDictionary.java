@@ -6,7 +6,7 @@ import java.net.SocketTimeoutException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-class AbadisDictionary extends Dictionary {
+public class AbadisDictionary extends Dictionary {
     public AbadisDictionary() {
 	language       = "faen";
 	link           = "https://abadis.ir";
@@ -19,7 +19,7 @@ class AbadisDictionary extends Dictionary {
 	ArrayList<String> examples    = new ArrayList<String>();	
 	ArrayList<String> synonyms    = new ArrayList<String>();	
 
-	word = word.replace("\"", "").replace("'", "");
+	word = sanitizeInput(word);
 	try {
 	    if (word.trim().length() > 0) {
 		Document doc = makeRequest(link+"/?lntype=fatoen&word="+word);
