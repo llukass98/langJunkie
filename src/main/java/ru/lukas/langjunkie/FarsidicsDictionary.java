@@ -3,6 +3,8 @@ package ru.lukas.langjunkie;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.net.SocketTimeoutException;
+import org.jsoup.HttpStatusException;
+import java.util.logging.Logger;
 import org.jsoup.nodes.Document;
 
 public class FarsidicsDictionary extends Dictionary {
@@ -15,28 +17,31 @@ public class FarsidicsDictionary extends Dictionary {
     public HashMap search(String word) {
 	HashMap result                = new HashMap();
 	ArrayList<String> definitions = new ArrayList<String>();
-        String blockOfDefinitions[]   = new String[50];
+        String[] blockOfDefinitions   = new String[100];
 
-	word = sanitizeInput(word);
-	try {
-	    if (word.trim().length() > 0) {
-		Document doc = makeRequest(link+"/ajax-searchf.php?keyword="+word);
-		String text  = doc.body().text();
+	try {	    
+	    word = sanitizeInput(word);
+	    Document doc = makeRequest(link+"/ajax-searchf.php?keyword="+word);
+	    String text  = doc.body().text().replace(" _", "");
 
-		if (!text.contains("No Results")) {
-		    blockOfDefinitions = text.split(" ");
+	    if (!text.contains("No Results")) {
+		blockOfDefinitions = text.split(" ");
 		    
-		    for (int i = 1; i < blockOfDefinitions.length-1; i++) {
-			if (!blockOfDefinitions[i].contains(",")) {
-			    definitions.add(blockOfDefinitions[i].trim());	
-			    break;
-			}
-
-			definitions.add(blockOfDefinitions[i].trim().replace(",", ""));
+		for (int i = 1; i < blockOfDefinitions.length-1; i++) {
+		    if (blockOfDefinitions[i].contains("(")) { continue; } // skip trash data, if any
+		    if (definitions.contains(blockOfDefinitions[i].trim().replace(",", ""))) { continue; } // skip duplicates
+		    if (!blockOfDefinitions[i].contains(",")) { // find the last element and break the loop
+			definitions.add(blockOfDefinitions[i].trim());	
+			break;
 		    }
+		    definitions.add(blockOfDefinitions[i].trim().replace(",", ""));
 		}
 	    }
-	} catch (SocketTimeoutException ste) {
+	} catch (SocketTimeoutException | HttpStatusException ste) {
+	    // TODO: log the exception	    
+	} catch (IllegalArgumentException iae) {
+	    // TODO: log the exception
+	} catch (NullPointerException npe) {
 	    // TODO: log the exception	    
 	} catch (Exception e) {
 	    e.printStackTrace();

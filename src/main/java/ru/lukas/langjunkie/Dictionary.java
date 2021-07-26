@@ -2,12 +2,13 @@ package ru.lukas.langjunkie;
 
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.io.IOException;
-import java.net.SocketTimeoutException;
 import org.jsoup.Jsoup;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
-
+import java.net.SocketTimeoutException;
+import org.jsoup.HttpStatusException;
+import java.io.IOException;
+    
 public abstract class Dictionary {
     protected String link;
     protected String language;
@@ -28,7 +29,7 @@ public abstract class Dictionary {
     }    
 
     protected Document makeRequest(String url)
-	throws IOException, SocketTimeoutException
+	throws SocketTimeoutException, HttpStatusException, IOException
     {
 	String ref = url.split("\\?")[0];
 
@@ -36,7 +37,7 @@ public abstract class Dictionary {
     }
     
     protected Document makeRequest(String url, String payload)
-	throws IOException, SocketTimeoutException
+	throws SocketTimeoutException, HttpStatusException, IOException
     {
 	return constructConnection(url)
 	    .referrer(url)
@@ -64,9 +65,12 @@ public abstract class Dictionary {
 	return new ArrayList<String>();
     }
 
-    protected String sanitizeInput(String input) {
-	input = input.replace("\"", "").replace("'", ""); // remove quotes
+    protected String sanitizeInput(String input) throws IllegalArgumentException {
 	input = input.trim(); // trim spaces
+	if (input.length() == 0) {
+	    throw new IllegalArgumentException("Searched word is an empty string");
+	}
+	input = input.replace("\"", "").replace("'", ""); // remove quotes
 
 	return input;
     }

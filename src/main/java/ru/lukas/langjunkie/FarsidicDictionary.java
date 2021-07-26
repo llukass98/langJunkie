@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.net.URLEncoder;
 import java.net.SocketTimeoutException;
+import org.jsoup.HttpStatusException;
 import java.nio.charset.StandardCharsets;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -19,28 +20,30 @@ public class FarsidicDictionary extends Dictionary {
 	HashMap result = new HashMap();
 	ArrayList<String> definitions = new ArrayList<String>();
 
-	word = sanitizeInput(word);
 	try {
-	    if (word.trim().length() > 0) {
-		String payload = "SearchWord="
-		    +URLEncoder.encode(word, StandardCharsets.UTF_8.toString())
-		    +"&Criteria=Exact&ShowKeyboard=false";
+	    word = sanitizeInput(word);
+	    String payload = "SearchWord="
+		+URLEncoder.encode(word, StandardCharsets.UTF_8.toString())
+		+"&Criteria=Exact&ShowKeyboard=false";
 	    
-		Document doc = makeRequest(link, payload);
-		// get definitions
-		for (Element block : doc.getElementsByClass("farsi-mean")) {
-		    for (String element : block.text().split("\\,")) {
-			String trimmed = element.trim();
-			
-			if (!definitions.contains(trimmed)) {
-			    definitions.add(trimmed.charAt(0) == '[' ?
-					    trimmed.split("]")[1].trim() :
-					    trimmed);
-			}
+	    Document doc = makeRequest(link, payload);
+	    // get definitions
+	    for (Element block : doc.getElementsByClass("farsi-mean")) {
+		for (String element : block.text().split("\\,")) {
+		    String trimmed = element.trim();
+		    
+		    if (!definitions.contains(trimmed)) {
+			definitions.add(trimmed.charAt(0) == '[' ?
+					trimmed.split("]")[1].trim() :
+					trimmed);
 		    }
 		}
 	    }
-	} catch (SocketTimeoutException ste) {
+	} catch (SocketTimeoutException | HttpStatusException ste) {
+	    // TODO: log the exception	    
+	} catch (IllegalArgumentException iae) {
+	    // TODO: log the exception
+	} catch (NullPointerException npe) {
 	    // TODO: log the exception	    
 	} catch (Exception e) {
 	    e.printStackTrace();

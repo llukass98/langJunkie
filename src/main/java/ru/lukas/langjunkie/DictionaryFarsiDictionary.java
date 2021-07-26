@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.net.URLEncoder;
 import java.net.SocketTimeoutException;
+import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
@@ -18,22 +19,24 @@ public class DictionaryFarsiDictionary extends Dictionary {
 	HashMap result = new HashMap();
 	ArrayList<String> definitions = new ArrayList<String>();
 
-	word = sanitizeInput(word);
 	try {
-	    if (word.trim().length() > 0) {
-		String payload = "submith=ok&text1="
-		    +URLEncoder.encode(word, "windows-1256")
-		    +"&submit1=Search&r1=p2e";
+	    word = sanitizeInput(word);
+	    String payload = "submith=ok&text1="
+		+URLEncoder.encode(word, "windows-1256")
+		+"&submit1=Search&r1=p2e";
+	    
+	    Document doc = makeRequest(link, payload);
 
-		Document doc = makeRequest(link, payload);
-
-		// get definitions
-		for (Element element : doc.getElementsByAttribute("onmouseover")) {		
-		    definitions.add(element.text().trim());
-		}
+	    // get definitions
+	    for (Element element : doc.getElementsByAttribute("onmouseover")) {		
+		definitions.add(element.text().trim());
 	    }
-	} catch (SocketTimeoutException ste) {
+	} catch (SocketTimeoutException | HttpStatusException ste) {
 	    // TODO: log the exception
+	} catch (IllegalArgumentException iae) {
+	    // TODO: log the exception
+	} catch (NullPointerException npe) {
+	    // TODO: log the exception	    
 	} catch (Exception e) {
 	    e.printStackTrace();
 	} finally {

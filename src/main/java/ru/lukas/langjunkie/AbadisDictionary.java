@@ -3,6 +3,7 @@ package ru.lukas.langjunkie;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.net.SocketTimeoutException;
+import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
@@ -19,27 +20,27 @@ public class AbadisDictionary extends Dictionary {
 	ArrayList<String> examples    = new ArrayList<String>();	
 	ArrayList<String> synonyms    = new ArrayList<String>();	
 
-	word = sanitizeInput(word);
 	try {
-	    if (word.trim().length() > 0) {
-		Document doc = makeRequest(link+"/?lntype=fatoen&word="+word);
-		// get definitions ==============
-		Element blockOfDefinitions = doc.getElementById("Means");;	    
-
-		for (Element element : blockOfDefinitions.getElementsByClass("NoLinkColor")) {
-		    String definition = element.text();
-
-		    definitions.add(definition.charAt(0) == '[' ?
-				    definition.split("]")[1].trim() :
-				    definition.trim());
-		}
-		// ==============================
-
-		examples = parseExamples(doc);
-		synonyms = parseSynonyms(doc);
+	    word = sanitizeInput(word);
+	    Document doc = makeRequest(link+"/?lntype=fatoen&word="+word);
+	    Element rawDefinitions = doc.getElementById("Means");;	    
+	    
+	    for (Element element : rawDefinitions.getElementsByClass("NoLinkColor")) {
+		String definition = element.text();
+		
+		definitions.add(definition.charAt(0) == '[' ?
+				definition.split("]")[1].trim() :
+				definition.trim());
 	    }
-	} catch (SocketTimeoutException ste) {
+
+	    examples = parseExamples(doc);
+	    synonyms = parseSynonyms(doc);
+	} catch (SocketTimeoutException | HttpStatusException ste) {
 	    // TODO: log the exception
+	} catch (IllegalArgumentException iae) {
+	    // TODO: log the exception
+	} catch (NullPointerException npe) {
+	    // TODO: log the exception	    
 	} catch (Exception e) {
 	    e.printStackTrace();
 	} finally {

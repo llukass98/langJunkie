@@ -3,6 +3,7 @@ package ru.lukas.langjunkie;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.net.SocketTimeoutException;
+import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -18,21 +19,23 @@ public class FarsidictionaryDictionary extends Dictionary {
 	HashMap result = new HashMap();
 	ArrayList<String> definitions = new ArrayList<String>();
 
-	word = sanitizeInput(word);
 	try {
-	    if (word.trim().length() > 0) {
-		Document doc   = makeRequest(link+"/index.php?q="+ word);
-		Elements elems = doc.getElementById("faen")
-		    .getElementsByAttributeValue("align", "left");
+	    word = sanitizeInput(word);
+	    Document doc   = makeRequest(link+"/index.php?q="+ word);
+	    Elements elems = doc.getElementById("faen")
+		.getElementsByAttributeValue("align", "left");
 
-		elems.remove(0);
-		elems.remove(0);
+	    elems.remove(0);
+	    elems.remove(0);
 	    
-		for (Element element : elems) {
-		    definitions.add(element.text().trim());
-		}
+	    for (Element element : elems) {
+		definitions.add(element.text().trim());
 	    }
-	} catch (SocketTimeoutException ste) {
+	} catch (SocketTimeoutException | HttpStatusException ste) {
+	    // TODO: log the exception
+	} catch (IllegalArgumentException iae) {
+	    // TODO: log the exception
+	} catch (NullPointerException npe) {
 	    // TODO: log the exception	    	    
 	} catch (Exception e) {
 	    e.printStackTrace();
