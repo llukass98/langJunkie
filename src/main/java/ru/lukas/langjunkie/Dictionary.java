@@ -71,6 +71,8 @@ public abstract class Dictionary {
 	    throw new IllegalArgumentException("Searched word is an empty string");
 	}
 	input = input.replace("\"", "").replace("'", ""); // remove quotes
+	// remove unnecessary spaces if input is a phrase
+	input = input.replaceAll("\\s+", " "); 
 
 	return input;
     }

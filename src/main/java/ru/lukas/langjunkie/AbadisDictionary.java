@@ -70,7 +70,7 @@ public class AbadisDictionary extends Dictionary {
 		}
 	    }	    
 	} catch (NullPointerException e) {
-	    e.printStackTrace();
+	    // TODO: log the excepttion
 	} finally {
 	    return result;
 	}
@@ -91,8 +91,7 @@ public class AbadisDictionary extends Dictionary {
 		}
 	    }
 	} catch (NullPointerException e) {
-	    e.printStackTrace();
-	    return result; // the searched word is mistyped, return an empty array
+	    // TODO: log the exception
 	} finally {
 	    return result; // return normal results
 	}	    
