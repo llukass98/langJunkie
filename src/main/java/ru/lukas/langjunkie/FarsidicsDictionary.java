@@ -24,16 +24,15 @@ public class FarsidicsDictionary extends Dictionary {
 		String text  = doc.body().text();
 
 		if (!text.contains("No Results")) {
-		    blockOfDefinitions = text.split("\\,");
-		    definitions.add(blockOfDefinitions[0].trim().split(" ")[1]);
+		    blockOfDefinitions = text.split(" ");
 		    
 		    for (int i = 1; i < blockOfDefinitions.length-1; i++) {
-			if (blockOfDefinitions[i].trim().contains(" ")) {
-			    definitions.add(blockOfDefinitions[i].trim().split(" ")[0]);			
+			if (!blockOfDefinitions[i].contains(",")) {
+			    definitions.add(blockOfDefinitions[i].trim());	
 			    break;
 			}
 
-			definitions.add(blockOfDefinitions[i].trim());			    		    
+			definitions.add(blockOfDefinitions[i].trim().replace(",", ""));
 		    }
 		}
 	    }
