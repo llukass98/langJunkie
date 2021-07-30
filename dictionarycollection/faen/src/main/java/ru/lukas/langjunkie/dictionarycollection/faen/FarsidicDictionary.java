@@ -2,6 +2,8 @@ package ru.lukas.langjunkie.dictionarycollection.faen;
 
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
 import java.net.URLEncoder;
 import java.net.SocketTimeoutException;
 import org.jsoup.HttpStatusException;
@@ -20,6 +22,11 @@ public class FarsidicDictionary extends Dictionary {
     public HashMap search(String word) {
 	HashMap result = new HashMap();
 	ArrayList<String> definitions = new ArrayList<String>();
+	List<Character> persianLetters = Arrays.asList
+	    ('ء', 'ا', 'آ', 'ب', 'پ', 'ت', 'ث', 'ج', 'چ',
+	     'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'ژ', 'س', 'ش',
+	     'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ك',
+	     'ک', 'گ', 'ل', 'م', 'ن', 'و', 'ه', 'ي', 'ی');	
 
 	try {
 	    word = sanitizeInput(word);
@@ -32,7 +39,10 @@ public class FarsidicDictionary extends Dictionary {
 	    for (Element block : doc.getElementsByClass("farsi-mean")) {
 		for (String element : block.text().split("\\,")) {
 		    String trimmed = element.trim();
-		    
+		    // the word contains persian letters
+		    // that cannot be a valid definition, skip it
+		    if (persianLetters.contains(trimmed.charAt(0))) { continue; }
+		    // otherwise, continue as usual
 		    if (!definitions.contains(trimmed)) {
 			definitions.add(trimmed.charAt(0) == '[' ?
 					trimmed.split("]")[1].trim() :

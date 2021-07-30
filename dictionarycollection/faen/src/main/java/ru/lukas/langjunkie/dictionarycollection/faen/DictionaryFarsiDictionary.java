@@ -30,7 +30,11 @@ public class DictionaryFarsiDictionary extends Dictionary {
 
 	    // get definitions
 	    for (Element element : doc.getElementsByAttribute("onmouseover")) {
-		definitions.add(element.text().trim());
+		String text = element.text().replace(")", "").trim();
+		// skip trash data
+		if (text.contains("(")) { continue; }
+		if (definitions.contains(text)) { continue; } // skip duplicates
+		definitions.add(text);
 	    }
 	} catch (SocketTimeoutException | HttpStatusException ste) {
 	    // TODO: log the exception
