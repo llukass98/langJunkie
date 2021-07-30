@@ -29,9 +29,14 @@ public class FarsidicsDictionary extends Dictionary {
 		blockOfDefinitions = text.split(" ");
 		    
 		for (int i = 1; i < blockOfDefinitions.length-1; i++) {
-		    if (blockOfDefinitions[i].contains("(")) { continue; } // skip trash data, if any
-		    if (definitions.contains(blockOfDefinitions[i].trim().replace(",", ""))) { continue; } // skip duplicates
-		    if (!blockOfDefinitions[i].contains(",")) { // find the last element and break the loop
+		    // skip trash data, if any
+		    if (blockOfDefinitions[i].contains("(")) { continue; }
+		    // skip duplicates
+		    if (definitions.contains(blockOfDefinitions[i]
+					     .trim()
+					     .replace(",", ""))) { continue; }
+		    // find the last element and break the loop
+		    if (!blockOfDefinitions[i].contains(",")) {
 			definitions.add(blockOfDefinitions[i].trim());	
 			break;
 		    }

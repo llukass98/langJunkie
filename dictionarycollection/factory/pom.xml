@@ -3,8 +3,8 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   
-  <groupId>ru.lukas.langjunkie.dictionarycollection.dictionary</groupId>
-  <artifactId>dictionary</artifactId>
+  <groupId>ru.lukas.langjunkie.dictionarycollection.factory</groupId>
+  <artifactId>factory</artifactId>
   <packaging>jar</packaging>  
   <version>1.0-SNAPSHOT</version>
 
@@ -14,15 +14,27 @@
     <version>1.0-SNAPSHOT</version>    
   </parent>
   
-  <name>Dictionary</name>
+  <name>Factory</name>
   <url>http://www.example.com</url>
 
-<dependencies>  
-  <dependency>
+  <dependencies>
+    <dependency>
+      <groupId>ru.lukas.langjunkie.dictionarycollection.dictionary</groupId>
+      <artifactId>dictionary</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>ru.lukas.langjunkie.dictionarycollection.faen</groupId>
+      <artifactId>faen</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    
+    <dependency>
     <groupId>org.jsoup</groupId>
     <artifactId>jsoup</artifactId>
     <version>1.13.1</version>
-  </dependency>
-</dependencies>
+    </dependency>
+  </dependencies>
   
 </project>

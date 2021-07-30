@@ -19,8 +19,13 @@
 
   <dependencies>
     <dependency>
-      <groupId>ru.lukas.langjunkie.dictionarycollection.faen</groupId>
-      <artifactId>faen</artifactId>
+      <groupId>ru.lukas.langjunkie.dictionarycollection.factory</groupId>
+      <artifactId>factory</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>ru.lukas.langjunkie.dictionarycollection.dictionary</groupId>
+      <artifactId>dictionary</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
@@ -33,7 +38,6 @@
           <version>1.2.1</version>
           <configuration>
 	    <skip>false</skip>
-	    <workingDirectory>loader</workingDirectory>
           </configuration>
         </plugin>
     </plugins>

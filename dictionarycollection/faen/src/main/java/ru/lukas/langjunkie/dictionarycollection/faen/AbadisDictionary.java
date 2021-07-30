@@ -26,14 +26,13 @@ public class AbadisDictionary extends Dictionary {
 	    Document doc = makeRequest(link+"/?lntype=fatoen&word="+word);
 	    Element rawDefinitions = doc.getElementById("Means");;	    
 	    
-	    for (Element element : rawDefinitions.getElementsByClass("NoLinkColor")) {
+	    for (Element element:rawDefinitions.getElementsByClass("NoLinkColor")) {
 		String definition = element.text();
 		
 		definitions.add(definition.charAt(0) == '[' ?
 				definition.split("]")[1].trim() :
 				definition.trim());
 	    }
-
 	    examples = parseExamples(doc);
 	    synonyms = parseSynonyms(doc);
 	} catch (SocketTimeoutException | HttpStatusException ste) {
@@ -67,7 +66,9 @@ public class AbadisDictionary extends Dictionary {
 
 	    for (Element element : block.getElementsByClass("Mean")) {		
 		for (String synonym : element.text().split("\\،")) {
-		    if (!synonym.trim().equals(searchedWord)) result.add(synonym.trim());
+		    if (!synonym.trim().equals(searchedWord)) {
+			result.add(synonym.trim());
+		    }
 		}
 	    }	    
 	} catch (NullPointerException e) {
@@ -82,8 +83,8 @@ public class AbadisDictionary extends Dictionary {
 	ArrayList<String> result = new ArrayList<String>();
 
 	try {
-	    /* throws NullPointerException if searched word is mistyped,
-	       returns an empty array*/
+	    /* throw NullPointerException if searched word is mistyped,
+	       return an empty array*/
 	    html.getElementsByTag("h1").first().text();
 	    // if no Exception continue as usual
 	    for (Element element : html.getElementsByClass("Lun")) {

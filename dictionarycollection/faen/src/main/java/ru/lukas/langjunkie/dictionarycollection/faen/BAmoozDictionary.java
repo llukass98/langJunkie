@@ -25,14 +25,19 @@ public class BAmoozDictionary extends Dictionary {
 	    
 	    for (Element element : doc.getElementsByClass("word-row-side")) {
 		// if english word has been searched throw NullPointerException
-		doc.getElementsByClass("reverse-word-translation-desc").first().text();
+		doc.getElementsByClass("reverse-word-translation-desc")
+		    .first()
+		    .text();
 		// if no exception continue as usual
-		if (element.child(0).hasClass("py-4")) { continue; } // skip first element
+		// skip first element
+		if (element.child(0).hasClass("py-4")) { continue; }
 		
 		for (Element span : element.getElementsByTag("span")) {
-		    if (span.hasClass("reverse-translation-index")) { continue; } // skip numbers
+		    // skip numbers
+		    if (span.hasClass("reverse-translation-index")) { continue; }
 		    if (span.hasClass("ml-n2")) { continue; } // skip commas
-		    if (span.hasClass("text-muted")) { continue; } // skip spaces and other trash
+		    // skip spaces and other trash
+		    if (span.hasClass("text-muted")) { continue; } 
 		    definitions.add(span.text().trim());			
 		}
 	    }

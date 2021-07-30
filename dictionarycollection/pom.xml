@@ -12,7 +12,8 @@
 
   <modules>
     <module>dictionary</module>    
-    <module>faen</module>    
+    <module>faen</module>
+    <module>factory</module>        
   </modules>
 
   <properties>

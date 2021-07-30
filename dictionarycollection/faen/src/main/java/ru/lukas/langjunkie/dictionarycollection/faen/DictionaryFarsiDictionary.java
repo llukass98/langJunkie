@@ -29,7 +29,7 @@ public class DictionaryFarsiDictionary extends Dictionary {
 	    Document doc = makeRequest(link, payload);
 
 	    // get definitions
-	    for (Element element : doc.getElementsByAttribute("onmouseover")) {		
+	    for (Element element : doc.getElementsByAttribute("onmouseover")) {
 		definitions.add(element.text().trim());
 	    }
 	} catch (SocketTimeoutException | HttpStatusException ste) {
