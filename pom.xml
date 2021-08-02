@@ -70,7 +70,7 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
-	<plugin>
+<!--	<plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>exec-maven-plugin</artifactId>
           <version>1.2.1</version>
@@ -78,7 +78,16 @@
 	    <skip>true</skip>
 	    <mainClass>ru.lukas.langjunkie.loader.App</mainClass>
           </configuration>
-        </plugin>
+          </plugin> -->
+	<plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>1.2.1</version>
+          <configuration>
+	    <skip>true</skip>
+	    <mainClass>ru.lukas.langjunkie.api.ApiApplication</mainClass>
+          </configuration>
+        </plugin>	  
 	<plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
@@ -89,7 +98,7 @@
             </descriptorRefs>
 	    <archive>
 	      <manifest>
-		<mainClass>ru.lukas.langjunkie.loader.App</mainClass>
+		<mainClass>ru.lukas.langjunkie.api.ApiApplication</mainClass>
 	      </manifest>
 	    </archive>
           </configuration>

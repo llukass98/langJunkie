@@ -17,7 +17,7 @@ public abstract class Collection {
 
     public String getCollectionName() {
 	return collectionName;
-    }        
+    }
 
     public ArrayList<HashMap> search(String word) {
 	ArrayList<HashMap> results = new ArrayList<HashMap>();
@@ -39,6 +39,8 @@ public abstract class Collection {
 		e.printStackTrace();
 	    }
 	    if (!((ArrayList) result.get("results")).isEmpty()) {
+		result.remove("searched_word");
+		result.remove("language");
 		results.add(result);
 	    }	    
 	}
