@@ -96,6 +96,7 @@
             <descriptorRefs>
               <descriptorRef>jar-with-dependencies</descriptorRef>
             </descriptorRefs>
+	    <finalname>langjunkie</finalname>
 	    <archive>
 	      <manifest>
 		<mainClass>ru.lukas.langjunkie.api.ApiApplication</mainClass>
