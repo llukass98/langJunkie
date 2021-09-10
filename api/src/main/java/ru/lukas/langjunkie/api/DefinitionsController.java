@@ -1,5 +1,6 @@
 package ru.lukas.langjunkie.api;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,13 +16,12 @@ import java.util.HashMap;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 
 @RestController
 public class DefinitionsController {
-	private SessionFactory sessionFactory = new Configuration()
-			.configure()
-			.buildSessionFactory();
+
+	@Autowired
+	private SessionFactory sessionFactory;
 
 	@GetMapping("/api/v1.0b/definitions")
 	public Definitions definitions
@@ -54,7 +54,11 @@ public class DefinitionsController {
 		List<Definition> queryResults = session.createQuery(query).list();
 		ArrayList<HashMap<String, Serializable>> finalResult = new ArrayList<>();
 
-		if (queryResults.isEmpty()) { return finalResult; }
+		if (queryResults.isEmpty()) {
+			session.close();
+			return finalResult;
+		}
+
 		for (Definition result : queryResults) {
 			HashMap<String, Serializable> dictionary = new HashMap<>();
 			dictionary.put("name", result.getDictionary());
@@ -64,6 +68,8 @@ public class DefinitionsController {
 			dictionary.put("examples", result.getExamples());
 			finalResult.add(dictionary);
 		}
+
+		session.close();
 		return finalResult;
 	}
 
