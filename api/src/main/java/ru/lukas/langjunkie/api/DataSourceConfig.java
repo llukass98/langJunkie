@@ -1,3 +1,8 @@
+/*
+ * TODO: find the way to eliminate duplicated code, i.e. db credentials
+ *  - see dataSource bean and hibernateProperties method.
+ */
+
 package ru.lukas.langjunkie.api;
 
 import org.springframework.boot.jdbc.DataSourceBuilder;

@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
+
     @ExceptionHandler(KeySelectorException.class)
     protected ResponseEntity<ApiError> handleKeySelector(KeySelectorException e) {
         ApiError apiError = new ApiError(404,
