@@ -1,14 +1,15 @@
 package ru.lukas.langjunkie.dictionarycollection.faen;
 
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Arrays;
-import java.io.Serializable;
-import java.net.SocketTimeoutException;
 import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
 import ru.lukas.langjunkie.dictionarycollection.dictionary.Dictionary;
+
+import java.io.Serializable;
+import java.net.SocketTimeoutException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 public class FarsidicsDictionary extends Dictionary {
 	public FarsidicsDictionary() {
@@ -17,6 +18,7 @@ public class FarsidicsDictionary extends Dictionary {
 		dictionaryName  = "farsidics";
 	}
 
+	@Override
 	public HashMap<String, Serializable> search(String word) {
 		HashMap<String, Serializable> result = new HashMap<>();
 		ArrayList<String> definitions = new ArrayList<>();
@@ -28,9 +30,9 @@ public class FarsidicsDictionary extends Dictionary {
 			String text  = doc.body().text().replace(" _", "");
 			List<Character> persianLetters = Arrays.asList
 					('ء', 'ا', 'آ', 'ب', 'پ', 'ت', 'ث', 'ج', 'چ',
-							'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'ژ', 'س', 'ش',
-							'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ك',
-							'ک', 'گ', 'ل', 'م', 'ن', 'و', 'ه', 'ي', 'ی');
+					 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'ژ', 'س', 'ش',
+					 'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ك',
+					 'ک', 'گ', 'ل', 'م', 'ن', 'و', 'ه', 'ي', 'ی');
 
 			if (!text.contains("No Results")) {
 				blockOfDefinitions = text.split(" ");

@@ -1,13 +1,14 @@
 package ru.lukas.langjunkie.api;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.servlet.mvc.method.annotation.*;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.core.annotation.Order;
 import org.springframework.core.Ordered;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import javax.xml.crypto.KeySelectorException;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import javax.xml.crypto.KeySelectorException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice

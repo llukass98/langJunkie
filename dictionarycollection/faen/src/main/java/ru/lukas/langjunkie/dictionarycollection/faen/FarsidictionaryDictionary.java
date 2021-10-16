@@ -1,14 +1,15 @@
 package ru.lukas.langjunkie.dictionarycollection.faen;
 
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.net.SocketTimeoutException;
-import java.io.Serializable;
 import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import ru.lukas.langjunkie.dictionarycollection.dictionary.Dictionary;
+
+import java.io.Serializable;
+import java.net.SocketTimeoutException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FarsidictionaryDictionary extends Dictionary {
 	public FarsidictionaryDictionary() {
@@ -17,6 +18,7 @@ public class FarsidictionaryDictionary extends Dictionary {
 		dictionaryName = "farsidictionary";
 	}
 
+	@Override
 	public HashMap<String, Serializable> search(String word) {
 		HashMap<String, Serializable> result = new HashMap<>();
 		ArrayList<String> definitions = new ArrayList<>();

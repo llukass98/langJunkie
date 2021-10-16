@@ -1,13 +1,14 @@
 package ru.lukas.langjunkie.dictionarycollection.faen;
 
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.net.SocketTimeoutException;
-import java.io.Serializable;
 import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import ru.lukas.langjunkie.dictionarycollection.dictionary.Dictionary;
+
+import java.io.Serializable;
+import java.net.SocketTimeoutException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AbadisDictionary extends Dictionary {
 	public AbadisDictionary() {
@@ -16,6 +17,7 @@ public class AbadisDictionary extends Dictionary {
 		dictionaryName = "abadis";
 	}
 
+	@Override
 	public HashMap<String, Serializable> search(String word) {
 		HashMap<String, Serializable> result = new HashMap<>();
 		ArrayList<String> definitions = new ArrayList<>();
@@ -73,7 +75,7 @@ public class AbadisDictionary extends Dictionary {
 				}
 			}
 		} catch (NullPointerException e) {
-			// TODO: log the excepttion
+			// TODO: log the exception
 		}
 
 		return result;
@@ -87,7 +89,7 @@ public class AbadisDictionary extends Dictionary {
 	    /* throw NullPointerException if searched word is mistyped,
 	       return an empty array*/
 			html.getElementsByTag("h1").first().text();
-			// if no Exception continue as usual
+			// if no Exception proceed as usual
 			for (Element element : html.getElementsByClass("Lun")) {
 				for (Element example : element.getElementsByClass("WordB")) {
 					result.add(example.ownText().trim());

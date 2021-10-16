@@ -1,12 +1,13 @@
 package ru.lukas.langjunkie.dictionarycollection.dictionary;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.ArrayList;
-import org.jsoup.Jsoup;
 import org.jsoup.Connection;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public abstract class Dictionary {
 	protected String link;
@@ -27,17 +28,13 @@ public abstract class Dictionary {
 		return dictionaryName;
 	}
 
-	protected Document makeRequest(String url)
-			throws IOException
-	{
+	protected Document makeRequest(String url) throws IOException {
 		String ref = url.split("\\?")[0];
 
 		return constructConnection(url).referrer(ref).get();
 	}
 
-	protected Document makeRequest(String url, String payload)
-			throws IOException
-	{
+	protected Document makeRequest(String url, String payload) throws IOException {
 		return constructConnection(url)
 				.referrer(url)
 				.requestBody(payload)
@@ -62,7 +59,7 @@ public abstract class Dictionary {
 	}
 
 	protected String sanitizeInput(String input) throws IllegalArgumentException {
-		input = input.trim(); // trim spaces
+		input = input.trim();
 		if (input.length() == 0) {
 			throw new IllegalArgumentException("Searched word is an empty string");
 		}

@@ -1,29 +1,29 @@
 package ru.lukas.langjunkie.api;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import ru.lukas.langjunkie.dictionarycollection.factory.CollectionFactory;
+import org.springframework.web.bind.annotation.RestController;
 import ru.lukas.langjunkie.db.Definition;
+import ru.lukas.langjunkie.dictionarycollection.factory.CollectionFactory;
 
 import javax.xml.crypto.KeySelectorException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-
+@RequestMapping("/api/v1.0b")
 @RestController
 public class DefinitionsController {
 
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	@GetMapping("/api/v1.0b/definitions")
+	@GetMapping("/definitions")
 	public Definitions definitions
 			(@RequestParam(name="word") String word,
 			 @RequestParam(name="lang") String language,
@@ -41,9 +41,9 @@ public class DefinitionsController {
 			for (HashMap<String, Serializable> definition : definitions) {
 				saveDefinitionToDB(language, word, definition);
 			}
-			return new Definitions(language, word, definitions);
+			return new Definitions(200, language, word, definitions);
 		}
-		return new Definitions(language, word, definitionsFromDB);
+		return new Definitions(200, language, word, definitionsFromDB);
 	}
 
 	private ArrayList<HashMap<String, Serializable>> getDefinitionsFromDB(String language, String word) {

@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+// TODO: Why is it abstract? Maybe plain class will do?
 public abstract class Collection {
 	protected ArrayList<Dictionary> collection;
 	protected String collectionName;
@@ -39,7 +40,9 @@ public abstract class Collection {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+
 			if (!((ArrayList<String>) result.get("results")).isEmpty()) {
+				// TODO: This result.remove stuff looks weird
 				result.remove("searched_word");
 				result.remove("language");
 				results.add(result);

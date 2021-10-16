@@ -1,13 +1,14 @@
 package ru.lukas.langjunkie.dictionarycollection.faen;
 
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.net.SocketTimeoutException;
-import java.io.Serializable;
 import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import ru.lukas.langjunkie.dictionarycollection.dictionary.Dictionary;
+
+import java.io.Serializable;
+import java.net.SocketTimeoutException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class BAmoozDictionary extends Dictionary {
 	public BAmoozDictionary() {
@@ -16,6 +17,7 @@ public class BAmoozDictionary extends Dictionary {
 		dictionaryName = "b-amooz";
 	}
 
+	@Override
 	public HashMap<String, Serializable> search(String word) {
 		HashMap<String, Serializable> result = new HashMap<>();
 		ArrayList<String> definitions = new ArrayList<>();

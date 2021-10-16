@@ -9,6 +9,7 @@ import java.util.HashMap;
 @Data
 public class Definitions {
 
+    private final int status;
     private final String collection;
     private final String searched_word;
     private final ArrayList<HashMap<String, Serializable>> definitions;
