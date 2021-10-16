@@ -18,7 +18,7 @@ public class FarsidicDictionary extends Dictionary {
 	public FarsidicDictionary() {
 		language       = "faen";
 		link           = "http://www.farsidic.com/en/Lang/FaEn";
-		dictionaryName = "farsidic";
+		name           = "farsidic";
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class FarsidicDictionary extends Dictionary {
 			Document doc = makeRequest(link, payload);
 			// get definitions
 			for (Element block : doc.getElementsByClass("farsi-mean")) {
-				for (String element : block.text().split("\\,")) {
+				for (String element : block.text().split(",")) {
 					String trimmed = element.trim();
 					// the word contains persian letters
 					// that cannot be a valid definition, skip it
@@ -63,7 +63,7 @@ public class FarsidicDictionary extends Dictionary {
 			e.printStackTrace();
 		} finally {
 			result.put("language",      language);
-			result.put("name",          dictionaryName);
+			result.put("name",          name);
 			result.put("link",          link);
 			result.put("searched_word", word);
 			result.put("results",       definitions);

@@ -15,7 +15,7 @@ public class FarsidicsDictionary extends Dictionary {
 	public FarsidicsDictionary() {
 		language        = "faen";
 		link            = "http://www.farsidics.com";
-		dictionaryName  = "farsidics";
+		name            = "farsidics";
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class FarsidicsDictionary extends Dictionary {
 			e.printStackTrace();
 		} finally {
 			result.put("language",      language);
-			result.put("name",          dictionaryName);
+			result.put("name",          name);
 			result.put("link",          link);
 			result.put("searched_word", word);
 			result.put("results",       definitions);

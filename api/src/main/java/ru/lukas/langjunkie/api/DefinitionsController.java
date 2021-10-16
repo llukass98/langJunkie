@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/api/v1.0b")
 @RestController
@@ -31,14 +32,14 @@ public class DefinitionsController {
 			 @RequestParam(name="ex", defaultValue="1") String examples)
 			throws KeySelectorException
 	{
-		ArrayList<HashMap<String, Serializable>> definitionsFromDB =
+		List<Map<String, Serializable>> definitionsFromDB =
 				getDefinitionsFromDB(language, word);
 
 		if (definitionsFromDB.isEmpty()) {
-			ArrayList<HashMap<String, Serializable>> definitions;
+			List<Map<String, Serializable>> definitions;
 
 			definitions = CollectionFactory.getCollection(language).search(word);
-			for (HashMap<String, Serializable> definition : definitions) {
+			for (Map<String, Serializable> definition : definitions) {
 				saveDefinitionToDB(language, word, definition);
 			}
 			return new Definitions(200, language, word, definitions);
@@ -46,13 +47,13 @@ public class DefinitionsController {
 		return new Definitions(200, language, word, definitionsFromDB);
 	}
 
-	private ArrayList<HashMap<String, Serializable>> getDefinitionsFromDB(String language, String word) {
+	private List<Map<String, Serializable>> getDefinitionsFromDB(String language, String word) {
 		word = word.trim();
 		Session session = sessionFactory.openSession();
 		String query =
 				"FROM Definition WHERE word='"+word+ "' AND language='" +language+ "'";
 		List<Definition> queryResults = session.createQuery(query).list();
-		ArrayList<HashMap<String, Serializable>> finalResult = new ArrayList<>();
+		List<Map<String, Serializable>> finalResult = new ArrayList<>();
 
 		if (queryResults.isEmpty()) {
 			session.close();
@@ -60,8 +61,8 @@ public class DefinitionsController {
 		}
 
 		for (Definition result : queryResults) {
-			HashMap<String, Serializable> dictionary = new HashMap<>();
-			dictionary.put("name", result.getDictionary());
+			Map<String, Serializable> dictionary = new HashMap<>();
+			dictionary.put("name", result.getName());
 			dictionary.put("link", result.getLink());
 			dictionary.put("results", result.getDefinitions());
 			dictionary.put("synonyms", result.getSynonyms());
@@ -75,7 +76,7 @@ public class DefinitionsController {
 
 	private void saveDefinitionToDB(String language,
 									String word,
-									HashMap<String, Serializable> definition)
+									Map<String, Serializable> definition)
 	{
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();

@@ -1,19 +1,20 @@
 package ru.lukas.langjunkie.db;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
-import javax.persistence.Id;
 
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.ArrayList;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Map;
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Definition implements Serializable {
 
     @Id
@@ -36,11 +37,9 @@ public class Definition implements Serializable {
     @UpdateTimestamp
     private LocalDateTime updatedOn;
 
-    public Definition() {}
-
     public Definition(String language,
                       String word,
-                      HashMap<String, Serializable> dictionary)
+                      Map<String, Serializable> dictionary)
     {
         this.word = word;
         this.language = language;
@@ -51,41 +50,10 @@ public class Definition implements Serializable {
         link = (String) dictionary.get("link");
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public String getWord() {
-        return word;
-    }
-
-    public String getDictionary() {
-        return name;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public ArrayList<String> getDefinitions() {
-        return definitions;
-    }
-
-    public ArrayList<String> getSynonyms() {
-        return synonyms;
-    }
-
-    public ArrayList<String> getExamples() {
-        return examples;
-    }
-
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "updatedOn = " + updatedOn + ")";
+        return getClass().getSimpleName() + "[" +
+                "updatedOn=" + updatedOn + ", " +
+                "createdOn=" + createdOn +"]";
     }
 }

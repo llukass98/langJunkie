@@ -3,8 +3,8 @@ package ru.lukas.langjunkie.api;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Data
 public class Definitions {
@@ -12,5 +12,5 @@ public class Definitions {
     private final int status;
     private final String collection;
     private final String searched_word;
-    private final ArrayList<HashMap<String, Serializable>> definitions;
+    private final List<Map<String, Serializable>> definitions;
 }

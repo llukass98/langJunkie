@@ -67,16 +67,6 @@
           <version>3.0.0</version>
         </plugin>
 
-        <!--	<plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>exec-maven-plugin</artifactId>
-          <version>1.2.1</version>
-          <configuration>
-	    <skip>true</skip>
-	    <mainClass>ru.lukas.langjunkie.loader.App</mainClass>
-          </configuration>
-          </plugin> -->
-
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>exec-maven-plugin</artifactId>
@@ -104,9 +94,7 @@
           <executions>
             <execution>
               <id>make-assembly</id>
-              <!-- bind to the packaging phase -->
               <phase>package</phase>
-
               <goals>
                 <goal>single</goal>
               </goals>

@@ -1,5 +1,7 @@
 package ru.lukas.langjunkie.dictionarycollection.dictionary;
 
+import lombok.Getter;
+
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -9,24 +11,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+@Getter
 public abstract class Dictionary {
 	protected String link;
 	protected String language;
-	protected String dictionaryName;
+	protected String name;
 
 	abstract public HashMap<String, Serializable> search(String word);
-
-	public String getLanguage() {
-		return language;
-	}
-
-	public String getLink() {
-		return link;
-	}
-
-	public String getName() {
-		return dictionaryName;
-	}
 
 	protected Document makeRequest(String url) throws IOException {
 		String ref = url.split("\\?")[0];

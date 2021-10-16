@@ -14,7 +14,7 @@ public class AbadisDictionary extends Dictionary {
 	public AbadisDictionary() {
 		language       = "faen";
 		link           = "https://abadis.ir";
-		dictionaryName = "abadis";
+		name           = "abadis";
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class AbadisDictionary extends Dictionary {
 			e.printStackTrace();
 		} finally {
 			result.put("language",      language);
-			result.put("name",          dictionaryName);
+			result.put("name",          name);
 			result.put("link",          link);
 			result.put("searched_word", word);
 			result.put("results",       definitions);
@@ -68,7 +68,7 @@ public class AbadisDictionary extends Dictionary {
 			Element block = html.getElementById("FaToEnSyn");
 
 			for (Element element : block.getElementsByClass("Mean")) {
-				for (String synonym : element.text().split("\\،")) {
+				for (String synonym : element.text().split("،")) {
 					if (!synonym.trim().equals(searchedWord)) {
 						result.add(synonym.trim());
 					}

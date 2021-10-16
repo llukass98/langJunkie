@@ -15,7 +15,7 @@ public class DictionaryFarsiDictionary extends Dictionary {
 	public DictionaryFarsiDictionary() {
 		language       = "faen";
 		link           = "http://www.dictionary-farsi.com";
-		dictionaryName = "dictionary-farsi";
+		name           = "dictionary-farsi";
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class DictionaryFarsiDictionary extends Dictionary {
 			e.printStackTrace();
 		} finally {
 			result.put("language",      language);
-			result.put("name",          dictionaryName);
+			result.put("name",          name);
 			result.put("link",          link);
 			result.put("searched_word", word);
 			result.put("results",       definitions);

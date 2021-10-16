@@ -14,7 +14,7 @@ public class BAmoozDictionary extends Dictionary {
 	public BAmoozDictionary() {
 		language       = "faen";
 		link           = "https://dic.b-amooz.com";
-		dictionaryName = "b-amooz";
+		name           = "b-amooz";
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class BAmoozDictionary extends Dictionary {
 			e.printStackTrace();
 		} finally {
 			result.put("language",      language);
-			result.put("name",          dictionaryName);
+			result.put("name",          name);
 			result.put("link",          link);
 			result.put("searched_word", word);
 			result.put("results",       definitions);
