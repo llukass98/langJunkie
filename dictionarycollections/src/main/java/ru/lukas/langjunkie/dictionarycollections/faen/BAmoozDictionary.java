@@ -1,67 +1,64 @@
 package ru.lukas.langjunkie.dictionarycollections.faen;
 
-import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+
 import ru.lukas.langjunkie.dictionarycollections.dictionary.Dictionary;
+import ru.lukas.langjunkie.dictionarycollections.dictionary.Request;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.SearchResult;
 
-import java.net.SocketTimeoutException;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 
+/**
+ * @author Dmitry Lukashevich
+ */
 public class BAmoozDictionary extends Dictionary {
-	public BAmoozDictionary() {
-		language       = "faen";
-		link           = "https://dic.b-amooz.com";
-		name           = "b-amooz";
+
+	private final Request<Document> documentRequest;
+
+	public BAmoozDictionary(Request<Document> documentRequest) {
+		super("faen", "b-amooz", "https://dic.b-amooz.com");
+		this.documentRequest = documentRequest;
 	}
 
 	@Override
 	public SearchResult search(String word) {
-		SearchResult result = new SearchResult();
-		ArrayList<String> definitions = new ArrayList<>();
+		word = sanitizeInput(word);
+		List<String> definitions = new ArrayList<>();
+		String requestUrl = getLink() + "/en/dictionary/rw?word=" + word;
+		Document document = null;
 
 		try {
-			word = sanitizeInput(word);
-			Document doc = makeRequest(link+"/en/dictionary/rw?word="+ word);
+			document = documentRequest.getRequest(requestUrl);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-			for (Element element : doc.getElementsByClass("word-row-side")) {
+		if (document != null) {
+			for (Element element : document.getElementsByClass("word-row-side")) {
 				// if english word has been searched throw NullPointerException
-				doc.getElementsByClass("reverse-word-translation-desc")
-						.first()
-						.text();
+				document.getElementsByClass("reverse-word-translation-desc").first().text();
 				// if no exception continue as usual
 				// skip first element
 				if (element.child(0).hasClass("py-4")) { continue; }
 
 				for (Element span : element.getElementsByTag("span")) {
-					// skip numbers
-					if (span.hasClass("reverse-translation-index")) { continue; }
+					if (span.hasClass("reverse-translation-index")) { continue; } // skip numbers
 					if (span.hasClass("ml-n2")) { continue; } // skip commas
-					// skip spaces and other trash
-					if (span.hasClass("text-muted")) { continue; }
+					if (span.hasClass("text-muted")) { continue; } // skip spaces and other trash
 					definitions.add(span.text().trim());
 				}
 			}
-		} catch (SocketTimeoutException | HttpStatusException ste) {
-			// TODO: log the exception
-		} catch (IllegalArgumentException iae) {
-			// TODO: log the exception
-		} catch (NullPointerException npe) {
-			// TODO: log the exception
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			result.setLanguage(language);
-			result.setName(name);
-			result.setLink(link);
-			result.setSearchedWord(word);
-			result.setResults(definitions);
-			result.setExamples(Collections.emptyList());
-			result.setSynonyms(Collections.emptyList());
 		}
 
-		return result;
+		return SearchResult.builder()
+				.language(getLanguage())
+				.name(getName())
+				.link(getLink())
+				.searchedWord(word)
+				.results(definitions)
+				.build();
 	}
 }

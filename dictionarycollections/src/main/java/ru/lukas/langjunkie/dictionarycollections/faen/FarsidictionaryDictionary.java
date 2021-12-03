@@ -1,58 +1,56 @@
 package ru.lukas.langjunkie.dictionarycollections.faen;
 
-import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
 import ru.lukas.langjunkie.dictionarycollections.dictionary.Dictionary;
+import ru.lukas.langjunkie.dictionarycollections.dictionary.Request;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.SearchResult;
 
-import java.net.SocketTimeoutException;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 
+/**
+ * @author Dmitry Lukashevich
+ */
 public class FarsidictionaryDictionary extends Dictionary {
-	public FarsidictionaryDictionary() {
-		language       = "faen";
-		link           = "https://www.farsidictionary.net";
-		name           = "farsidictionary";
+
+	private final Request<Document> documentRequest;
+
+	public FarsidictionaryDictionary(Request<Document> documentRequest) {
+		super("faen", "farsidictionary", "https://www.farsidictionary.net");
+		this.documentRequest = documentRequest;
 	}
 
 	@Override
 	public SearchResult search(String word) {
-		SearchResult result = new SearchResult();
-		ArrayList<String> definitions = new ArrayList<>();
+		word = sanitizeInput(word);
+		List<String> definitions = new ArrayList<>();
+		String requestUrl = getLink() + "/index.php?q=" + word;
+		Document document = null;
+		Elements elems = null;
 
 		try {
-			word = sanitizeInput(word);
-			Document doc   = makeRequest(link+"/index.php?q="+ word);
-			Elements elems = doc.getElementById("faen")
+			document = documentRequest.getRequest(requestUrl);
+			elems = document.getElementById("faen")
 					.getElementsByAttributeValue("align", "left");
-
-			elems.remove(0);
-			elems.remove(0);
-
-			for (Element element : elems) {
-				definitions.add(element.text().trim());
-			}
-		} catch (SocketTimeoutException | HttpStatusException ste) {
-			// TODO: log the exception
-		} catch (IllegalArgumentException iae) {
-			// TODO: log the exception
-		} catch (NullPointerException npe) {
-			// TODO: log the exception
-		} catch (Exception e) {
+		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-			result.setLanguage(language);
-			result.setName(name);
-			result.setLink(link);
-			result.setSearchedWord(word);
-			result.setResults(definitions);
-			result.setExamples(Collections.emptyList());
-			result.setSynonyms(Collections.emptyList());
 		}
 
-		return result;
+		elems.remove(0);
+		elems.remove(0);
+
+		for (Element element : elems) { definitions.add(element.text().trim()); }
+
+		return SearchResult.builder()
+				.language(getLanguage())
+				.name(getName())
+				.link(getLink())
+				.searchedWord(word)
+				.results(definitions)
+				.build();
 	}
 }

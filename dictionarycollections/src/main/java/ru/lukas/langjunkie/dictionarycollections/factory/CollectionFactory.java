@@ -8,6 +8,9 @@ import javax.xml.crypto.KeySelectorException;
 import java.util.HashMap;
 import java.util.Set;
 
+/**
+ * @author Dmitry Lukashevich
+ */
 public class CollectionFactory {
 
 	private final static HashMap<String, Collection> collections;

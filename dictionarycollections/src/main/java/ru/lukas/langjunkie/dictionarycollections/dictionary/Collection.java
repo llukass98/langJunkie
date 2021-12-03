@@ -8,23 +8,30 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+/**
+ * @author Dmitry Lukashevich
+ */
 @Getter
 public abstract class Collection {
-	protected List<Dictionary> collection;
-	protected String collectionName;
+
+	private final List<Dictionary> collection;
+	private final String collectionName;
+	private final ExecutorService service;
+
+	public Collection(String collectionName, List<Dictionary> collection) {
+		this.collectionName = collectionName;
+		this.collection = collection;
+		service = Executors.newFixedThreadPool(10);
+	}
 
 	public List<SearchResult> search(String word) {
 		List<SearchResult> results = new ArrayList<>();
 		List<Future<SearchResult>> tasks = new ArrayList<>();
-		// TODO: make it a worker maybe, instead of creating it every search request?
-		ExecutorService service = Executors.newFixedThreadPool(10);
 
-		// run all threads and save 'em in an array
 		for (Dictionary dictionary : collection) {
 			tasks.add(service.submit(() -> dictionary.search(word)));
 		}
 
-		// query each task whether it's done and get the results
 		for (Future<SearchResult> task : tasks) {
 			SearchResult result;
 
@@ -36,8 +43,11 @@ public abstract class Collection {
 				e.printStackTrace();
 			}
 		}
-		service.shutdown();
 
 		return results;
+	}
+
+	public void shutdown() {
+		service.shutdown();
 	}
 }

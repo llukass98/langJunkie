@@ -1,15 +1,19 @@
 package ru.lukas.langjunkie.dictionarycollections.dictionary;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 /**
  * @author Dmitry Lukashevich
  */
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
-@Setter
+@Builder
 public class SearchResult {
 
     private String language;
@@ -17,6 +21,4 @@ public class SearchResult {
     private String link;
     private String searchedWord;
     private List<String> results;
-    private List<String> examples;
-    private List<String> synonyms;
 }
