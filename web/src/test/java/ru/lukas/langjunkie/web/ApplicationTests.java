@@ -1,4 +1,4 @@
-package ru.lukas.langjunkie.web.app;
+package ru.lukas.langjunkie.web;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
