@@ -8,8 +8,8 @@ import ru.lukas.langjunkie.dictionarycollections.dictionary.Dictionary;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.Request;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.SearchResult;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,21 +29,29 @@ public class FarsidictionaryDictionary extends Dictionary {
 		word = sanitizeInput(word);
 		List<String> definitions = new ArrayList<>();
 		String requestUrl = getLink() + "/index.php?q=" + word;
-		Document document = null;
+		Document document;
 		Elements elems = null;
 
 		try {
 			document = documentRequest.getRequest(requestUrl);
-			elems = document.getElementById("faen")
-					.getElementsByAttributeValue("align", "left");
-		} catch (IOException e) {
-			e.printStackTrace();
+			Element elements = document.getElementById("faen");
+
+			if (elements != null) {
+				elems = elements.getElementsByAttributeValue("align", "left");
+			}
+
+			if (elems != null) {
+				elems.remove(0);
+				elems.remove(0);
+
+				for (Element element : elems) { definitions.add(element.text().trim()); }
+			}
+		} catch (Exception e) {
+			e.printStackTrace(); // TODO: add logger
+			return SearchResult.builder()
+					.language(getLanguage()).name(getName()).link(getLink())
+					.results(Collections.emptyList()).build();
 		}
-
-		elems.remove(0);
-		elems.remove(0);
-
-		for (Element element : elems) { definitions.add(element.text().trim()); }
 
 		return SearchResult.builder()
 				.language(getLanguage())

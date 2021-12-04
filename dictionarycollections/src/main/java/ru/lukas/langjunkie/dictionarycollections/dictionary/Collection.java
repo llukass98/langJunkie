@@ -4,9 +4,8 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Dmitry Lukashevich
@@ -25,29 +24,35 @@ public abstract class Collection {
 	}
 
 	public List<SearchResult> search(String word) {
+		List<Callable<SearchResult>> tasks = new ArrayList<>();
 		List<SearchResult> results = new ArrayList<>();
-		List<Future<SearchResult>> tasks = new ArrayList<>();
 
-		for (Dictionary dictionary : collection) {
-			tasks.add(service.submit(() -> dictionary.search(word)));
-		}
-
-		for (Future<SearchResult> task : tasks) {
-			SearchResult result;
-
-			try {
-				result = task.get();
-
-				if (!result.getResults().isEmpty()) { results.add(result); }
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		collection.forEach(dictionary -> tasks.add(() -> dictionary.search(word)));
+		try {
+			results = service.invokeAll(tasks, 5, TimeUnit.SECONDS).stream()
+					.map(this::get)
+					.filter(result -> !result.getResults().isEmpty())
+					.collect(Collectors.toList());
+		} catch (InterruptedException | CancellationException e) {
+			e.printStackTrace(); // TODO: add logger
+			return results;
 		}
 
 		return results;
 	}
 
-	public void shutdown() {
-		service.shutdown();
+	public void shutdown() { service.shutdown(); }
+
+	private SearchResult get(Future<SearchResult> future) {
+		SearchResult result = new SearchResult();
+
+		try {
+			result = future.get();
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace(); //TODO: add logger
+			return result;
+		}
+
+		return result;
 	}
 }

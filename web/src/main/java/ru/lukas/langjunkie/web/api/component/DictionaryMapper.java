@@ -20,6 +20,7 @@ public class DictionaryMapper {
         if (definitions.isEmpty()) { throw new RuntimeException("No data has been found"); }
 
         return DictionaryDto.builder()
+                .status(200)
                 .collection(definitions.get(0).getLanguage())
                 .searchedWord(definitions.get(0).getWord())
                 .definitions(definitions.stream()

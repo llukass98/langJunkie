@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.lukas.langjunkie.web.api.dto.CollectionsDto;
 import ru.lukas.langjunkie.dictionarycollections.factory.CollectionFactory;
 
-@RequestMapping("/api/v1.0b")
 @RestController
+@RequestMapping("/api/v1.0b")
 public class CollectionsController {
 
     @GetMapping("/collections")

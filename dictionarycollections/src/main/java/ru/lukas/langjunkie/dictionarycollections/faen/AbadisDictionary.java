@@ -7,8 +7,8 @@ import ru.lukas.langjunkie.dictionarycollections.dictionary.Dictionary;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.Request;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.SearchResult;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,13 +28,16 @@ public class AbadisDictionary extends Dictionary {
 		word = sanitizeInput(word);
 		List<String> definitions = new ArrayList<>();
 		String requestUrl = getLink() + "/?lntype=fatoen&word=" + word;
-		Document document = null;
+		Document document;
 		Element rawDefinitions = null;
 
 		try {
 			document = documentRequest.getRequest(requestUrl);
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace(); // TODO: add logger
+			return SearchResult.builder()
+					.language(getLanguage()).name(getName()).link(getLink())
+					.results(Collections.emptyList()).build();
 		}
 
 		if (document != null) { rawDefinitions = document.getElementById("Means"); }

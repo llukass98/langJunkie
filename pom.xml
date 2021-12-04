@@ -78,7 +78,7 @@
           <version>1.2.1</version>
           <configuration>
             <skip>true</skip>
-            <mainClass>ru.lukas.langjunkie.web.app.Application</mainClass>
+            <mainClass>ru.lukas.langjunkie.web.Application</mainClass>
           </configuration>
         </plugin>
 
@@ -92,7 +92,7 @@
             </descriptorRefs>
             <archive>
               <manifest>
-                <mainClass>ru.lukas.langjunkie.web.app.Application</mainClass>
+                <mainClass>ru.lukas.langjunkie.web.</mainClass>
               </manifest>
             </archive>
           </configuration>

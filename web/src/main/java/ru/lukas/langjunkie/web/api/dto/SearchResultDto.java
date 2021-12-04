@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 public class SearchResultDto {
 
-    private String name;
-    private String link;
-    private List<String> results;
+    private final String name;
+    private final String link;
+    private final List<String> results;
 }

@@ -12,6 +12,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -47,9 +48,12 @@ public class FarsidicDictionary extends Dictionary {
 
 			document = documentRequest.postRequest(getLink(), payload);
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+			e.printStackTrace(); // TODO: add logger
+		} catch (Exception e) {
+			e.printStackTrace(); // TODO: add logger
+			return SearchResult.builder()
+					.language(getLanguage()).name(getName()).link(getLink())
+					.results(Collections.emptyList()).build();
 		}
 
 		if (document != null) {

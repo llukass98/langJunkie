@@ -1,6 +1,10 @@
 package ru.lukas.langjunkie.web.api.model;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -12,7 +16,7 @@ import javax.persistence.Id;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder

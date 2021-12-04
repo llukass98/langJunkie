@@ -10,7 +10,7 @@
     <relativePath/>
   </parent>
 
-  <groupId>ru.lukas.langjunkie.web.app</groupId>
+  <groupId>ru.lukas.langjunkie.web</groupId>
   <artifactId>web</artifactId>
   <version>1.0</version>
   <name>Application</name>
@@ -60,6 +60,12 @@
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-entitymanager</artifactId>
+      <version>${hibernate.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
       <version>${hibernate.version}</version>
     </dependency>
 

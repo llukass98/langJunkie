@@ -11,8 +11,8 @@ import ru.lukas.langjunkie.web.api.service.DictionaryService;
 
 import javax.xml.crypto.KeySelectorException;
 
-@RequestMapping("/api/v1.0b")
 @RestController
+@RequestMapping("/api/v1.0b")
 public class DictionaryController {
 
 	private final DictionaryService dictionaryService;

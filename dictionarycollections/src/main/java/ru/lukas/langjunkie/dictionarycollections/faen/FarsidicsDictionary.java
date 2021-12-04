@@ -8,6 +8,7 @@ import ru.lukas.langjunkie.dictionarycollections.dictionary.SearchResult;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,8 +40,11 @@ public class FarsidicsDictionary extends Dictionary {
 
 		try {
 			document = documentRequest.getRequest(requestUrl);
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace(); // TODO: add logger
+			return SearchResult.builder()
+					.language(getLanguage()).name(getName()).link(getLink())
+					.results(Collections.emptyList()).build();
 		}
 
 		String text  = null;

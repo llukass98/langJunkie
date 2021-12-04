@@ -19,17 +19,17 @@ import java.util.stream.Collectors;
 public class DictionaryService {
 
     private final DictionaryMapper dictionaryMapper;
-    private final DictionaryRepository hibernateDictionaryRepository;
+    private final DictionaryRepository dictionaryRepository;
 
-    public DictionaryService(DictionaryMapper dictionaryMapper, DictionaryRepository hibernateDictionaryRepository) {
+    public DictionaryService(DictionaryMapper dictionaryMapper, DictionaryRepository dictionaryRepository) {
         this.dictionaryMapper = dictionaryMapper;
-        this.hibernateDictionaryRepository = hibernateDictionaryRepository;
+        this.dictionaryRepository = dictionaryRepository;
     }
 
     public List<Dictionary> getDefinitions(String word, String language) throws KeySelectorException {
         word = word.trim();
         List<Dictionary> definitionsFromDB =
-                hibernateDictionaryRepository.findByWordAndLanguage(word, language);
+                dictionaryRepository.findByWordAndLanguage(word, language);
 
         return definitionsFromDB.isEmpty() ?
                 saveAndGetDefinitions(word, language) : definitionsFromDB;
@@ -39,7 +39,7 @@ public class DictionaryService {
         List<Dictionary> definitions = CollectionFactory.getCollection(language).search(word)
                 .stream().map(dictionaryMapper::toModel).collect(Collectors.toList());
 
-        hibernateDictionaryRepository.saveAll(definitions);
+        dictionaryRepository.saveAll(definitions);
 
         return definitions;
     }

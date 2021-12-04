@@ -5,12 +5,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import javax.sql.DataSource;
-
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.Map;
+
+import javax.sql.DataSource;
 
 @Configuration
 public class DataSourceConfig {

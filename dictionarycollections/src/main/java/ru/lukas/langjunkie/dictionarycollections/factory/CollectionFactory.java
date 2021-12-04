@@ -23,10 +23,6 @@ public class CollectionFactory {
 
 	private CollectionFactory() {}
 
-	public static Set<String> getCollections() {
-		return collections.keySet();
-	}
-
 	public static Collection getCollection (String collectionName)
 			throws KeySelectorException
 	{
@@ -36,4 +32,7 @@ public class CollectionFactory {
 
 		return collections.get(collectionName);
 	}
+
+	public static Set<String> getCollections() { return collections.keySet(); }
+
 }

@@ -11,6 +11,7 @@ import java.util.List;
 @Builder
 public class DictionaryDto {
 
+    private final Integer status;
     private final String collection;
 
     @JsonProperty("searched_word")
