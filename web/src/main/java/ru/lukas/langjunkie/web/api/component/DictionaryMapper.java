@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
  * @author Dmitry Lukashevich
  */
 @Component
+// TODO: consider mapStruct lib
 public class DictionaryMapper {
 
     public DictionaryDto toDto(List<Dictionary> definitions) {

@@ -1,11 +1,11 @@
 package ru.lukas.langjunkie.web.api.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
 import java.util.Set;
 
-@Getter
+@Data
 @AllArgsConstructor
 public class CollectionsDto {
 

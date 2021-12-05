@@ -1,3 +1,4 @@
+/*
 package ru.lukas.langjunkie.web.api.repository;
 
 import org.hibernate.Session;
@@ -10,9 +11,11 @@ import ru.lukas.langjunkie.web.api.model.Dictionary;
 
 import java.util.List;
 
+*/
 /**
  * @author Dmitry Lukashevich
- */
+ *//*
+
 @Repository
 public class HibernateDictionaryRepository implements DictionaryRepository {
 
@@ -55,3 +58,4 @@ public class HibernateDictionaryRepository implements DictionaryRepository {
         session.close();
     }
 }
+*/
