@@ -11,40 +11,33 @@
 </head>
 <body>
 <div class="main">
-    <h1>Sign up</h1>
+    <h1>Sign in</h1>
     <div class="container">
         <div class="sign-up-content">
-            <form method="POST" class="signup" action="/signup">
-                <h2 class="form-title">Create an account</h2>
-                <div class="form-textbox">
-                    <label for="name">Full name</label>
-                    <input type="text" name="full_name" id="name" />
+            <form method="POST" class="signin" action="/signin">
+                <h2 class="form-title">Authorise</h2>
+                <div class="error" <#if signin_failure != true>hidden</#if>>
+                    Unable to authorise - bad credentials. Try again.
                 </div>
-
                 <div class="form-textbox">
                     <label for="username">Username</label>
-                    <input type="text" name="username" id="username" />
-                </div>
-
-                <div class="form-textbox">
-                    <label for="email">Email</label>
-                    <input type="email" name="email" id="email" />
+                    <input type="text" name="username" id="name" />
                 </div>
 
                 <div class="form-textbox">
                     <label for="pass">Password</label>
-                    <input type="password" name="pass" id="pass" />
+                    <input type="password" name="password" id="pass" class="signin_pass" />
                 </div>
 
                 <div class="form-textbox">
-                    <input type="submit" name="submit" id="submit" class="submit" value="Create account" />
+                    <input type="submit" name="submit" id="submit" class="submit" value="Sign in" />
                 </div>
 
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             </form>
 
             <p class="loginhere">
-                Already have an account ?<a href="/signin" class="loginhere-link"> Log in</a>
+                Don't have an account ?<a href="/signup" class="loginhere-link"> Sign up</a>
             </p>
         </div>
     </div>

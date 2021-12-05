@@ -75,6 +75,7 @@ const printResults = data => {
 
 fetchCollections();
 submitBtn.addEventListener("click", fetchDefinitions);
+
 for (let i = 0; i < words.length; i++) {
     words[i].addEventListener("click", fetchDefinitionsText);
 }

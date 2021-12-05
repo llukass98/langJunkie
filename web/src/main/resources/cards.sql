@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS card, word, "user";
+DROP TABLE IF EXISTS card, word, "user" CASCADE;
 
 CREATE TABLE "user" (
     id BIGSERIAL PRIMARY KEY,
@@ -27,4 +27,5 @@ CREATE TABLE card (
 
 INSERT INTO "user"
     (username, password, email, full_name, role, is_active)
-VALUES ('admin', 'admin', 'admin@admin.ru', 'John Dough', 'ROLE_ADMIN', TRUE);
+VALUES ('admin', '$2a$10$UhVwh1Kxrre3df1MkAexvuNw792lrrAU2y6A5PAYoouZ89cqg0kDK',
+        'admin@admin.ru', 'John Dough', 'ROLE_ADMIN', TRUE);

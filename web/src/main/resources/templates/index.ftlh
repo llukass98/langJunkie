@@ -9,13 +9,17 @@
 <body>
 <div class="container">
     <div class="row">
-        <h4 class="col col-8 text-center mt-5 mx-4 w-75">Search the definition of the word</h4>
-        <div class="col mx-2 mt-5"></div>
         <select id="lang_collection" name="lang" class="col form-select form-select-sm mt-5 px-3" aria-label="Default select example">
             <#list collections.getCollections() as collection>
                 <option value=${collection}>${collection}</option>
             </#list>
         </select>
+        <h4 class="col col-8 text-center mt-5 mx-4 w-75">Search the definition of the word</h4>
+        <div class="col mx-2 mt-5"></div>
+        <form class="col mt-5" method="post", action="/logout">
+            <input type="submit" class="btn btn-danger" value="Logout" />
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+        </form>
     </div>
 </div>
 <div class="container-md mt-5">

@@ -298,7 +298,7 @@ input {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px; }
 
-#username {
+#username, .signin_pass {
   border-top: none; }
 
 #pass {
@@ -309,6 +309,12 @@ input {
   border: none;
   border-left: solid 2px #ebebeb;
   border-right: solid 2px #ebebeb; }
+
+.error {
+  margin: 0 0 10px 0;
+  text-align: center;
+  color: red;
+}
 
 input[type=checkbox]:not(old) {
   width: 2em;
@@ -401,19 +407,33 @@ input:-webkit-autofill {
 @media screen and (max-width: 768px) {
   .container {
     width: calc( 100% - 30px);
-    max-width: 100%; } }
+    max-width: 100%; }
+
+  .error {
+    margin: 0 0 10px 0;
+    text-align: center; }}
+
 @media screen and (max-width: 575px) {
   .sign-up-content {
     padding: 40px 20px 32px 20px; }
 
   .form-radio input + label {
     display: block;
-    margin-bottom: 10px; } }
+    margin-bottom: 10px; }
+
+  .error {
+    margin: 0 0 10px 0;
+    text-align: center; }}
+
 @media screen and (max-width: 400px) {
   .form-textbox label {
     left: 15px; }
 
   input {
-    padding: 16px 30px 16px 100px; } }
+    padding: 16px 30px 16px 100px; }
+
+  .error {
+    margin: 0 0 10px 0;
+    text-align: center; }}
 
 /*# sourceMappingURL=style.css.map */
