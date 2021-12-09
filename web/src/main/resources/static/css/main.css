@@ -1,0 +1,68 @@
+#definitions_card_dict, #definitions_card {
+    position: absolute;
+    left: 25%;
+    margin: 0 auto;
+    z-index: 9999;
+}
+
+#definitions_card_dict {
+    top: 300px;
+}
+
+#definitions_card {
+    top: -10px;
+}
+
+.word {
+    margin: 3px;
+}
+
+.word:hover {
+    cursor: pointer;
+}
+
+#lang_collection {
+    position: relative;
+    margin-left: 45%;
+    height:28px;
+}
+
+#logout {
+    margin-left: 50%;
+}
+
+#custom_text {
+    width: 100%;
+}
+
+.text {
+    overflow-wrap: normal;
+}
+
+.card-body {
+    display: flex;
+    flex-flow: column;
+}
+
+.card-body > .buttons {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+}
+
+.card-body button {
+    width: 150px;
+}
+
+#edit_form, #add_form {
+    position: absolute;
+    left: 25%;
+    top: 20%;
+    width: 50%;
+    z-index: 9999;
+    padding: 10px;
+}
+
+#username {
+    width: 0;
+}

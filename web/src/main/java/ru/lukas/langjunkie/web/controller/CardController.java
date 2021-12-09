@@ -1,0 +1,45 @@
+package ru.lukas.langjunkie.web.controller;
+
+import org.springframework.stereotype.Controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import ru.lukas.langjunkie.web.dto.CardDto;
+import ru.lukas.langjunkie.web.service.CardServiceImpl;
+
+/**
+ * @author Dmitry Lukashevich
+ */
+@Controller
+public class CardController {
+
+    private final CardServiceImpl cardServiceImpl;
+
+    public CardController(CardServiceImpl cardServiceImpl) {
+        this.cardServiceImpl = cardServiceImpl;
+    }
+
+    @PostMapping(value = "/add/card")
+    public String addCard(CardDto cardDto, @RequestParam String username) {
+        cardServiceImpl.saveCard(cardDto, username);
+
+        return "redirect:/cards";
+    }
+
+    @PostMapping(value = "/update/card/{card-id}")
+    public String updateCard(CardDto cardDto, @PathVariable("card-id") Long id) {
+        cardDto.setId(id);
+        cardServiceImpl.updateCard(cardDto);
+
+        return "redirect:/cards";
+    }
+
+    @GetMapping("/delete/card/{card-id}")
+    public String deleteCard(@PathVariable("card-id") Long id) {
+        cardServiceImpl.deleteCard(id);
+
+        return "redirect:/cards";
+    }
+}
