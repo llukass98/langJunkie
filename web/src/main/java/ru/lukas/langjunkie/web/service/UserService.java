@@ -1,22 +1,16 @@
 package ru.lukas.langjunkie.web.service;
 
-import org.springframework.stereotype.Service;
+import ru.lukas.langjunkie.web.dto.UserDto;
 import ru.lukas.langjunkie.web.model.User;
-import ru.lukas.langjunkie.web.repository.UserRepository;
 
 /**
  * @author Dmitry Lukashevich
  */
-@Service
-public class UserService {
+public interface UserService {
 
-    private final UserRepository userRepository;
+    UserDto getUserByUsername(String username);
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    User getUserByUsernameAsModel(String username);
 
-    public void saveUser(User user) {
-        userRepository.save(user);
-    }
+    void saveUser(UserDto userDto, String password);
 }

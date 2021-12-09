@@ -16,9 +16,11 @@
         <div class="sign-up-content">
             <form method="POST" class="signin" action="/signin">
                 <h2 class="form-title">Authorise</h2>
-                <div class="error" <#if signin_failure != true>hidden</#if>>
-                    Unable to authorise - bad credentials. Try again.
-                </div>
+
+                <#if signin_failure?has_content>
+                    <div class="error">Unable to authorise - bad credentials. Try again.</div>
+                </#if>
+
                 <div class="form-textbox">
                     <label for="username">Username</label>
                     <input type="text" name="username" id="name" />

@@ -16,9 +16,30 @@
         <div class="sign-up-content">
             <form method="POST" class="signup" action="/signup">
                 <h2 class="form-title">Create an account</h2>
+
+                <!-- Database constraint validation section start -->
+                <#if signup_failure?has_content>
+                    <#if error?has_content>
+                        <div class="error">
+                            <#if error == "user_exists">
+                                User with such username is already registered.
+                            <#else>
+                                User with such email is already registered.
+                            </#if>
+                        </div>
+                    </#if>
+
+                    <#if errors?has_content>
+                      <#list errors as error>
+                          <p class="error">${error.getMessage()}</p>
+                      </#list>
+                    </#if>
+                </#if>
+                <!-- Database constraint validation section end-->
+
                 <div class="form-textbox">
                     <label for="name">Full name</label>
-                    <input type="text" name="full_name" id="name" />
+                    <input type="text" name="fullname" id="name" />
                 </div>
 
                 <div class="form-textbox">
@@ -33,7 +54,7 @@
 
                 <div class="form-textbox">
                     <label for="pass">Password</label>
-                    <input type="password" name="pass" id="pass" />
+                    <input type="password" name="password" id="pass" />
                 </div>
 
                 <div class="form-textbox">

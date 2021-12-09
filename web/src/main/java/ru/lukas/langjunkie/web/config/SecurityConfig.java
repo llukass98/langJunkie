@@ -7,7 +7,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
 
@@ -15,7 +14,7 @@ import javax.sql.DataSource;
  * @author Dmitry Lukashevich
  */
 @Configuration
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final DataSource dataSource;
 
@@ -27,13 +26,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final String SQL_BY_USERNAME = "SELECT username, password, is_active " +
             "FROM \"user\" WHERE username = ?";
 
-    public SecurityConfiguration(DataSource dataSource) {
+    public SecurityConfig(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        PasswordEncoder encoder = passwordEncoder();
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .usersByUsernameQuery(SQL_BY_USERNAME)
@@ -72,7 +70,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    public BCryptPasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder(); }
 }

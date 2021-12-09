@@ -1,6 +1,9 @@
 package ru.lukas.langjunkie.web.dto;
 
-import lombok.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * @author Dmitry Lukashevich
@@ -11,7 +14,9 @@ import lombok.*;
 @Setter
 public class CardDto {
 
+    private Long id;
     private String frontSide;
     private String backSide;
-    private WordDto word;
+    private String language;
+    private String word;
 }

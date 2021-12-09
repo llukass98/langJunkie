@@ -29,7 +29,7 @@ public abstract class Collection {
 
 		collection.forEach(dictionary -> tasks.add(() -> dictionary.search(word)));
 		try {
-			results = service.invokeAll(tasks, 5, TimeUnit.SECONDS).stream()
+			results = service.invokeAll(tasks).stream()
 					.map(this::get)
 					.filter(result -> !result.getResults().isEmpty())
 					.collect(Collectors.toList());

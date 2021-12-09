@@ -18,7 +18,7 @@ public class UserDto {
 
     private String username;
     private String email;
-    private String fullName;
+    private String fullname;
     private List<CardDto> cards;
     private Boolean isActive;
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ru.lukas.langjunkie.web.api.component.DictionaryMapper;
 import ru.lukas.langjunkie.web.api.dto.DictionaryDto;
-import ru.lukas.langjunkie.web.api.service.DictionaryService;
+import ru.lukas.langjunkie.web.api.service.DictionaryServiceImpl;
 
 import javax.xml.crypto.KeySelectorException;
 
@@ -15,11 +15,11 @@ import javax.xml.crypto.KeySelectorException;
 @RequestMapping("/api/v1.0b")
 public class DictionaryController {
 
-	private final DictionaryService dictionaryService;
+	private final DictionaryServiceImpl dictionaryServiceImpl;
 	private final DictionaryMapper dictionaryMapper;
 
-	public DictionaryController(DictionaryService dictionaryService, DictionaryMapper dictionaryMapper) {
-		this.dictionaryService = dictionaryService;
+	public DictionaryController(DictionaryServiceImpl dictionaryServiceImpl, DictionaryMapper dictionaryMapper) {
+		this.dictionaryServiceImpl = dictionaryServiceImpl;
 		this.dictionaryMapper = dictionaryMapper;
 	}
 
@@ -27,6 +27,6 @@ public class DictionaryController {
 	public DictionaryDto definitions (@RequestParam String word, @RequestParam String lang)
 			throws KeySelectorException
 	{
-		return dictionaryMapper.toDto(dictionaryService.getDefinitions(word, lang));
+		return dictionaryMapper.toDto(dictionaryServiceImpl.getDefinitions(word, lang));
 	}
 }

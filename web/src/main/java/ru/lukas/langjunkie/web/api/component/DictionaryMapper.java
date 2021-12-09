@@ -7,6 +7,7 @@ import ru.lukas.langjunkie.web.api.dto.SearchResultDto;
 import ru.lukas.langjunkie.web.api.model.Dictionary;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.SearchResult;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 public class DictionaryMapper {
 
     public DictionaryDto toDto(List<Dictionary> definitions) {
-        if (definitions.isEmpty()) { throw new RuntimeException("No data has been found"); }
+        if (definitions.isEmpty()) { return mapToEmptyDictionaryDto(); }
 
         return DictionaryDto.builder()
                 .status(200)
@@ -41,6 +42,12 @@ public class DictionaryMapper {
                 .name(searchResult.getName())
                 .link(searchResult.getLink())
                 .definitions(searchResult.getResults())
+                .build();
+    }
+
+    private DictionaryDto mapToEmptyDictionaryDto() {
+        return DictionaryDto.builder()
+                .status(404)
                 .build();
     }
 }
