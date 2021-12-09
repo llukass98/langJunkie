@@ -22,13 +22,13 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="/">Home</a>
+                            <a class="nav-link active" aria-current="page" href="/">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/cards">Flash cards</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="/dictionary">Dictionary</a>
+                            <a class="nav-link" href="/dictionary">Dictionary</a>
                         </li>
                     </ul>
                     <form class="navbar-text" method="post" action="/logout">
