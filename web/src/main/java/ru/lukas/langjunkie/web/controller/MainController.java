@@ -25,31 +25,29 @@ public class MainController {
 
     @GetMapping(value = "/")
     public String index(ModelMap modelMap, Principal principal) {
-        UserDto userDto = userServiceImpl.getUserByUsername(principal.getName());
-
-        modelMap.put("user", userDto);
-        modelMap.put("collections", new CollectionsDto(CollectionFactory.getCollections()));
+        prepareModelMap(modelMap, principal);
 
         return "index";
     }
 
     @GetMapping(value = "/cards")
     public String cards(ModelMap modelMap, Principal principal) {
-        UserDto userDto = userServiceImpl.getUserByUsername(principal.getName());
-
-        modelMap.put("user", userDto);
-        modelMap.put("collections", new CollectionsDto(CollectionFactory.getCollections()));
+        prepareModelMap(modelMap, principal);
 
         return "cards";
     }
 
     @GetMapping(value = "/dictionary")
     public String dictionary(ModelMap modelMap, Principal principal) {
-        UserDto userDto = userServiceImpl.getUserByUsername(principal.getName());
+        prepareModelMap(modelMap, principal);
+
+        return "dictionary";
+    }
+
+    private void prepareModelMap(ModelMap modelMap, Principal principal) {
+        UserDto userDto = userServiceImpl.getUserByUsernameAsDto(principal.getName());
 
         modelMap.put("user", userDto);
         modelMap.put("collections", new CollectionsDto(CollectionFactory.getCollections()));
-
-        return "dictionary";
     }
 }
