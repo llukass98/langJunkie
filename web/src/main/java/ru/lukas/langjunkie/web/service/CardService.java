@@ -14,7 +14,7 @@ public interface CardService {
 
     void updateCard(CardDto cardDto) throws IOException;
 
-    void deleteCard(Long id) throws IOException;
+    void deleteCard(Long id);
 
     Long getNumberOfCardsByUser(UserDto userDto);
 }

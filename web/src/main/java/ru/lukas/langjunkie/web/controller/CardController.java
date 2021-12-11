@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.lukas.langjunkie.web.dto.CardDto;
+import ru.lukas.langjunkie.web.service.CardService;
 import ru.lukas.langjunkie.web.service.CardServiceImpl;
 
 import java.io.IOException;
@@ -17,15 +18,15 @@ import java.io.IOException;
 @Controller
 public class CardController {
 
-    private final CardServiceImpl cardServiceImpl;
+    private final CardService cardService;
 
-    public CardController(CardServiceImpl cardServiceImpl) {
-        this.cardServiceImpl = cardServiceImpl;
+    public CardController(CardService cardService) {
+        this.cardService = cardService;
     }
 
     @PostMapping(value = "/add/card")
     public String addCard(CardDto cardDto, @RequestParam String username) throws IOException {
-        cardServiceImpl.saveCard(cardDto, username);
+        cardService.saveCard(cardDto, username);
 
         return "redirect:/cards";
     }
@@ -35,14 +36,14 @@ public class CardController {
             throws IOException
     {
         cardDto.setId(id);
-        cardServiceImpl.updateCard(cardDto);
+        cardService.updateCard(cardDto);
 
         return "redirect:/cards";
     }
 
     @GetMapping("/delete/card/{card-id}")
     public String deleteCard(@PathVariable("card-id") Long id) throws IOException {
-        cardServiceImpl.deleteCard(id);
+        cardService.deleteCard(id);
 
         return "redirect:/cards";
     }
