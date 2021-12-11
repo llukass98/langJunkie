@@ -11,7 +11,6 @@
 <div class="container ">
     <div class="row">
         <!-- Navigation -->
-        <!-- Navigation -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">${user.fullname}</a>
@@ -67,7 +66,7 @@
     <div class="row">
         <h5 class="col text-center">Load your text. Words are clickable :)</h5>
     </div>
-    <div class="text mt-5"></div>
+    <div id="processed_text" class="text mt-5"></div>
     <textarea id="custom_text" class="mt-5 form-control" placeholder="Your text for reading and translation" rows="10"></textarea>
     <button id="textloader" class="btn btn-secondary mt-3">Load!</button>
 </div>
