@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userMapper.toUserModel(userDto);
         user.setPassword(password);
-        user.setRole(roleRepository.findByName("USER").orElseThrow());
+        user.setRole(roleRepository.findByName(RoleRepository.ROLE_USER).orElseThrow());
 
         if (user.getPassword().length() < 6 || user.getPassword().length() > 15) {
             throw new InvalidPasswordException("Password length must be between 6 and 15 characters");

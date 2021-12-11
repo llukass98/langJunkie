@@ -43,6 +43,9 @@ public class Card {
     @Embedded
     private Word word;
 
+    @Column(name = "picture_path")
+    private String picturePath;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

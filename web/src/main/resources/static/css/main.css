@@ -66,3 +66,8 @@
 #username {
     width: 0;
 }
+
+#card_picture {
+    width: 200px;
+    object-fit: scale-down;
+}
