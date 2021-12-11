@@ -15,13 +15,14 @@ const expandCard = (e) => {
 }
 
 const showBackSide = (e) => {
-    e.target.parentElement.parentElement.children[4].removeAttribute("hidden");
+    const cardId = e.target.parentElement.children[4].innerText;
+    document.querySelector("#back_side" + cardId).removeAttribute("hidden");
     e.target.setAttribute("hidden", "");
 }
 
 const hideBackSide = (e) => {
-    console.log(e.target.parentElement.parentElement);
-    e.target.parentElement.parentElement.children[4].setAttribute("hidden", "");
+    const cardId = e.target.parentElement.children[4].innerText;
+    document.querySelector("#back_side" + cardId).setAttribute("hidden", "");
     e.target.parentElement.children[0].removeAttribute("hidden");
     e.target.parentElement.parentElement.setAttribute("hidden", "");
 }
@@ -34,20 +35,20 @@ const compressCard = (e) => {
 
 const showEditForm = (e) => {
     const cardId = e.target.parentElement.children[4].innerText;
-    const word = e.target.parentElement.parentElement.children[0].innerText;
-    const language = e.target.parentElement.parentElement.children[1].innerText;
-    const front = e.target.parentElement.parentElement.children[2].innerText;
-    const back = e.target.parentElement.parentElement.children[4].innerText;
+    const word = document.querySelector("#word" + cardId).innerText;
+    const language = document.querySelector("#language" + cardId).innerText;
+    const front = document.querySelector("#front_side" + cardId).innerText;
+    const back = document.querySelector("#back_side" + cardId).innerText;
 
     editForm.children[0].firstElementChild.value = word;
-    editForm.children[1].firstElementChild.value = language;
-    editForm.children[2].firstElementChild.value = front;
-    editForm.children[3].firstElementChild.value = back;
+    editForm.children[2].firstElementChild.value = language;
+    editForm.children[3].firstElementChild.value = front;
+    editForm.children[4].firstElementChild.value = back;
     editForm.setAttribute("action", "/update/card/" + cardId);
     editForm.removeAttribute("hidden");
 }
 
-const hideEditForm = (e) => {
+const hideEditForm = () => {
     editForm.setAttribute("hidden", "");
 }
 

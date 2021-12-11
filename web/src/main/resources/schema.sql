@@ -9,7 +9,7 @@ CREATE TABLE dictionary (
 );
 
 CREATE TABLE role (
-    id SERIAL PRIMARY KEY,
+    id BIGINT PRIMARY KEY,
     name VARCHAR UNIQUE NOT NULL
 );
 
@@ -19,7 +19,7 @@ CREATE TABLE "user" (
     password VARCHAR NOT NULL,
     email VARCHAR UNIQUE NOT NULL,
     full_name VARCHAR NOT NULL,
-    role_id INT,
+    role_id BIGINT,
     FOREIGN KEY (role_id) REFERENCES role(id)
 );
 
@@ -30,10 +30,11 @@ CREATE TABLE card (
     language VARCHAR NOT NULL,
     user_id BIGINT,
     word VARCHAR,
+    picture VARCHAR,
     FOREIGN KEY (user_id) REFERENCES "user"(id)
 );
 
-INSERT INTO role(id, name) VALUES (1, 'ADMIN');
+/*INSERT INTO role(id, name) VALUES (1, 'ADMIN');
 INSERT INTO role(id, name) VALUES (2, 'USER');
 
 
@@ -44,4 +45,4 @@ VALUES ('admin', '$2a$10$UhVwh1Kxrre3df1MkAexvuNw792lrrAU2y6A5PAYoouZ89cqg0kDK',
 
 INSERT INTO card
 (front_side, back_side, language, user_id, word)
-VALUES (E'This is what I\'m capable of', 'Back side', 'enen', 1, 'capable');
+VALUES (E'This is what I\'m capable of', 'Back side', 'enen', 1, 'capable');*/

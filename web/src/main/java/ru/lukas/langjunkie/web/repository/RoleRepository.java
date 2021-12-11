@@ -10,5 +10,8 @@ import java.util.Optional;
  */
 public interface RoleRepository extends CrudRepository<Role, Long> {
 
+    String ROLE_ADMIN = "ADMIN";
+    String ROLE_USER = "USER";
+
     Optional<Role> findByName(String name);
 }
