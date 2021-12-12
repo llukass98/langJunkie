@@ -71,3 +71,17 @@
     width: 200px;
     object-fit: scale-down;
 }
+
+#definition_close_btn {
+    width: 8px;
+}
+
+.flash_card {
+    margin: 0px;
+    height: 32px;
+}
+
+.flash_card:hover {
+    cursor: pointer;
+    background-color: #ffffac;
+}
