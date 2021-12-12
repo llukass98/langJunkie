@@ -50,11 +50,4 @@ public class CardController {
 
         return "redirect:/cards";
     }
-
-    @GetMapping("/img/uploaded/{card-id}")
-    public void getCardImage(@PathVariable("card-id") Long cardId,
-                             HttpServletResponse response)
-    {
-        cardServiceImpl.addCardImageToResponse(cardId, response);
-    }
 }
