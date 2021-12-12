@@ -29,5 +29,4 @@ effective-settings.xml
 *.jar
 */dependency-reduced-pom.xml
 node_modules
-
-**/img/uploaded
+**/files

@@ -15,12 +15,14 @@ import ru.lukas.langjunkie.web.component.CardMapper;
 import ru.lukas.langjunkie.web.dto.CardDto;
 import ru.lukas.langjunkie.web.dto.UserDto;
 import ru.lukas.langjunkie.web.model.Card;
+import ru.lukas.langjunkie.web.model.ImageFileInfo;
 import ru.lukas.langjunkie.web.model.User;
 import ru.lukas.langjunkie.web.repository.CardRepository;
 import ru.lukas.langjunkie.web.repository.UserRepository;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * @author Dmitry Lukashevich
@@ -44,7 +46,6 @@ public class CardServiceImpl implements CardService {
         Optional<MultipartFile> picture = Optional.ofNullable(cardDto.getPicture());
 
         addPicture(picture, card);
-
         card.setUser(user);
         user.getCards().add(card);
 
@@ -55,10 +56,9 @@ public class CardServiceImpl implements CardService {
     public void deleteCard(Long id) {
         Card card = cardRepository.findById(id).orElseThrow();
         User user = userRepository.findByUsername(card.getUser().getUsername());
-        Optional<String> picture = Optional.ofNullable(card.getPicturePath());
+        Optional<ImageFileInfo> picture = Optional.ofNullable(card.getImage());
 
         deletePicture(picture, card);
-
         user.getCards().remove(card);
 
         userRepository.save(user);
@@ -68,7 +68,7 @@ public class CardServiceImpl implements CardService {
     public void updateCard(CardDto cardDto) throws IOException {
         Card card = cardRepository.findById(cardDto.getId()).orElseThrow();
         Optional<MultipartFile> picture = Optional.ofNullable(cardDto.getPicture());
-        Optional<String> oldPicture = Optional.ofNullable(card.getPicturePath());
+        Optional<ImageFileInfo> oldPicture = Optional.ofNullable(card.getImage());
 
         deletePicture(oldPicture, card);
         addPicture(picture, card);
@@ -93,26 +93,45 @@ public class CardServiceImpl implements CardService {
     {
         if (picture.isPresent()) {
             if (!picture.get().isEmpty()) {
-                String fileName = picture.get().getOriginalFilename().replaceAll(" ", "_");
-                
+                ImageFileInfo imageFileInfo = createImageFileInfo(
+                        picture.get().getOriginalFilename(),
+                        picture.get()
+                );
+
                 if (s3client.doesBucketExistV2(bucketName)) {
                     ObjectMetadata metadata = new ObjectMetadata();
                     metadata.setContentLength(picture.get().getSize());
-                    s3client.putObject(new PutObjectRequest(bucketName, fileName, picture.get().getInputStream(), metadata));
+                    s3client.putObject(new PutObjectRequest(
+                            bucketName,
+                            imageFileInfo.getFilename(),
+                            picture.get().getInputStream(),
+                            metadata));
                 }
 
-                card.setPicturePath(fileName);
+                card.setImage(imageFileInfo);
             }
         }
     }
 
-    private void deletePicture(Optional<String> picture, Card card) {
+    private void deletePicture(Optional<ImageFileInfo> picture, Card card) {
         if (picture.isPresent()) {
             if (s3client.doesBucketExistV2(bucketName)) {
-                s3client.deleteObject(bucketName, picture.get());
+                s3client.deleteObject(bucketName, picture.get().getFilename());
             }
 
-            card.setPicturePath(null);
+            card.setImage(null);
         }
+    }
+
+    private ImageFileInfo createImageFileInfo(String filename, MultipartFile picture) {
+        String newFilename = UUID.randomUUID().toString();
+        String extension = filename.substring(filename.indexOf('.'));
+
+        return ImageFileInfo.builder()
+                .filename(newFilename + extension)
+                .mimeType(picture.getContentType())
+                .originalName(picture.getOriginalFilename())
+                .size(picture.getSize())
+                .build();
     }
 }

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import java.util.Objects;
 
@@ -34,17 +36,18 @@ public class Card {
     @Column(name = "back_side")
     private String backSide;
 
-    private String language;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
+    private ImageFileInfo image;
+
     @Embedded
     private Word word;
 
-    @Column(name = "picture_path")
-    private String picturePath;
+    private String language;
 
     @Override
     public boolean equals(Object o) {
