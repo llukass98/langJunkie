@@ -6,20 +6,24 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import org.springframework.web.multipart.MultipartFile;
+
 import ru.lukas.langjunkie.web.component.CardMapper;
-import ru.lukas.langjunkie.web.component.UserMapper;
 import ru.lukas.langjunkie.web.dto.CardDto;
 import ru.lukas.langjunkie.web.dto.UserDto;
 import ru.lukas.langjunkie.web.model.Card;
+import ru.lukas.langjunkie.web.model.ImageFileInfo;
 import ru.lukas.langjunkie.web.model.User;
 import ru.lukas.langjunkie.web.repository.CardRepository;
 import ru.lukas.langjunkie.web.repository.UserRepository;
+
+import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * @author Dmitry Lukashevich
@@ -42,7 +46,6 @@ public class CardServiceImpl implements CardService {
         Optional<MultipartFile> picture = Optional.ofNullable(cardDto.getPicture());
 
         addPicture(picture, card);
-
         card.setUser(user);
         user.getCards().add(card);
 
@@ -53,10 +56,9 @@ public class CardServiceImpl implements CardService {
     public void deleteCard(Long id) throws IOException {
         Card card = cardRepository.findById(id).orElseThrow();
         User user = userRepository.findByUsername(card.getUser().getUsername());
-        Optional<String> picture = Optional.ofNullable(card.getPicturePath());
+        Optional<ImageFileInfo> picture = Optional.ofNullable(card.getImage());
 
         deletePicture(picture, card);
-
         user.getCards().remove(card);
 
         userRepository.save(user);
@@ -66,7 +68,7 @@ public class CardServiceImpl implements CardService {
     public void updateCard(CardDto cardDto) throws IOException {
         Card card = cardRepository.findById(cardDto.getId()).orElseThrow();
         Optional<MultipartFile> picture = Optional.ofNullable(cardDto.getPicture());
-        Optional<String> oldPicture = Optional.ofNullable(card.getPicturePath());
+        Optional<ImageFileInfo> oldPicture = Optional.ofNullable(card.getImage());
 
         deletePicture(oldPicture, card);
         addPicture(picture, card);
@@ -86,24 +88,63 @@ public class CardServiceImpl implements CardService {
         return cardRepository.countByUserId(userId);
     }
 
+    @Override
+    public void addCardImageToResponse(Long cardId, HttpServletResponse response) {
+        Card card = cardRepository.findById(cardId).orElseThrow();
+        ImageFileInfo imageFileInfo = card.getImage();
+        Path filePath = Paths.get(picturePath, imageFileInfo.getFilename());
+
+        response.setContentType(imageFileInfo.getMimeType());
+        response.setContentLength(imageFileInfo.getSize().intValue());
+        response.setHeader(
+                "Content-Disposition",
+                "filename=\"" + imageFileInfo.getOriginalName() + "\"");
+
+        try {
+            Files.copy(filePath, response.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace(); // TODO: add logger
+        }
+    }
+
     private void addPicture(Optional<MultipartFile> picture, Card card)
             throws IOException
     {
         if (picture.isPresent()) {
             if (!picture.get().isEmpty()) {
-                String fileName = picture.get().getOriginalFilename().replaceAll(" ", "_");
-                Path filePath = Paths.get(picturePath).resolve(fileName);
+                ImageFileInfo imageFileInfo = createImageFileInfo(
+                        picture.get().getOriginalFilename(),
+                        picture.get()
+                );
+
+                imageFileInfo.setCard(card);
+                Path filePath = Paths.get(picturePath).resolve(imageFileInfo.getFilename());
                 Files.write(filePath, picture.get().getBytes());
-                card.setPicturePath(fileName);
+                card.setImage(imageFileInfo);
             }
         }
     }
 
-    private void deletePicture(Optional<String> picture, Card card) throws IOException {
+    private void deletePicture(Optional<ImageFileInfo> picture, Card card)
+            throws IOException
+    {
         if (picture.isPresent()) {
-            Path oldFileName = Paths.get(picturePath).resolve(picture.get());
+            Path oldFileName = Paths.get(picturePath).resolve(picture.get().getFilename());
             Files.delete(oldFileName);
-            card.setPicturePath(null);
+            card.setImage(null);
+            cardRepository.save(card);
         }
+    }
+
+    private ImageFileInfo createImageFileInfo(String filename, MultipartFile picture) {
+        String newFilename = UUID.randomUUID().toString();
+        String extension = filename.substring(filename.indexOf('.'));
+
+        return ImageFileInfo.builder()
+                .filename(newFilename + extension)
+                .mimeType(picture.getContentType())
+                .originalName(picture.getOriginalFilename())
+                .size(picture.getSize())
+                .build();
     }
 }

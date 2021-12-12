@@ -3,6 +3,7 @@ package ru.lukas.langjunkie.web.service;
 import ru.lukas.langjunkie.web.dto.CardDto;
 import ru.lukas.langjunkie.web.dto.UserDto;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -17,4 +18,6 @@ public interface CardService {
     void deleteCard(Long id) throws IOException;
 
     Long getNumberOfCardsByUser(UserDto userDto);
+
+    void addCardImageToResponse(Long cardId, HttpServletResponse response);
 }
