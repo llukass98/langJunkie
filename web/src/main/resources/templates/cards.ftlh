@@ -121,7 +121,7 @@
                     <h5 id="word${card.id}" class="card-title">${card.word}</h5>
 
                     <#if card.picturePath??>
-                        <img id="card_picture" src="img/uploaded/${card.picturePath}" />
+                        <img id="card_picture" src="img/uploaded/${card.id}"  alt="card_image"/>
                     </#if>
 
                     <h6 id="language${card.id}" hidden>${card.language}</h6>

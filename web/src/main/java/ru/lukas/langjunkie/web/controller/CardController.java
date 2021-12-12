@@ -6,8 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import ru.lukas.langjunkie.web.dto.CardDto;
 import ru.lukas.langjunkie.web.service.CardServiceImpl;
+
+import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
@@ -45,5 +48,12 @@ public class CardController {
         cardServiceImpl.deleteCard(id);
 
         return "redirect:/cards";
+    }
+
+    @GetMapping("/img/uploaded/{card-id}")
+    public void getCardImage(@PathVariable("card-id") Long cardId,
+                             HttpServletResponse response)
+    {
+        cardServiceImpl.addCardImageToResponse(cardId, response);
     }
 }
