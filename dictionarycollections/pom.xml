@@ -6,9 +6,12 @@
   <groupId>ru.lukas.langjunkie.dictionarycollections</groupId>
   <artifactId>dictionarycollections</artifactId>
   <packaging>jar</packaging>
-  <version>1.0</version>
+  <version>0.2.1</version>
 
   <name>Dictionary collections</name>
+  <description>
+    Collections of dictionaries for simultaneous definition search of any word in group of online dictionaries.
+  </description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -28,6 +31,12 @@
       <groupId>org.jsoup</groupId>
       <artifactId>jsoup</artifactId>
       <version>1.14.3</version>
+    </dependency>
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.2.7</version>
     </dependency>
 
     <dependency>

@@ -10,6 +10,7 @@ import ru.lukas.langjunkie.dictionarycollections.factory.CollectionFactory;
 import javax.xml.crypto.KeySelectorException;
 
 import java.util.List;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
@@ -40,7 +41,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         List<Dictionary> definitions = CollectionFactory.getCollection(language).search(word)
                 .stream().map(dictionaryMapper::toModel).collect(Collectors.toList());
 
-        dictionaryRepository.saveAll(definitions);
+        Executors.newSingleThreadExecutor().submit(() -> dictionaryRepository.saveAll(definitions));
 
         return definitions;
     }
