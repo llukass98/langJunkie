@@ -1,6 +1,7 @@
 package ru.lukas.langjunkie.web.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ import java.util.UUID;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CardServiceImpl implements CardService {
 
     private final UserRepository userRepository;
@@ -103,7 +105,8 @@ public class CardServiceImpl implements CardService {
         try {
             Files.copy(filePath, response.getOutputStream());
         } catch (IOException e) {
-            e.printStackTrace(); // TODO: add logger
+            log.error("Unable to save {}. Error msg: {}", filePath, e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -113,7 +116,7 @@ public class CardServiceImpl implements CardService {
         if (picture.isPresent()) {
             if (!picture.get().isEmpty()) {
                 ImageFileInfo imageFileInfo = createImageFileInfo(
-                        picture.get().getOriginalFilename(),
+                        Optional.ofNullable(picture.get().getOriginalFilename()).orElse(""),
                         picture.get()
                 );
 

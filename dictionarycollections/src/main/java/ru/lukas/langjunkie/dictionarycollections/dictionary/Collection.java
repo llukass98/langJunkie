@@ -1,16 +1,23 @@
 package ru.lukas.langjunkie.dictionarycollections.dictionary;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 /**
  * @author Dmitry Lukashevich
  */
 @Getter
+@Slf4j
 public abstract class Collection {
 
 	private final List<Dictionary> collection;
@@ -28,13 +35,14 @@ public abstract class Collection {
 		List<SearchResult> results = new ArrayList<>();
 
 		collection.forEach(dictionary -> tasks.add(() -> dictionary.search(word)));
+
 		try {
 			results = service.invokeAll(tasks).stream()
 					.map(this::get)
 					.filter(result -> !result.getResults().isEmpty())
 					.collect(Collectors.toList());
 		} catch (InterruptedException | CancellationException e) {
-			e.printStackTrace(); // TODO: add logger
+			log.warn(e.getMessage(), e);
 			return results;
 		}
 
@@ -49,7 +57,8 @@ public abstract class Collection {
 		try {
 			result = future.get();
 		} catch (InterruptedException | ExecutionException e) {
-			e.printStackTrace(); //TODO: add logger
+			log.warn(e.getMessage(), e);
+
 			return result;
 		}
 

@@ -1,5 +1,8 @@
 package ru.lukas.langjunkie.dictionarycollections.faen;
 
+import lombok.extern.slf4j.Slf4j;
+
+import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -8,6 +11,7 @@ import ru.lukas.langjunkie.dictionarycollections.dictionary.Dictionary;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.Request;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.SearchResult;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,6 +19,7 @@ import java.util.List;
 /**
  * @author Dmitry Lukashevich
  */
+@Slf4j
 public class FarsidictionaryDictionary extends Dictionary {
 
 	private final Request<Document> documentRequest;
@@ -46,8 +51,8 @@ public class FarsidictionaryDictionary extends Dictionary {
 
 				for (Element element : elems) { definitions.add(element.text().trim()); }
 			}
-		} catch (Exception e) {
-			e.printStackTrace(); // TODO: add logger
+		} catch (IOException e) {
+			log.warn(e.getMessage());
 			return SearchResult.builder()
 					.language(getLanguage()).name(getName()).link(getLink())
 					.results(Collections.emptyList()).build();

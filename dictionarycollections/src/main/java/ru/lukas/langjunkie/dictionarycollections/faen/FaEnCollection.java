@@ -21,10 +21,16 @@ public class FaEnCollection extends Collection {
 		super("faen", List.of(
 				new BAmoozDictionary(jsoupRequest),
 				new FarsidicDictionary(jsoupRequest),
-				//new DictionaryFarsiDictionary(jsoupRequest),
 				new FarsidictionaryDictionary(jsoupRequest),
 				new FarsidicsDictionary(jsoupRequest)
+
+				// TODO: html has changed, adjust jsoup parser
 				//new AbadisDictionary(jsoupRequest)
+				/*
+				 * TODO: website stopped working recently - status code 503.
+				 * Candidate for removal.
+				 */
+				//new DictionaryFarsiDictionary(jsoupRequest)
 		));
 	}
 }
