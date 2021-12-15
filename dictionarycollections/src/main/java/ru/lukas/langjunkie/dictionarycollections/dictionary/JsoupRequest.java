@@ -40,6 +40,6 @@ public class JsoupRequest implements Request<Document> {
                 .header("Accept-Language", "en-US,en;q=0.5")
                 .header("Host", url.split("//")[1].split("/")[0])
                 .followRedirects(true)
-                .timeout(4000);
+                .timeout(4 * 1000);
     }
 }

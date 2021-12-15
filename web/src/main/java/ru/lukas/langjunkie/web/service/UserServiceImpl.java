@@ -1,5 +1,9 @@
 package ru.lukas.langjunkie.web.service;
 
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -7,6 +11,7 @@ import ru.lukas.langjunkie.web.api.exception.InvalidPasswordException;
 import ru.lukas.langjunkie.web.component.UserMapper;
 import ru.lukas.langjunkie.web.dto.UserDto;
 import ru.lukas.langjunkie.web.model.User;
+import ru.lukas.langjunkie.web.repository.RoleRepository;
 import ru.lukas.langjunkie.web.repository.UserRepository;
 
 import java.util.Collections;
@@ -14,30 +19,23 @@ import java.util.Collections;
 /**
  * @author Dmitry Lukashevich
  */
+@RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final UserMapper userMapper;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    public UserServiceImpl(UserRepository userRepository,
-                           UserMapper userMapper,
-                           BCryptPasswordEncoder bCryptPasswordEncoder)
-    {
-        this.userRepository = userRepository;
-        this.userMapper = userMapper;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
-    public UserDto getUserByUsername(String username) {
-        return userMapper.toUserDto(userRepository.findByUsername(username));
-    }
-
-    @Override
-    public User getUserByUsernameAsModel(String username) {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public UserDto getUserByUsernameAsDto(String username) {
+        return userMapper.toUserDto(userRepository.findByUsername(username));
     }
 
     @Override
@@ -47,13 +45,13 @@ public class UserServiceImpl implements UserService {
 
         User user = userMapper.toUserModel(userDto);
         user.setPassword(password);
-        user.setRole("ROLE_USER");
+        user.setRole(roleRepository.findByName(RoleRepository.ROLE_USER).orElseThrow());
 
         if (user.getPassword().length() < 6 || user.getPassword().length() > 15) {
             throw new InvalidPasswordException("Password length must be between 6 and 15 characters");
         }
 
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 }

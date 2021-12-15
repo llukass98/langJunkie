@@ -1,5 +1,7 @@
 package ru.lukas.langjunkie.dictionarycollections.faen;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
@@ -9,12 +11,14 @@ import ru.lukas.langjunkie.dictionarycollections.dictionary.SearchResult;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
 import java.util.Collections;
 import java.util.List;
 
 /**
  * @author Dmitry Lukashevich
  */
+@Slf4j
 public class BAmoozDictionary extends Dictionary {
 
 	private final Request<Document> documentRequest;
@@ -29,12 +33,12 @@ public class BAmoozDictionary extends Dictionary {
 		word = sanitizeInput(word);
 		List<String> definitions = new ArrayList<>();
 		String requestUrl = getLink() + "/en/dictionary/rw?word=" + word;
-		Document document = null;
+		Document document;
 
 		try {
 			document = documentRequest.getRequest(requestUrl);
-		} catch (Exception e) {
-			e.printStackTrace(); // TODO: add logger
+		} catch (IOException e) {
+			log.warn(e.getMessage());
 			return SearchResult.builder()
 					.language(getLanguage()).name(getName()).link(getLink())
 					.results(Collections.emptyList()).build();
@@ -43,6 +47,7 @@ public class BAmoozDictionary extends Dictionary {
 		if (document != null) {
 			for (Element element : document.getElementsByClass("word-row-side")) {
 				// if english word has been searched throw NullPointerException
+				// TODO: don't like it here, consider for refactoring
 				document.getElementsByClass("reverse-word-translation-desc").first().text();
 				// if no exception continue as usual
 				// skip first element

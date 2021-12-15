@@ -1,5 +1,7 @@
 package ru.lukas.langjunkie.dictionarycollections.faen;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
@@ -18,6 +20,7 @@ import java.util.List;
 /**
  * @author Dmitry Lukashevich
  */
+@Slf4j
 public class FarsidicDictionary extends Dictionary {
 
 	private final Request<Document> documentRequest;
@@ -48,9 +51,9 @@ public class FarsidicDictionary extends Dictionary {
 
 			document = documentRequest.postRequest(getLink(), payload);
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace(); // TODO: add logger
-		} catch (Exception e) {
-			e.printStackTrace(); // TODO: add logger
+			log.error(e.getMessage());
+		} catch (IOException e) {
+			log.warn(e.getMessage());
 			return SearchResult.builder()
 					.language(getLanguage()).name(getName()).link(getLink())
 					.results(Collections.emptyList()).build();

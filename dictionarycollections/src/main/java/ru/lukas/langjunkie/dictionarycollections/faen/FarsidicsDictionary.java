@@ -1,5 +1,7 @@
 package ru.lukas.langjunkie.dictionarycollections.faen;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.jsoup.nodes.Document;
 
 import ru.lukas.langjunkie.dictionarycollections.dictionary.Dictionary;
@@ -14,6 +16,7 @@ import java.util.List;
 /**
  * @author Dmitry Lukashevich
  */
+@Slf4j
 public class FarsidicsDictionary extends Dictionary {
 
 	private final Request<Document> documentRequest;
@@ -36,12 +39,12 @@ public class FarsidicsDictionary extends Dictionary {
 		List<String> definitions = new ArrayList<>();
 		String[] blockOfDefinitions;
 		String requestUrl = getLink() + "/ajax-searchf.php?keyword=" + word;
-		Document document = null;
+		Document document;
 
 		try {
 			document = documentRequest.getRequest(requestUrl);
-		} catch (Exception e) {
-			e.printStackTrace(); // TODO: add logger
+		} catch (IOException e) {
+			log.warn(e.getMessage());
 			return SearchResult.builder()
 					.language(getLanguage()).name(getName()).link(getLink())
 					.results(Collections.emptyList()).build();

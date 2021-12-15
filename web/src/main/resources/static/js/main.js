@@ -29,6 +29,7 @@ const fetchDefinitions = (e) => {
     e.target.className += " mark";
     spinner.removeAttribute("hidden");
     showDefinitionsCard();
+    saveCardBtn.setAttribute("hidden", "");
     results.innerText = "";
 
     const resp = fetch("/api/v1.0b/definitions?lang=" + lang + "&word=" + word)
@@ -36,6 +37,7 @@ const fetchDefinitions = (e) => {
         .then(data => {
             spinner.setAttribute("hidden", "true");
             printResults(data);
+            saveCardBtn.removeAttribute("hidden");
         })
         .catch(err => results.innerText = "Nothing has been found");
 }
@@ -77,6 +79,39 @@ const loadText = () => {
     }
 
     processedText.appendChild(documentFragment);
+
+    if (textArea.value.trim() !== "") {
+        const text = textArea.value.replace(/\s+/g, " ").split(/[\s,.!?؟]/g);
+        const processedText = document.querySelector("#processed_text");
+        const documentFragment = document.createDocumentFragment();
+
+        textArea.setAttribute("hidden", "true");
+
+        for (let i = 0; i < text.length; i++) {
+            let span = document.createElement("span");
+            span.className = "word lead h6";
+            span.addEventListener("click", fetchDefinitions);
+            span.innerText = text[i];
+            if (i % 17 === 0) {
+                documentFragment.appendChild(document.createElement("br"))
+            }
+            documentFragment.appendChild(span);
+        }
+
+        processedText.appendChild(documentFragment);
+        textLoaderBtn.innerText = "Load another text";
+        textLoaderBtn.removeEventListener("click", loadText);
+        textLoaderBtn.addEventListener("click", restoreTextArea);
+    }
+}
+
+const restoreTextArea = () => {
+    textArea.value = "";
+    textArea.removeAttribute("hidden", "");
+    document.querySelector("#processed_text").innerHTML = "";
+    textLoaderBtn.removeEventListener("click", restoreTextArea);
+    textLoaderBtn.addEventListener("click", loadText);
+    textLoaderBtn.innerText = "Load!";
 }
 
 const saveCardRequest = () => {
@@ -88,11 +123,7 @@ const saveCardRequest = () => {
     const language = collectionTable[document.querySelector("#lang_collection").value];
     const username = document.querySelector("#username").innerText;
     let definition = "";
-    console.log(word);
-    console.log(csrfName);
-    console.log(csrfValue);
-    console.log(language);
-    console.log(username);
+
     for (let i = 0; i < definitionElements.length; i++){
         definition += definitionElements[i].innerText + " :: ";
     }
