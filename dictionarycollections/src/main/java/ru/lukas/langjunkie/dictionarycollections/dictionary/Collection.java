@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -39,10 +40,12 @@ public abstract class Collection {
 		try {
 			results = service.invokeAll(tasks).stream()
 					.map(this::get)
-					.filter(result -> !result.getResults().isEmpty())
+					.filter(optional -> optional.isPresent() && !optional.get().getResults().isEmpty())
+					.map(Optional::get)
 					.collect(Collectors.toList());
 		} catch (InterruptedException | CancellationException e) {
 			log.warn(e.getMessage(), e);
+
 			return results;
 		}
 
@@ -51,17 +54,17 @@ public abstract class Collection {
 
 	public void shutdown() { service.shutdown(); }
 
-	private SearchResult get(Future<SearchResult> future) {
-		SearchResult result = new SearchResult();
+	private Optional<SearchResult> get(Future<SearchResult> future) {
+		SearchResult result;
 
 		try {
 			result = future.get();
 		} catch (InterruptedException | ExecutionException e) {
 			log.warn(e.getMessage(), e);
 
-			return result;
+			return Optional.empty();
 		}
 
-		return result;
+		return Optional.of(result);
 	}
 }
