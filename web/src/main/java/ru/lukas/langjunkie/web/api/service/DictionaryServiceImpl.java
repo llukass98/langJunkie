@@ -1,16 +1,19 @@
 package ru.lukas.langjunkie.web.api.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection;
+import ru.lukas.langjunkie.dictionarycollections.factory.CollectionFactory;
 import ru.lukas.langjunkie.web.api.component.DictionaryMapper;
 import ru.lukas.langjunkie.web.api.model.Dictionary;
 import ru.lukas.langjunkie.web.api.repository.DictionaryRepository;
-import ru.lukas.langjunkie.dictionarycollections.factory.CollectionFactory;
 
 import javax.xml.crypto.KeySelectorException;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
@@ -18,15 +21,13 @@ import java.util.stream.Collectors;
  * @author Dmitry Lukashevich
  */
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class DictionaryServiceImpl implements DictionaryService {
 
     private final DictionaryMapper dictionaryMapper;
     private final DictionaryRepository dictionaryRepository;
-
-    public DictionaryServiceImpl(DictionaryMapper dictionaryMapper, DictionaryRepository dictionaryRepository) {
-        this.dictionaryMapper = dictionaryMapper;
-        this.dictionaryRepository = dictionaryRepository;
-    }
+    private final CollectionFactory collectionFactory;
 
     @Override
     public List<Dictionary> getDefinitions(String word, DictionaryCollection collection)
@@ -43,7 +44,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     private List<Dictionary> saveAndGetDefinitions(String word, DictionaryCollection collection)
             throws KeySelectorException
     {
-        List<Dictionary> definitions = CollectionFactory
+        List<Dictionary> definitions = collectionFactory
                 .getCollection(collection).search(word)
                 .stream().map(dictionaryMapper::toModel).collect(Collectors.toList());
 

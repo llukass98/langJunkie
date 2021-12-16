@@ -7,34 +7,39 @@ import ru.lukas.langjunkie.dictionarycollections.faen.FaEnCollection;
 import javax.xml.crypto.KeySelectorException;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * @author Dmitry Lukashevich
  */
 public class CollectionFactory {
 
-	private final static HashMap<DictionaryCollection, Collection> collections;
+	private final Map<DictionaryCollection, Supplier<Collection>> collections;
+	private final Map<DictionaryCollection, Collection> cache;
 
-	// TODO: ugly as hell, refactor it
-	static {
-		collections = new HashMap<>();
-		collections.put(DictionaryCollection.FAEN, new FaEnCollection());
+	public CollectionFactory() {
+		cache = new HashMap<>();
+		// Lazy init
+		collections = Map.of(
+				DictionaryCollection.FAEN, FaEnCollection::new
+		);
 	}
 
-	private CollectionFactory() {}
-
-	public static Collection getCollection (DictionaryCollection collectionName)
+	public Collection getCollection (DictionaryCollection collectionName)
 			throws KeySelectorException
 	{
 		if (!collections.containsKey(collectionName)) {
 			throw new KeySelectorException("Unknown collection");
 		}
 
-		return collections.get(collectionName);
+		cache.putIfAbsent(collectionName, collections.get(collectionName).get());
+
+		return cache.get(collectionName);
 	}
 
-	public static Set<DictionaryCollection> getAllCollections() {
+	public static Set<DictionaryCollection> getAvailableCollections() {
 		return Set.of(DictionaryCollection.values());
 	}
 }

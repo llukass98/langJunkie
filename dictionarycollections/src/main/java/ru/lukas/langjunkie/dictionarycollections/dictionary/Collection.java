@@ -22,13 +22,13 @@ import java.util.stream.Collectors;
 public abstract class Collection {
 
 	private final List<Dictionary> collection;
-	private final String collectionName;
-	private final ExecutorService service;
+	private final DictionaryCollection collectionName;
+	private final ExecutorService executorService;
 
-	public Collection(String collectionName, List<Dictionary> collection) {
+	public Collection(DictionaryCollection collectionName, List<Dictionary> collection) {
 		this.collectionName = collectionName;
 		this.collection = collection;
-		service = Executors.newFixedThreadPool(10);
+		executorService = Executors.newFixedThreadPool(10);
 	}
 
 	public List<SearchResult> search(String word) {
@@ -38,7 +38,7 @@ public abstract class Collection {
 		collection.forEach(dictionary -> tasks.add(() -> dictionary.search(word)));
 
 		try {
-			results = service.invokeAll(tasks).stream()
+			results = executorService.invokeAll(tasks).stream()
 					.map(this::get)
 					.filter(optional -> optional.isPresent() && !optional.get().getResults().isEmpty())
 					.map(Optional::get)
@@ -52,7 +52,7 @@ public abstract class Collection {
 		return results;
 	}
 
-	public void shutdown() { service.shutdown(); }
+	public void shutdown() { executorService.shutdown(); }
 
 	private Optional<SearchResult> get(Future<SearchResult> future) {
 		SearchResult result;

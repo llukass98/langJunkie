@@ -52,6 +52,6 @@ public class MainController {
 
         modelMap.put("user", userDto);
         modelMap.put("card_number", cardService.getNumberOfCardsByUser(userDto));
-        modelMap.put("collections", new CollectionsDto(CollectionFactory.getAllCollections()));
+        modelMap.put("collections", new CollectionsDto(CollectionFactory.getAvailableCollections()));
     }
 }

@@ -1,6 +1,6 @@
 package ru.lukas.langjunkie.web.api.component;
 
-import org.apache.http.HttpStatus;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import ru.lukas.langjunkie.web.api.dto.DictionaryDto;
@@ -22,7 +22,7 @@ public class DictionaryMapper {
         if (definitions.isEmpty()) { return mapToEmptyDictionaryDto(); }
 
         return DictionaryDto.builder()
-                .status(HttpStatus.SC_OK)
+                .status(HttpStatus.OK.value())
                 .collection(definitions.get(0).getLanguage().name())
                 .searchedWord(definitions.get(0).getWord())
                 .definitions(definitions.stream()
@@ -47,7 +47,7 @@ public class DictionaryMapper {
 
     private DictionaryDto mapToEmptyDictionaryDto() {
         return DictionaryDto.builder()
-                .status(HttpStatus.SC_NOT_FOUND)
+                .status(HttpStatus.NOT_FOUND.value())
                 .build();
     }
 }
