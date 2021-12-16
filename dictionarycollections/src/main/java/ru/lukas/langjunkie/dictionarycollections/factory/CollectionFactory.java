@@ -1,6 +1,7 @@
 package ru.lukas.langjunkie.dictionarycollections.factory;
 
 import ru.lukas.langjunkie.dictionarycollections.dictionary.Collection;
+import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection;
 import ru.lukas.langjunkie.dictionarycollections.faen.FaEnCollection;
 
 import javax.xml.crypto.KeySelectorException;
@@ -13,17 +14,17 @@ import java.util.Set;
  */
 public class CollectionFactory {
 
-	private final static HashMap<String, Collection> collections;
+	private final static HashMap<DictionaryCollection, Collection> collections;
 
 	// TODO: ugly as hell, refactor it
 	static {
 		collections = new HashMap<>();
-		collections.put("faen", new FaEnCollection());
+		collections.put(DictionaryCollection.FAEN, new FaEnCollection());
 	}
 
 	private CollectionFactory() {}
 
-	public static Collection getCollection (String collectionName)
+	public static Collection getCollection (DictionaryCollection collectionName)
 			throws KeySelectorException
 	{
 		if (!collections.containsKey(collectionName)) {
@@ -33,6 +34,7 @@ public class CollectionFactory {
 		return collections.get(collectionName);
 	}
 
-	public static Set<String> getCollections() { return collections.keySet(); }
-
+	public static Set<DictionaryCollection> getAllCollections() {
+		return Set.of(DictionaryCollection.values());
+	}
 }

@@ -13,6 +13,6 @@ public class CollectionsController {
 
     @GetMapping("/collections")
     public CollectionsDto collections() {
-        return new CollectionsDto(CollectionFactory.getCollections());
+        return new CollectionsDto(CollectionFactory.getAllCollections());
     }
 }

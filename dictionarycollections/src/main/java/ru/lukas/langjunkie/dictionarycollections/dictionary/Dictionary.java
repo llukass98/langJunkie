@@ -8,11 +8,11 @@ import lombok.Getter;
 @Getter
 public abstract class Dictionary {
 
-	private final String language;
+	private final DictionaryCollection language;
 	private final String name;
 	private final String link;
 
-	public Dictionary(String language, String name, String link) {
+	public Dictionary(DictionaryCollection language, String name, String link) {
 		this.language = language;
 		this.name = name;
 		this.link = link;

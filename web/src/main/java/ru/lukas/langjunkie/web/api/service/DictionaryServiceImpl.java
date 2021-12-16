@@ -2,6 +2,7 @@ package ru.lukas.langjunkie.web.api.service;
 
 import org.springframework.stereotype.Service;
 
+import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection;
 import ru.lukas.langjunkie.web.api.component.DictionaryMapper;
 import ru.lukas.langjunkie.web.api.model.Dictionary;
 import ru.lukas.langjunkie.web.api.repository.DictionaryRepository;
@@ -28,17 +29,22 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    public List<Dictionary> getDefinitions(String word, String language) throws KeySelectorException {
+    public List<Dictionary> getDefinitions(String word, DictionaryCollection collection)
+            throws KeySelectorException
+    {
         word = word.trim();
         List<Dictionary> definitionsFromDB =
-                dictionaryRepository.findByWordAndLanguage(word, language);
+                dictionaryRepository.findByWordAndLanguage(word, collection);
 
         return definitionsFromDB.isEmpty() ?
-                saveAndGetDefinitions(word, language) : definitionsFromDB;
+                saveAndGetDefinitions(word, collection) : definitionsFromDB;
     }
 
-    private List<Dictionary> saveAndGetDefinitions(String word, String language) throws KeySelectorException {
-        List<Dictionary> definitions = CollectionFactory.getCollection(language).search(word)
+    private List<Dictionary> saveAndGetDefinitions(String word, DictionaryCollection collection)
+            throws KeySelectorException
+    {
+        List<Dictionary> definitions = CollectionFactory
+                .getCollection(collection).search(word)
                 .stream().map(dictionaryMapper::toModel).collect(Collectors.toList());
 
         Executors.newSingleThreadExecutor().submit(() -> dictionaryRepository.saveAll(definitions));

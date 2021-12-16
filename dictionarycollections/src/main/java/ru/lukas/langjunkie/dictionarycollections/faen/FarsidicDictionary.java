@@ -6,6 +6,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import ru.lukas.langjunkie.dictionarycollections.dictionary.Dictionary;
+import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.Request;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.SearchResult;
 
@@ -33,7 +34,7 @@ public class FarsidicDictionary extends Dictionary {
 	);
 
 	public FarsidicDictionary(Request<Document> documentRequest) {
-		super("faen", "farsidic", "http://www.farsidic.com/en/Lang/FaEn");
+		super(DictionaryCollection.FAEN, "farsidic", "http://www.farsidic.com/en/Lang/FaEn");
 		this.documentRequest = documentRequest;
 
 	}

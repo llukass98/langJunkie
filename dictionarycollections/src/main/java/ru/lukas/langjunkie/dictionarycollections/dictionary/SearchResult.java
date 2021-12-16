@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 public class SearchResult {
 
-    private String language;
+    private DictionaryCollection language;
     private String name;
     private String link;
     private String searchedWord;
