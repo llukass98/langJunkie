@@ -1,6 +1,5 @@
 "use strict";
 
-const langCollectionField = document.querySelector("#lang_collection");
 const definitionsCard = document.querySelector("#definitions_card");
 const definitionCloseBtn = document.querySelector("#definition_close_btn");
 const words = document.getElementsByClassName("word");
@@ -8,14 +7,6 @@ const textLoaderBtn = document.querySelector("#textloader");
 const textArea = document.querySelector("textarea");
 const saveCardBtn = document.querySelector("#save");
 const collectionTable = { "faen": "persian", "enen": "english" };
-
-// Load all available colections
-const fetchCollections = () => {
-    const resp = fetch("/api/v1.0b/collections")
-        .then(response => response.json())
-        .then(data => langCollectionField.setAttribute("value", data.collections))
-        .catch(err => console.log(err));
-}
 
 const fetchDefinitions = (e) => {
     for (let i = 0; i < words.length; i++) {
@@ -48,7 +39,7 @@ const printResults = data => {
     const dictNames = data.definitions.map(def => def.name);
     const dictLink = data.definitions.map(def => def.link);
 
-    results.innerHTML = "<h4><p id=\"word\">" + data.searched_word + "</p></h4> Collection: <i id=\"collection\">" + data.collection + "<p><h5>Definitions found: </p></h5>";
+    results.innerHTML = "<h4><p id=\"word\">" + data.searched_word + "</p></h4> Collection: <i id=\"collection\">" + data.collection.toLowerCase() + "<p><h5>Definitions found: </p></h5>";
     for (const key of new Set(resultSet).keys()) {
         results.innerHTML += "<span><strong class=\"definition\">" + key + "</strong></span> :: ";
     }
@@ -61,6 +52,25 @@ const printResults = data => {
 }
 
 const loadText = () => {
+    const text = textArea.value.replace(/\s+/g, " ").split(/[\s,.!?؟]/g);
+    const processedText = textArea.parentElement.children[1];
+    const documentFragment = document.createDocumentFragment();
+
+    textArea.setAttribute("hidden", "true");
+
+    for (let i = 0; i < text.length; i++) {
+        let span = document.createElement("span");
+        span.className = "word lead h6";
+        span.addEventListener("click", fetchDefinitions);
+        span.innerText = text[i];
+        if (i % 17 === 0) {
+            documentFragment.appendChild(document.createElement("br"))
+        }
+        documentFragment.appendChild(span);
+    }
+
+    processedText.appendChild(documentFragment);
+
     if (textArea.value.trim() !== "") {
         const text = textArea.value.replace(/\s+/g, " ").split(/[\s,.!?؟]/g);
         const processedText = document.querySelector("#processed_text");
@@ -133,4 +143,3 @@ for (let i = 0; i < words.length; i++) {
 
 definitionCloseBtn.addEventListener("click", hideDefinitionsCard);
 saveCardBtn.addEventListener("click", saveCardRequest);
-fetchCollections();

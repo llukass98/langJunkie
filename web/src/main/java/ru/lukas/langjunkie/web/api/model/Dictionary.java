@@ -6,12 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection;
+
+import javax.persistence.*;
 
 import java.util.List;
 
@@ -26,7 +23,9 @@ public class Dictionary {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String language;
+    @Enumerated(EnumType.STRING)
+    private DictionaryCollection language;
+
     private String word;
     private String name;
     private String link;

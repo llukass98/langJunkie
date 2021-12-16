@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 
 import ru.lukas.langjunkie.dictionarycollections.dictionary.Dictionary;
+import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.Request;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.SearchResult;
 
@@ -29,7 +30,7 @@ public class FarsidicsDictionary extends Dictionary {
 	);
 
 	public FarsidicsDictionary(Request<Document> documentRequest) {
-		super("faen", "farsidics", "http://www.farsidics.com");
+		super(DictionaryCollection.FAEN, "farsidics", "http://www.farsidics.com");
 		this.documentRequest = documentRequest;
 	}
 

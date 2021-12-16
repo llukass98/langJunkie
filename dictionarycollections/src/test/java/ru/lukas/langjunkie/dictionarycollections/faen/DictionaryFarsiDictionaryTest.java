@@ -1,7 +1,6 @@
 package ru.lukas.langjunkie.dictionarycollections.faen;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,10 +18,7 @@ import java.util.List;
 import org.jsoup.nodes.Document;
 import org.jsoup.Jsoup;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.lukas.langjunkie.dictionarycollections.dictionary.Dictionary;
-import ru.lukas.langjunkie.dictionarycollections.dictionary.JsoupRequest;
-import ru.lukas.langjunkie.dictionarycollections.dictionary.Request;
-import ru.lukas.langjunkie.dictionarycollections.dictionary.SearchResult;
+import ru.lukas.langjunkie.dictionarycollections.dictionary.*;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -68,7 +64,7 @@ public class DictionaryFarsiDictionaryTest {
 	@Test
 	public void theLanguageFieldShouldBeCorrect() {
 		assertThat(dictionary.getLanguage(),
-				equalTo("faen"));
+				equalTo(DictionaryCollection.FAEN));
 	}
 
 	@Test

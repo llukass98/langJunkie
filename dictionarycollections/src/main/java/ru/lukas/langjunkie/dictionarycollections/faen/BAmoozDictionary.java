@@ -6,12 +6,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import ru.lukas.langjunkie.dictionarycollections.dictionary.Dictionary;
+import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.Request;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.SearchResult;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class BAmoozDictionary extends Dictionary {
 	private final Request<Document> documentRequest;
 
 	public BAmoozDictionary(Request<Document> documentRequest) {
-		super("faen", "b-amooz", "https://dic.b-amooz.com");
+		super(DictionaryCollection.FAEN, "b-amooz", "https://dic.b-amooz.com");
 		this.documentRequest = documentRequest;
 	}
 

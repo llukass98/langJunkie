@@ -20,10 +20,7 @@ import org.jsoup.nodes.Document;
 
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import ru.lukas.langjunkie.dictionarycollections.dictionary.Dictionary;
-import ru.lukas.langjunkie.dictionarycollections.dictionary.JsoupRequest;
-import ru.lukas.langjunkie.dictionarycollections.dictionary.Request;
-import ru.lukas.langjunkie.dictionarycollections.dictionary.SearchResult;
+import ru.lukas.langjunkie.dictionarycollections.dictionary.*;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -59,7 +56,7 @@ public class BAmoozDictionaryTest {
 
 	@Test
 	public void theLanguageFieldShouldBeCorrect() {
-		assertThat(dictionary.getLanguage(), equalTo("faen"));
+		assertThat(dictionary.getLanguage(), equalTo(DictionaryCollection.FAEN));
 	}
 
 	@Test

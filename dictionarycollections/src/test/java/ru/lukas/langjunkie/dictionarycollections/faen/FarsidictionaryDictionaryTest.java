@@ -21,10 +21,7 @@ import org.jsoup.Jsoup;
 
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import ru.lukas.langjunkie.dictionarycollections.dictionary.Dictionary;
-import ru.lukas.langjunkie.dictionarycollections.dictionary.JsoupRequest;
-import ru.lukas.langjunkie.dictionarycollections.dictionary.Request;
-import ru.lukas.langjunkie.dictionarycollections.dictionary.SearchResult;
+import ru.lukas.langjunkie.dictionarycollections.dictionary.*;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -61,7 +58,7 @@ public class FarsidictionaryDictionaryTest {
 	@Test
 	public void theLanguageFieldShouldBeCorrect() {
 		assertThat(dictionary.getLanguage(),
-				equalTo("faen"));
+				equalTo(DictionaryCollection.FAEN));
 	}
 
 	@Test

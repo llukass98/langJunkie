@@ -6,6 +6,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import ru.lukas.langjunkie.dictionarycollections.dictionary.Dictionary;
+import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.Request;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.SearchResult;
 
@@ -26,7 +27,7 @@ public class DictionaryFarsiDictionary extends Dictionary {
 	private final Request<Document> documentRequest;
 
 	public DictionaryFarsiDictionary(Request<Document> documentRequest) {
-		super("faen", "dictionary-farsi", "http://www.dictionary-farsi.com");
+		super(DictionaryCollection.FAEN, "dictionary-farsi", "http://www.dictionary-farsi.com");
 		this.documentRequest = documentRequest;
 	}
 

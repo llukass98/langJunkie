@@ -2,12 +2,12 @@ package ru.lukas.langjunkie.dictionarycollections.faen;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import ru.lukas.langjunkie.dictionarycollections.dictionary.Dictionary;
+import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.Request;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.SearchResult;
 
@@ -25,7 +25,7 @@ public class FarsidictionaryDictionary extends Dictionary {
 	private final Request<Document> documentRequest;
 
 	public FarsidictionaryDictionary(Request<Document> documentRequest) {
-		super("faen", "farsidictionary", "https://www.farsidictionary.net");
+		super(DictionaryCollection.FAEN, "farsidictionary", "https://www.farsidictionary.net");
 		this.documentRequest = documentRequest;
 	}
 

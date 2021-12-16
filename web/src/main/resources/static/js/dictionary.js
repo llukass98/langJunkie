@@ -1,17 +1,8 @@
 "use strict";
 
-const langCollectionField = document.querySelector("#lang_collection");
 const submitBtn = document.querySelector("#submit_btn");
 const definitionsCard = document.querySelector("#definitions_card_dict");
 const definitionCloseBtn = document.querySelector("#definition_close_btn");
-
-// Load all available colections
-const fetchCollections = () => {
-    const resp = fetch("/api/v1.0b/collections")
-        .then(response => response.json())
-        .then(data => langCollectionField.setAttribute("value", data.collections))
-        .catch(err => console.log(err));
-}
 
 // Load definitions
 const fetchDefinitions = () => {
@@ -62,6 +53,5 @@ const showDefinitionsCard = () => {
     definitionsCard.removeAttribute("hidden");
 }
 
-fetchCollections();
 submitBtn.addEventListener("click", fetchDefinitions);
 definitionCloseBtn.addEventListener("click", hideDefinitionsCard);

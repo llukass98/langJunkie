@@ -36,7 +36,7 @@
 
                     <select id="lang_collection" name="lang" class="col form-select form-select-sm px-1" aria-label="">
                         <#list collections.getCollections() as collection>
-                            <option value=${collection}>${collection}</option>
+                            <option value=${collection}>${collection?lower_case}</option>
                         </#list>
                     </select>
                 </div>

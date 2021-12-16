@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection;
+
 /**
  * @author Dmitry Lukashevich
  */
@@ -23,7 +25,7 @@ public class AbadisDictionary extends Dictionary {
 	private final Request<Document> documentRequest;
 
 	public AbadisDictionary(Request<Document> documentRequest) {
-		super("faen", "abadis", "https://abadis.ir");
+		super(DictionaryCollection.FAEN, "abadis", "https://abadis.ir");
 		this.documentRequest = documentRequest;
 	}
 

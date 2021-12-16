@@ -1,5 +1,6 @@
 package ru.lukas.langjunkie.web.api.component;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import ru.lukas.langjunkie.web.api.dto.DictionaryDto;
@@ -7,7 +8,6 @@ import ru.lukas.langjunkie.web.api.dto.SearchResultDto;
 import ru.lukas.langjunkie.web.api.model.Dictionary;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.SearchResult;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,8 +22,8 @@ public class DictionaryMapper {
         if (definitions.isEmpty()) { return mapToEmptyDictionaryDto(); }
 
         return DictionaryDto.builder()
-                .status(200)
-                .collection(definitions.get(0).getLanguage())
+                .status(HttpStatus.OK.value())
+                .collection(definitions.get(0).getLanguage().name())
                 .searchedWord(definitions.get(0).getWord())
                 .definitions(definitions.stream()
                         .map(definition -> SearchResultDto.builder()
@@ -47,7 +47,7 @@ public class DictionaryMapper {
 
     private DictionaryDto mapToEmptyDictionaryDto() {
         return DictionaryDto.builder()
-                .status(404)
+                .status(HttpStatus.NOT_FOUND.value())
                 .build();
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection;
 import ru.lukas.langjunkie.web.api.component.DictionaryMapper;
 import ru.lukas.langjunkie.web.api.dto.DictionaryDto;
 import ru.lukas.langjunkie.web.api.service.DictionaryServiceImpl;
@@ -24,7 +25,7 @@ public class DictionaryController {
 	}
 
 	@GetMapping("/definitions")
-	public DictionaryDto definitions (@RequestParam String word, @RequestParam String lang)
+	public DictionaryDto definitions (@RequestParam String word, @RequestParam DictionaryCollection lang)
 			throws KeySelectorException
 	{
 		return dictionaryMapper.toDto(dictionaryServiceImpl.getDefinitions(word, lang));
