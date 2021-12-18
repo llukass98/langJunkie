@@ -5,7 +5,7 @@
   <groupId>ru.lukas.langjunkie</groupId>
   <artifactId>langjunkie</artifactId>
   <packaging>pom</packaging>
-  <version>1.0</version>
+  <version>0.2.2</version>
   <name>LangJunkie</name>
 
   <modules>
