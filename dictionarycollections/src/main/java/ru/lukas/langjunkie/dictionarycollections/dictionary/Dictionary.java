@@ -2,6 +2,8 @@ package ru.lukas.langjunkie.dictionarycollections.dictionary;
 
 import lombok.Getter;
 
+import java.util.regex.Pattern;
+
 /**
  * @author Dmitry Lukashevich
  */
@@ -11,6 +13,8 @@ public abstract class Dictionary {
 	private final DictionaryCollection language;
 	private final String name;
 	private final String link;
+
+	private static final Pattern pattern = Pattern.compile("[\\\\\\[\\]{}?!.,\"'()؟،]");
 
 	public Dictionary(DictionaryCollection language, String name, String link) {
 		this.language = language;
@@ -25,9 +29,10 @@ public abstract class Dictionary {
 		if (input.length() == 0) {
 			throw new IllegalArgumentException("Searched word is an empty string");
 		}
-		input = input.replace("\"", "")
-				.replace("'", ""); // remove quotes
-		// remove unnecessary spaces if input is a phrase
+
+		// remove all undesired characters
+		input = pattern.matcher(input).replaceAll("");
+		// replace two ot more spaces with one
 		return input.replaceAll("\\s+", " ");
 	}
 }

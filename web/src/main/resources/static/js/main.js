@@ -52,25 +52,6 @@ const printResults = data => {
 }
 
 const loadText = () => {
-    const text = textArea.value.replace(/\s+/g, " ").split(/[\s,.!?؟]/g);
-    const processedText = textArea.parentElement.children[1];
-    const documentFragment = document.createDocumentFragment();
-
-    textArea.setAttribute("hidden", "true");
-
-    for (let i = 0; i < text.length; i++) {
-        let span = document.createElement("span");
-        span.className = "word lead h6";
-        span.addEventListener("click", fetchDefinitions);
-        span.innerText = text[i];
-        if (i % 17 === 0) {
-            documentFragment.appendChild(document.createElement("br"))
-        }
-        documentFragment.appendChild(span);
-    }
-
-    processedText.appendChild(documentFragment);
-
     if (textArea.value.trim() !== "") {
         const text = textArea.value.replace(/\s+/g, " ").split(/[\s,.!?؟]/g);
         const processedText = document.querySelector("#processed_text");
@@ -98,7 +79,7 @@ const loadText = () => {
 
 const restoreTextArea = () => {
     textArea.value = "";
-    textArea.removeAttribute("hidden", "");
+    textArea.removeAttribute("hidden");
     document.querySelector("#processed_text").innerHTML = "";
     textLoaderBtn.removeEventListener("click", restoreTextArea);
     textLoaderBtn.addEventListener("click", loadText);
@@ -127,8 +108,6 @@ const saveCardRequest = () => {
     hideDefinitionsCard();
 }
 
-textLoaderBtn.addEventListener("click", loadText);
-
 const hideDefinitionsCard = () => {
     definitionsCard.setAttribute("hidden", "true");
 }
@@ -141,5 +120,6 @@ for (let i = 0; i < words.length; i++) {
     words[i].addEventListener("click", fetchDefinitions);
 }
 
+textLoaderBtn.addEventListener("click", loadText);
 definitionCloseBtn.addEventListener("click", hideDefinitionsCard);
 saveCardBtn.addEventListener("click", saveCardRequest);
