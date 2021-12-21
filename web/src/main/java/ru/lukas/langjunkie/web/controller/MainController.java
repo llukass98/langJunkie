@@ -26,21 +26,21 @@ public class MainController {
         this.cardService = cardService;
     }
 
-    @GetMapping(value = "/")
+    @GetMapping("/")
     public String index(ModelMap modelMap, Principal principal) {
         prepareModelMap(modelMap, principal);
 
         return "index";
     }
 
-    @GetMapping(value = "/cards")
+    @GetMapping("/cards")
     public String cards(ModelMap modelMap, Principal principal) {
         prepareModelMap(modelMap, principal);
 
         return "cards";
     }
 
-    @GetMapping(value = "/dictionary")
+    @GetMapping("/dictionary")
     public String dictionary(ModelMap modelMap, Principal principal) {
         prepareModelMap(modelMap, principal);
 
@@ -51,7 +51,7 @@ public class MainController {
         UserDto userDto = userService.getUserByUsernameAsDto(principal.getName());
 
         modelMap.put("user", userDto);
-        modelMap.put("card_number", cardService.getNumberOfCardsByUser(userDto));
+        modelMap.put("card_count", cardService.getNumberOfCardsByUser(userDto));
         modelMap.put("collections", new CollectionsDto(CollectionFactory.getAvailableCollections()));
     }
 }

@@ -55,7 +55,7 @@ public class AuthorisationController {
 
             return "signup";
         }
-        System.out.println(createUserDto);
+
         userService.saveUser(createUserDto);
 
         return "redirect:/";
