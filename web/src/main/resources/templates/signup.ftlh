@@ -18,22 +18,16 @@
                 <h2 class="form-title">Create an account</h2>
 
                 <!-- Database constraint validation section start -->
-                <#if signup_failure?has_content>
-                    <#if error?has_content>
-                        <div class="error">
-                            <#if error == "user_exists">
-                                User with such username is already registered.
-                            <#else>
-                                User with such email is already registered.
-                            </#if>
-                        </div>
-                    </#if>
+                <#if error??>
+                    <div class="error">
+                        User with such ${error} is already registered.
+                    </div>
+                </#if>
 
-                    <#if errors?has_content>
-                      <#list errors as error>
-                          <p class="error">${error.getMessage()}</p>
-                      </#list>
-                    </#if>
+                <#if errors?has_content>
+                    <#list errors as error>
+                        <p class="error">${error.getDefaultMessage()}</p>
+                    </#list>
                 </#if>
                 <!-- Database constraint validation section end-->
 

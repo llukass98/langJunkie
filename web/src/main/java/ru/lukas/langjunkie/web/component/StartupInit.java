@@ -16,6 +16,7 @@ import ru.lukas.langjunkie.web.repository.RoleRepository;
 import ru.lukas.langjunkie.web.repository.UserRepository;
 
 import javax.annotation.PostConstruct;
+import java.util.Optional;
 
 /**
  * @author Dmitry Lukashevich
@@ -64,20 +65,20 @@ public class StartupInit {
     }
 
     private void addAdmin() {
-        User admin = userRepository.findByUsername(adminUsername);
+        Optional<User> admin = userRepository.findByUsername(adminUsername);
 
-        if (admin == null) {
+        if (admin.isEmpty()) {
             Role role = roleRepository.findByName(RoleRepository.ROLE_ADMIN).orElseThrow();
             role.setAuthority(RoleRepository.ROLE_ADMIN);
 
-            admin = new User();
-            admin.setUsername(adminUsername);
-            admin.setPassword(passwordEncoder.encode(adminPassword));
-            admin.setEmail("admin@admin.com");
-            admin.setFullName("Administrator");
-            admin.setRole(role);
+            User user = User.builder()
+                    .username(adminUsername)
+                    .password(passwordEncoder.encode(adminPassword))
+                    .email("admin@admin.com")
+                    .fullName("Administrator")
+                    .role(role).build();
 
-            userRepository.save(admin);
+            userRepository.save(user);
         }
     }
 }

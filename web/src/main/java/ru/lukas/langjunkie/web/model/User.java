@@ -1,5 +1,7 @@
 package ru.lukas.langjunkie.web.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,20 +9,9 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -30,28 +21,29 @@ import java.util.List;
  */
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@Table(name = "\"user\"")
+@Builder
+@Table(
+        name = "\"user\"",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "username", name = "username"),
+                @UniqueConstraint(columnNames = "email", name = "email")
+        }
+)
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Username is mandatory")
-    private String username;
-
-    @NotBlank
-    private String password;
-
-    @NotBlank(message = "Email is mandatory")
-    @Email(message = "Enter correct email address")
-    private String email;
-
-    @NotBlank(message = "Full name field is mandatory")
     @Column(name = "full_name")
     private String fullName;
+
+    private String username;
+    private String email;
+    private String password;
 
     @OneToMany(
             mappedBy = "user",
@@ -60,6 +52,7 @@ public class User implements UserDetails {
             orphanRemoval = true)
     private List<Card> cards;
 
+    @NotNull(message = "user needs role")
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;

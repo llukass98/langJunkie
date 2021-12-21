@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -11,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.lukas.langjunkie.web.component.CardMapper;
 import ru.lukas.langjunkie.web.dto.CardDto;
 import ru.lukas.langjunkie.web.dto.UserDto;
+import ru.lukas.langjunkie.web.exception.CardNotFoundException;
 import ru.lukas.langjunkie.web.model.Card;
 import ru.lukas.langjunkie.web.model.ImageFileInfo;
 import ru.lukas.langjunkie.web.model.User;
@@ -43,21 +45,23 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public void saveCard(CardDto cardDto, String username) throws IOException {
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("wrong username"));
         Card card = cardMapper.toCardModel(cardDto);
         Optional<MultipartFile> picture = Optional.ofNullable(cardDto.getPicture());
 
         addPicture(picture, card);
         card.setUser(user);
-        user.getCards().add(card);
 
-        userRepository.save(user);
+        cardRepository.save(card);
     }
 
     @Override
     public void deleteCard(Long id) throws IOException {
-        Card card = cardRepository.findById(id).orElseThrow();
-        User user = userRepository.findByUsername(card.getUser().getUsername());
+        Card card = cardRepository.findById(id)
+                .orElseThrow(() -> new CardNotFoundException("no card with such ID"));
+        User user = userRepository.findByUsername(card.getUser().getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("wrong username"));
         Optional<ImageFileInfo> picture = Optional.ofNullable(card.getImage());
 
         deletePicture(picture, card);
@@ -68,7 +72,8 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public void updateCard(CardDto cardDto) throws IOException {
-        Card card = cardRepository.findById(cardDto.getId()).orElseThrow();
+        Card card = cardRepository.findById(cardDto.getId())
+                .orElseThrow(() -> new CardNotFoundException("no card with such ID"));
         Optional<MultipartFile> picture = Optional.ofNullable(cardDto.getPicture());
         Optional<ImageFileInfo> oldPicture = Optional.ofNullable(card.getImage());
 
@@ -85,14 +90,17 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public Long getNumberOfCardsByUser(UserDto userDto) {
-        Long userId = userRepository.findByUsername(userDto.getUsername()).getId();
+        User user = userRepository.findByUsername(userDto.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("wrong username"));
+        Long userId = user.getId();
 
         return cardRepository.countByUserId(userId);
     }
 
     @Override
     public void addCardImageToResponse(Long cardId, HttpServletResponse response) {
-        Card card = cardRepository.findById(cardId).orElseThrow();
+        Card card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new CardNotFoundException("no card with such ID"));
         ImageFileInfo imageFileInfo = card.getImage();
         Path filePath = Paths.get(picturePath, imageFileInfo.getFilename());
 
@@ -105,8 +113,7 @@ public class CardServiceImpl implements CardService {
         try {
             Files.copy(filePath, response.getOutputStream());
         } catch (IOException e) {
-            log.error("Unable to save {}. Error msg: {}", filePath, e.getMessage());
-            e.printStackTrace();
+            log.error("Unable to find {}. Error msg: {}", filePath, e.getMessage(), e);
         }
     }
 
