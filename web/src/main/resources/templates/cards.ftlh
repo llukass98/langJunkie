@@ -44,8 +44,8 @@
         </nav>
         <!-- End of navigation-->
 
-        <h4 class="col text-center mt-5 mx-5 w-75">You have ${card_number}
-            <#if card_number == 1>card:<#else>cards:</#if></h4>
+        <h4 class="col text-center mt-5 mx-5 w-75">You have ${card_count}
+            <#if card_count == 1>card:<#else>cards:</#if></h4>
     </div>
 </div>
 

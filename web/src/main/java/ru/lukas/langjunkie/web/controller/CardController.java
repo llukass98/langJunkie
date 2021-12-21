@@ -26,14 +26,14 @@ public class CardController {
         this.cardServiceImpl = cardServiceImpl;
     }
 
-    @PostMapping(value = "/add/card")
+    @PostMapping("/add/card")
     public String addCard(CardDto cardDto, @RequestParam String username) throws IOException {
         cardServiceImpl.saveCard(cardDto, username);
 
         return "redirect:/cards";
     }
 
-    @PostMapping(value = "/update/card/{card-id}")
+    @PostMapping("/update/card/{card-id}")
     public String updateCard(CardDto cardDto, @PathVariable("card-id") Long id)
             throws IOException
     {
