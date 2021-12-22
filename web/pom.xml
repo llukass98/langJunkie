@@ -12,7 +12,7 @@
 
     <groupId>ru.lukas.langjunkie.web</groupId>
     <artifactId>web</artifactId>
-    <version>0.2.2</version>
+    <version>0.2.3</version>
     <name>Application</name>
     <description>LangJunkie application</description>
 
@@ -105,6 +105,34 @@
             <groupId>ru.lukas.langjunkie.dictionarycollections</groupId>
             <artifactId>dictionarycollections</artifactId>
             <version>0.2.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.zonky.test</groupId>
+            <artifactId>embedded-postgres</artifactId>
+            <version>1.3.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.zonky.test</groupId>
+            <artifactId>embedded-database-spring-test</artifactId>
+            <version>2.1.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <version>5.5.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <version>1.3</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

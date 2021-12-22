@@ -44,30 +44,37 @@
         </nav>
         <!-- End of navigation-->
 
-        <h4 class="col text-center mt-5 mx-5 w-75">You have ${card_number}
-            <#if card_number == 1>card:<#else>cards:</#if></h4>
+        <h4 class="col text-center mt-5 mx-5 w-75">You have ${user.cards?size}
+            <#if user.cards?size == 1>card:<#else>cards:</#if></h4>
     </div>
 </div>
 
 <div class="container-md mt-5">
     <!-- Add flash card form ================================-->
     <form class="card shadow" id="add_form" method="POST" action="/add/card" enctype="multipart/form-data" hidden>
+        <label for="card_word" class="h6">word</label>
         <div class="mb-3">
             <input id="word" type="text" name="word" class="form-control" placeholder="Enter the new word">
         </div>
 
+        <label for="picture" class="h6">illustration</label>
         <div class="mb-3">
             <input id="picture" type="file" accept=".jpg, .png" name="picture" class="form-control">
         </div>
 
-        <div class="mb-3">
-            <input id="language" type="text" name="language" class="form-control" placeholder="Enter the language">
-        </div>
+        <label for="dict_collection" class="h6">dictionary collection</label>
+        <select id="dict_collection" name="language" class="mb-3" aria-label="Default select example">
+            <#list collections.getCollections() as collection>
+                <option value=${collection}>${collection?lower_case}</option>
+            </#list>
+        </select>
 
+        <label for="front-side" class="h6">front side</label>
         <div class="mb-3">
             <textarea id="front-side" class="form-control" name="frontSide" placeholder="Enter the text of front side" rows="3"></textarea>
         </div>
 
+        <label for="back-side" class="h6">back side</label>
         <div class="mb-3">
             <textarea id="back-side" class="form-control" name="backSide" placeholder="Enter the text of back side" rows="3"></textarea>
         </div>
@@ -82,28 +89,35 @@
 
     <!-- Edit flash card form ================================-->
     <form class="card shadow" id="edit_form" method="POST" action="" enctype="multipart/form-data" hidden>
+        <label for="edit_card_word" class="h6">word</label>
         <div class="mb-3">
             <input id="edit_card_word" type="text" name="word" class="form-control" placeholder="Enter the new word">
         </div>
 
+        <label for="edit_picture" class="h6">illustration</label>
         <div class="mb-3">
             <input id="edit_picture" type="file" accept=".jpg, .jpeg, .png" name="picture" class="form-control">
         </div>
 
-        <div class="mb-3">
-            <input id="edit_card_language" type="text" name="language" class="form-control" placeholder="Enter the language">
-        </div>
+        <label for="edit_dict_collection" class="h6">dictionary collection</label>
+        <select id="edit_dict_collection" name="language" class="mb-3" aria-label="Default select example">
+            <#list collections.getCollections() as collection>
+                <option value=${collection}>${collection?lower_case}</option>
+            </#list>
+        </select>
 
+        <label for="edit_card_front" class="h6">front side</label>
         <div class="mb-3">
             <textarea id="edit_card_front" class="form-control" name="frontSide" placeholder="Enter the text of front side" rows="3"></textarea>
         </div>
 
+        <label for="edit_card_back" class="h6">back side</label>
         <div class="mb-3">
             <textarea id="edit_card_back" class="form-control" name="backSide" placeholder="Enter the text of back side" rows="3"></textarea>
         </div>
 
         <input type="hidden" name="username" value="${user.username}" />
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+        <input id="csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
         <input class="col" type="submit" value="Edit" />
         <div id="edit_close_btn" class="col btn-sm btn-danger close_btn">Close</div>
@@ -125,7 +139,9 @@
                     </#if>
 
                     <h6 id="language${card.id}" hidden>${card.language}</h6>
-                    <p id="front_side${card.id}" class="card-text"><#if card.frontSide??>${card.frontSide}</#if></p>
+                    <p id="front_side${card.id}" class="card-text" <#if card.language == "FAEN">style="direction:rtl"</#if>>
+                        <#if card.frontSide??>${card.frontSide}</#if>
+                    </p>
                     <hr class="card-text" />
                     <p id="back_side${card.id}" class="card-text back_side" hidden>${card.backSide}</p>
 
@@ -133,9 +149,9 @@
                         <button class="btn btn-success back_side_btn">Back side</button>
                         <button class="btn btn-success edit_btn">Edit</button>
                         <button class="btn btn-secondary close_btn">Close</button>
-                        <form method="GET" action="/delete/card/${card.id}">
-                            <button id="delete_btn" class="btn btn-danger">Delete</button>
-                        </form>
+                        <#--<form method="DELETE" action="/delete/card/${card.id}">-->
+                        <button id="delete_btn" class="btn btn-danger delete_btn">Delete</button>
+                        <#--</form>-->
                         <div class="card_id" id="id" hidden>${card.id}</div>
                     </div>
                 </div>

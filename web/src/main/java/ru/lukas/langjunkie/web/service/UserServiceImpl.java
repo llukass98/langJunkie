@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import ru.lukas.langjunkie.web.api.exception.InvalidPasswordException;
+import ru.lukas.langjunkie.web.dto.CreateUserDto;
 import ru.lukas.langjunkie.web.component.UserMapper;
 import ru.lukas.langjunkie.web.dto.UserDto;
 import ru.lukas.langjunkie.web.model.User;
@@ -30,26 +30,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username);
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("wrong username"));
     }
 
     @Override
     public UserDto getUserByUsernameAsDto(String username) {
-        return userMapper.toUserDto(userRepository.findByUsername(username));
+        return userMapper.toUserDto(userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("wrong username")));
     }
 
     @Override
-    public void saveUser(UserDto userDto, String password) {
-        userDto.setCards(Collections.emptyList());
-        userDto.setIsActive(true);
+    public void saveUser(CreateUserDto createUserDto) {
+        createUserDto.setCards(Collections.emptyList());
+        createUserDto.setIsActive(true);
 
-        User user = userMapper.toUserModel(userDto);
-        user.setPassword(password);
+        User user = userMapper.toUserModel(createUserDto);
         user.setRole(roleRepository.findByName(RoleRepository.ROLE_USER).orElseThrow());
-
-        if (user.getPassword().length() < 6 || user.getPassword().length() > 15) {
-            throw new InvalidPasswordException("Password length must be between 6 and 15 characters");
-        }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);

@@ -1,13 +1,18 @@
 package ru.lukas.langjunkie.web.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,8 +27,10 @@ import java.util.Objects;
  */
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class Card {
 
     @Id
@@ -47,7 +54,8 @@ public class Card {
     @Embedded
     private Word word;
 
-    private String language;
+    @Enumerated(EnumType.STRING)
+    private DictionaryCollection language;
 
     @Override
     public boolean equals(Object o) {

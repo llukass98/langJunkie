@@ -6,9 +6,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import ru.lukas.langjunkie.web.service.UserService;
 
-import javax.sql.DataSource;
+import ru.lukas.langjunkie.web.service.UserService;
 
 /**
  * @author Dmitry Lukashevich
@@ -16,34 +15,17 @@ import javax.sql.DataSource;
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final DataSource dataSource;
     private final UserService userService;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    /*// language=SQL
-    private final String SQL_AUTHORITIES = "SELECT username, role FROM \"user\" " +
-            "WHERE username = ?";
-
-    // language=SQL
-    private final String SQL_BY_USERNAME = "SELECT username, password, is_active " +
-            "FROM \"user\" WHERE username = ?";*/
-
-    public WebSecurityConfig(DataSource dataSource, UserService userService, BCryptPasswordEncoder passwordEncoder) {
-        this.dataSource = dataSource;
+    public WebSecurityConfig(UserService userService, BCryptPasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
     }
 
-    protected void configureGlobal( AuthenticationManagerBuilder auth) throws Exception {
+    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder);
     }
-    /*@Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication()
-                .dataSource(dataSource)
-                .usersByUsernameQuery(SQL_BY_USERNAME)
-                .authoritiesByUsernameQuery(SQL_AUTHORITIES);
-    }*/
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -67,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web.ignoring()
                 .antMatchers("/resources/**",
                         "/static/**",

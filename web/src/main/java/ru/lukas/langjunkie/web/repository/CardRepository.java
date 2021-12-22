@@ -9,6 +9,4 @@ import ru.lukas.langjunkie.web.model.Card;
  */
 @Repository
 public interface CardRepository extends CrudRepository<Card, Long> {
-
-    Long countByUserId(Long userId);
 }
