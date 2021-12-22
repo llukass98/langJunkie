@@ -22,11 +22,11 @@ import javax.validation.Valid;
  * @author Dmitry Lukashevich
  */
 @Controller
-public class AuthorisationController {
+public class AuthenticationController {
 
     private final UserService userService;
 
-    public AuthorisationController(UserService userService) {
+    public AuthenticationController(UserService userService) {
         this.userService = userService;
     }
 
