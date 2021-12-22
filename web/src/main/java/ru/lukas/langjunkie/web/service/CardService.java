@@ -17,7 +17,5 @@ public interface CardService {
 
     void deleteCard(Long id) throws IOException;
 
-    Long getNumberOfCardsByUser(UserDto userDto);
-
     void addCardImageToResponse(Long cardId, HttpServletResponse response);
 }

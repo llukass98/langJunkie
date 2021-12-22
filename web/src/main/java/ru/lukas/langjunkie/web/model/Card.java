@@ -1,9 +1,10 @@
 package ru.lukas.langjunkie.web.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection;
 
 import javax.persistence.CascadeType;
@@ -19,8 +20,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-import javax.validation.constraints.NotNull;
-
 import java.util.Objects;
 
 /**
@@ -28,8 +27,10 @@ import java.util.Objects;
  */
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class Card {
 
     @Id

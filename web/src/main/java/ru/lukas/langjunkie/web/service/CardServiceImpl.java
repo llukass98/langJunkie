@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import ru.lukas.langjunkie.web.component.CardMapper;
 import ru.lukas.langjunkie.web.dto.CardDto;
-import ru.lukas.langjunkie.web.dto.UserDto;
 import ru.lukas.langjunkie.web.exception.CardNotFoundException;
 import ru.lukas.langjunkie.web.model.Card;
 import ru.lukas.langjunkie.web.model.ImageFileInfo;
@@ -86,15 +85,6 @@ public class CardServiceImpl implements CardService {
         card.getWord().setWord(cardDto.getWord());
 
         cardRepository.save(card);
-    }
-
-    @Override
-    public Long getNumberOfCardsByUser(UserDto userDto) {
-        User user = userRepository.findByUsername(userDto.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("wrong username"));
-        Long userId = user.getId();
-
-        return cardRepository.countByUserId(userId);
     }
 
     @Override

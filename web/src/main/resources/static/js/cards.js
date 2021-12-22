@@ -2,6 +2,7 @@ const cards = document.getElementsByClassName("flash_card");
 const backSideBtns = document.getElementsByClassName("back_side_btn");
 const closeBtns = document.getElementsByClassName("close_btn");
 const editBtns = document.getElementsByClassName("edit_btn");
+const deleteBtns = document.getElementsByClassName("delete_btn");
 const addCardBtn = document.querySelector("#add_card_btn");
 const editForm = document.querySelector("#edit_form");
 const addForm = document.querySelector("#add_form");
@@ -40,10 +41,10 @@ const showEditForm = (e) => {
     const front = document.querySelector("#front_side" + cardId).innerText;
     const back = document.querySelector("#back_side" + cardId).innerText;
 
-    editForm.children[0].firstElementChild.value = word;
-    editForm.children[2].firstElementChild.value = language;
-    editForm.children[3].firstElementChild.value = front;
-    editForm.children[4].firstElementChild.value = back;
+    editForm.children[1].firstElementChild.value = word;
+    editForm.children[5].firstElementChild.value = language;
+    editForm.children[7].firstElementChild.value = front;
+    editForm.children[9].firstElementChild.value = back;
     editForm.setAttribute("action", "/update/card/" + cardId);
     editForm.removeAttribute("hidden");
 }
@@ -60,6 +61,16 @@ const hideAddForm = () => {
     addForm.setAttribute("hidden", "");
 }
 
+const deleteCard = (e) => {
+    const csrf = document.querySelector("#csrf");
+    const cardId = e.target.parentElement.children[4].innerText;
+    const uri = "/delete/card/" + cardId + "?" +
+        csrf.getAttribute("name") + "=" + csrf.getAttribute("value");
+
+    fetch(uri, { method: "DELETE" })
+        .then(() => window.location.reload());
+}
+
 for (let i = 0; i < cards.length; i++) {
     cards[i].addEventListener("click", expandCard);
 }
@@ -74,6 +85,10 @@ for (let i = 0; i < backSideBtns.length; i++) {
 
 for (let i = 0; i < editBtns.length; i++) {
     editBtns[i].addEventListener("click", showEditForm);
+}
+
+for (let i = 0; i < deleteBtns.length; i++) {
+    deleteBtns[i].addEventListener("click", deleteCard);
 }
 
 addCardBtn.addEventListener("click", showAddForm);
