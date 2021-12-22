@@ -92,10 +92,10 @@ const saveCardRequest = () => {
     const csrfValue = document.querySelector("#logout").parentElement.children[1].getAttribute("value")
     const word = document.querySelector("#word").innerText;
     const definitionElements = document.getElementsByClassName("definition");
-    const language = collectionTable[document.querySelector("#lang_collection").value];
+    const language = document.querySelector("#lang_collection").value;
     const username = document.querySelector("#username").innerText;
     let definition = "";
-
+    
     for (let i = 0; i < definitionElements.length; i++){
         definition += definitionElements[i].innerText + " :: ";
     }
