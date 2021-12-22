@@ -32,15 +32,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-
 /**
  * @author Dmitry Lukashevich
  */
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("dev")
-@DisplayName("AuthorisationController tests")
-public class AuthorisationControllerTest {
+@DisplayName("AuthenticationController tests")
+public class AuthenticationControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

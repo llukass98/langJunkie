@@ -15,10 +15,10 @@
     <div class="container">
         <div class="sign-up-content">
             <form method="POST" class="signin" action="/signin">
-                <h2 class="form-title">Authorise</h2>
+                <h2 class="form-title">Authenticate</h2>
 
                 <#if signin_failure?has_content>
-                    <div class="error">Unable to authorise - bad credentials. Try again.</div>
+                    <div class="error">Unable to authenticate - bad credentials. Try again.</div>
                 </#if>
 
                 <div class="form-textbox">
