@@ -2,10 +2,7 @@ package ru.lukas.langjunkie.web.controller;
 
 import org.springframework.stereotype.Controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import ru.lukas.langjunkie.web.dto.CardDto;
 import ru.lukas.langjunkie.web.service.CardServiceImpl;
@@ -43,7 +40,7 @@ public class CardController {
         return "redirect:/cards";
     }
 
-    @GetMapping("/delete/card/{card-id}")
+    @DeleteMapping("/delete/card/{card-id}")
     public String deleteCard(@PathVariable("card-id") Long id) throws IOException {
         cardServiceImpl.deleteCard(id);
 

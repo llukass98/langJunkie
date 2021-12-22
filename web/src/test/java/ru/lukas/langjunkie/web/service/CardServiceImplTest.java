@@ -102,30 +102,4 @@ public class CardServiceImplTest {
             cardService.updateCard(card);
         }
     }
-
-    @Nested
-    @DisplayName("getNumberOfCardsByUser() tests")
-    public class GetNumberOfCardsByUserTests {
-
-        private final UserDto user = UserDto.builder()
-                .username("non-existent_username").build();
-
-        @Test
-        @DisplayName("throws UsernameNotFoundException")
-        public void shouldThrowUsernameNotFoundException() {
-            UserDto user = UserDto.builder()
-                    .username("non-existent_username").build();
-
-            assertThrows(UsernameNotFoundException.class,
-                    () -> cardService.getNumberOfCardsByUser(user));
-        }
-
-        @Test
-        @DisplayName("returns 1 for \"admin\"")
-        public void shouldReturnOneForAdmin() {
-            user.setUsername("admin");
-
-            assertThat(cardService.getNumberOfCardsByUser(user), is(1L));
-        }
-    }
 }

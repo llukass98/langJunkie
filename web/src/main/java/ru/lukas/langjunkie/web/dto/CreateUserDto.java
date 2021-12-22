@@ -2,6 +2,7 @@ package ru.lukas.langjunkie.web.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +13,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author Dmitry Lukashevich
@@ -21,6 +21,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 @Setter
+@EqualsAndHashCode(of = "username")
 @Builder
 public class CreateUserDto {
 
@@ -39,17 +40,4 @@ public class CreateUserDto {
 
     private List<CardDto> cards;
     private Boolean isActive;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CreateUserDto that = (CreateUserDto) o;
-        return Objects.equals(username, that.username);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(username);
-    }
 }

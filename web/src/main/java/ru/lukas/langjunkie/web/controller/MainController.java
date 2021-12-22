@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import ru.lukas.langjunkie.dictionarycollections.factory.CollectionFactory;
 import ru.lukas.langjunkie.web.api.dto.CollectionsDto;
 import ru.lukas.langjunkie.web.dto.UserDto;
-import ru.lukas.langjunkie.web.service.CardService;
 import ru.lukas.langjunkie.web.service.UserService;
 
 import java.security.Principal;
@@ -19,11 +18,9 @@ import java.security.Principal;
 public class MainController {
 
     private final UserService userService;
-    private final CardService cardService;
 
-    public MainController(UserService userService, CardService cardService) {
+    public MainController(UserService userService) {
         this.userService = userService;
-        this.cardService = cardService;
     }
 
     @GetMapping("/")
@@ -51,7 +48,6 @@ public class MainController {
         UserDto userDto = userService.getUserByUsernameAsDto(principal.getName());
 
         modelMap.put("user", userDto);
-        modelMap.put("card_count", cardService.getNumberOfCardsByUser(userDto));
         modelMap.put("collections", new CollectionsDto(CollectionFactory.getAvailableCollections()));
     }
 }

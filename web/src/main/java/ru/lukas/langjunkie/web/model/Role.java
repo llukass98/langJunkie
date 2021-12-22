@@ -13,11 +13,11 @@ import javax.persistence.Id;
 /**
  * @author Dmitry Lukashevich
  */
-@Getter
-@Setter
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@Getter
+@Setter
 public class Role implements GrantedAuthority {
 
     public static String ROLE_PREFIX = "ROLE_";
