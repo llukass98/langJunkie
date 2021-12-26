@@ -12,8 +12,6 @@ import ru.lukas.langjunkie.web.validation.Password;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-import java.util.List;
-
 /**
  * @author Dmitry Lukashevich
  */
@@ -37,7 +35,4 @@ public class CreateUserDto {
 
     @Password
     private String password;
-
-    private List<CardDto> cards;
-    private Boolean isActive;
 }

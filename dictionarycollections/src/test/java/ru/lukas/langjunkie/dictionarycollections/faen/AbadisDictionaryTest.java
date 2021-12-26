@@ -25,6 +25,9 @@ import java.util.List;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.SearchResult;
 
+/**
+ * @author Dmitry Lukashevich
+ */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("AbadisDictionary tests")
 public class AbadisDictionaryTest extends AbstractDictionaryTest {

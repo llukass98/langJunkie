@@ -10,6 +10,11 @@ const editCloseBtn = document.querySelector("#edit_close_btn");
 const addCloseBtn = document.querySelector("#add_close_btn");
 
 const expandCard = (e) => {
+    const cardId = e.target.parentElement.children[1].children[6].children[4].innerText;
+    const cardPicture = e.target.parentElement.children[1].children[1];
+    cardPicture.setAttribute("src", "/card/img/" + cardId);
+    cardPicture.removeAttribute("hidden");
+
     e.target.parentElement.children[0].setAttribute("hidden", "");
     e.target.parentElement.children[1].removeAttribute("hidden");
     e.target.parentElement.style = "width: 50rem; position: absolute; top: 20%; left:25%";
@@ -45,7 +50,8 @@ const showEditForm = (e) => {
     editForm.children[5].firstElementChild.value = language;
     editForm.children[7].firstElementChild.value = front;
     editForm.children[9].firstElementChild.value = back;
-    editForm.setAttribute("action", "/update/card/" + cardId);
+    document.querySelector("#update_card_id").setAttribute("value", cardId);
+    editForm.setAttribute("action", "/update/card");
     editForm.removeAttribute("hidden");
 }
 

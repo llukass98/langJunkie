@@ -15,7 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 import ru.lukas.langjunkie.web.dto.CreateUserDto;
-import ru.lukas.langjunkie.web.dto.UserDto;
+import ru.lukas.langjunkie.web.dto.UserViewDto;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -57,29 +57,6 @@ public class UserServiceImplTest {
     }
 
     @Nested
-    @DisplayName("getUserByUsernameAsDto() tests")
-    public class getUserByUsernameAsDtoTests {
-
-        @Test
-        @DisplayName("throws UsernameNotFoundException")
-        public void shouldThrowUsernameNotFoundException() {
-            assertThrows(UsernameNotFoundException.class,
-                    () -> userService.getUserByUsernameAsDto("non-existent_username"));
-        }
-
-        @Test
-        @DisplayName("returns correct userDto")
-        public void shouldReturnCorrectUserDto() {
-            UserDto userDto = userService.getUserByUsernameAsDto("admin");
-
-            assertThat(userDto.getUsername(), is("admin"));
-            assertThat(userDto.getFullname(), is("John Dough"));
-            assertThat(userDto.getCards().size(), is(1));
-            assertThat(userDto.getEmail(), is("admin@admin.org"));
-        }
-    }
-
-    @Nested
     @DisplayName("saveUser() tests")
     public class saveUserTests {
 
@@ -112,6 +89,28 @@ public class UserServiceImplTest {
         @DisplayName("throws no exception if all required data is present")
         public void shouldThrowNoExceptionIfUserExists() {
             userService.saveUser(user);
+        }
+    }
+
+    @Nested
+    @DisplayName("getUserViewByUsername() tests")
+    public class getUserViewByUsernameTests {
+
+        @Test
+        @DisplayName("throws UsernameNotFoundException")
+        public void shouldThrowUsernameNotFoundException() {
+            assertThrows(UsernameNotFoundException.class,
+                    () -> userService.getUserViewByUsername("non-existent_username"));
+        }
+
+        @Test
+        @DisplayName("returns correct UserViewDto")
+        public void shouldReturnCorrectUserViewDto() {
+            UserViewDto userDto = userService.getUserViewByUsername("admin");
+
+            assertThat(userDto.getId(), is(1L));
+            assertThat(userDto.getUsername(), is("admin"));
+            assertThat(userDto.getFullName(), is("John Dough"));
         }
     }
 }

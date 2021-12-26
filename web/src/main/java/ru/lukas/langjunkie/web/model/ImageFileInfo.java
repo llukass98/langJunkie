@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+
 import java.util.Objects;
 
 /**
@@ -28,9 +28,6 @@ public class ImageFileInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @OneToOne(mappedBy = "image")
-    private Card card;
 
     @Column(name = "mime_type")
     private String mimeType;

@@ -3,7 +3,6 @@ DROP TABLE IF EXISTS
     dictionary,
     dictionary_definitions,
     "user",
-    word,
     card,
     image_file_info CASCADE;
 
@@ -47,19 +46,33 @@ CREATE TABLE card (
     user_id BIGINT,
     image_id BIGINT,
     FOREIGN KEY (user_id) REFERENCES "user"(id),
-    FOREIGN KEY (image_id) REFERENCES "user"(id)
+    FOREIGN KEY (image_id) REFERENCES image_file_info(id)
 );
 
 INSERT INTO role(id, name) VALUES (1, 'ADMIN');
 INSERT INTO role(id, name) VALUES (2, 'USER');
 
 INSERT INTO "user"
-       (username, password, email, full_name, role_id)
+    (username, password, email, full_name, role_id)
 VALUES
-       ('admin', '$2a$10$UhVwh1Kxrre3df1MkAexvuNw792lrrAU2y6A5PAYoouZ89cqg0kDK',
-        'admin@admin.org', 'John Dough', 1);
+    ('admin', '$2a$10$UhVwh1Kxrre3df1MkAexvuNw792lrrAU2y6A5PAYoouZ89cqg0kDK',
+     'admin@admin.org', 'John Dough', 1),
+    ('user', '$2a$10$UhVwh1Kxrre3df1MkAexvuNw792lrrAU2y6A5PAYoouZ89cqg0kDK',
+     'user@user.org', 'John Dough Jr.', 2);
+
+INSERT INTO  image_file_info
+    (filename, mime_type, original_name, size)
+VALUES
+    ('1234-6456-23423-425gdf-gfewr-245.jpg', 'image/jpeg', 'image.jpg', 209785);
 
 INSERT INTO card
-       (front_side, back_side, language, user_id, image_id, word)
+    (front_side, back_side, language, user_id, image_id, word)
 VALUES
-       (E'This is what I\'m capable of', 'Back side', 'FAEN', 1, null, 'capable');
+    (E'This is what I\'m capable of', 'Back side', 'FAEN', 1, null, 'capable'),
+    (E'This is what I\'m capable of', 'Back side', 'FAEN', 1, null, 'capable'),
+    (E'This is what I\'m capable of', 'Back side', 'FAEN', 1, null, 'capable'),
+    (E'This is what I\'m capable of', 'Back side', 'FAEN', 1, null, 'capable'),
+    (E'This is what I\'m capable of', 'Back side', 'FAEN', 1, null, 'capable'),
+    (E'This is what I\'m capable of', 'Back side', 'FAEN', 1, null, 'capable'),
+    (E'This is what I\'m capable of', 'Back side', 'FAEN', 1, null, 'capable'),
+    (E'This is what I\'m capable of', 'Back side', 'FAEN', 1, null, 'capable');

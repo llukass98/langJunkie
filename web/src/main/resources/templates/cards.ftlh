@@ -13,7 +13,7 @@
         <!-- Navigation -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">${user.getFullname()}</a>
+                <a class="navbar-brand" href="#">${user.fullName}</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -44,8 +44,8 @@
         </nav>
         <!-- End of navigation-->
 
-        <h4 class="col text-center mt-5 mx-5 w-75">You have ${user.cards?size}
-            <#if user.cards?size == 1>card:<#else>cards:</#if></h4>
+        <h4 class="col text-center mt-5 mx-5 w-75">You have ${cards.totalElements}
+            <#if cards.totalElements == 1>card:<#else>cards:</#if></h4>
     </div>
 </div>
 
@@ -116,7 +116,7 @@
             <textarea id="edit_card_back" class="form-control" name="backSide" placeholder="Enter the text of back side" rows="3"></textarea>
         </div>
 
-        <input type="hidden" name="username" value="${user.username}" />
+        <input id="update_card_id" type="hidden" name="id" value="" />
         <input id="csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
         <input class="col" type="submit" value="Edit" />
@@ -128,35 +128,51 @@
 
     <!-- Flash cards ========================================-->
     <div class="col align-items-center">
-        <#list user.getCards() as card>
+        <#list cards.content as card>
             <div class="card mt-2 row" style="width: 18rem;">
-                <h5 class="flash_card text-center mt-1">${card.word}</h5>
+                <h5 class="flash_card text-center mt-1">${card.word.value}</h5>
                 <div class="card-body shadow" hidden>
-                    <h5 id="word${card.id}" class="card-title">${card.word}</h5>
+                    <h5 id="word${card.id}" class="card-title">${card.word.value}</h5>
 
-                    <#if card.picturePath??>
-                        <img id="card_picture" src="img/uploaded/${card.id}"  alt="card_image"/>
-                    </#if>
+                    <img id="card_picture" src="#"  alt="" hidden/>
 
                     <h6 id="language${card.id}" hidden>${card.language}</h6>
                     <p id="front_side${card.id}" class="card-text" <#if card.language == "FAEN">style="direction:rtl"</#if>>
                         <#if card.frontSide??>${card.frontSide}</#if>
                     </p>
                     <hr class="card-text" />
+
                     <p id="back_side${card.id}" class="card-text back_side" hidden>${card.backSide}</p>
 
                     <div class="buttons">
                         <button class="btn btn-success back_side_btn">Back side</button>
                         <button class="btn btn-success edit_btn">Edit</button>
                         <button class="btn btn-secondary close_btn">Close</button>
-                        <#--<form method="DELETE" action="/delete/card/${card.id}">-->
                         <button id="delete_btn" class="btn btn-danger delete_btn">Delete</button>
-                        <#--</form>-->
-                        <div class="card_id" id="id" hidden>${card.id}</div>
+
+                        <div id="card_id" id="id" hidden>${card.id}</div>
                     </div>
                 </div>
             </div>
         </#list>
+
+        <!-- Pagination -->
+        <#if (cards.totalPages > 1)>
+            <nav class="col mt-5" aria-label="...">
+                <ul class="pagination pagination-sm">
+                    <#assign page = cards.totalPages>
+                    <#list 0..<page as i>
+                        <#if cards.number == i>
+                            <li class="page-item active" aria-current="page">
+                                <span class="page-link">${i + 1}</span>
+                            </li>
+                        <#else>
+                            <li class="page-item"><a class="page-link" href="/cards?page=${i}">${i + 1}</a></li>
+                        </#if>
+                    </#list>
+                </ul>
+            </nav>
+        </#if>
     </div>
 </div>
 </body>

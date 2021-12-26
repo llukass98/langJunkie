@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 /**
@@ -17,5 +18,6 @@ import javax.persistence.Embeddable;
 @Setter
 public class Word {
 
-    private String word;
+    @Column(name = "word")
+    private String value;
 }

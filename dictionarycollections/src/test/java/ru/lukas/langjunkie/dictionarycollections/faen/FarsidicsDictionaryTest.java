@@ -25,6 +25,9 @@ import org.jsoup.Jsoup;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.SearchResult;
 
+/**
+ * @author Dmitry Lukashevich
+ */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("FarsidicsDictionary tests")
 public class FarsidicsDictionaryTest extends AbstractDictionaryTest {

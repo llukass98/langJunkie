@@ -7,6 +7,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * @author Dmitry Lukashevich
+ */
 @Data
 @Builder
 public class DictionaryDto {

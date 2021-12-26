@@ -7,6 +7,9 @@ import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection
 
 import java.util.Set;
 
+/**
+ * @author Dmitry Lukashevich
+ */
 @Data
 @AllArgsConstructor
 public class CollectionsDto {

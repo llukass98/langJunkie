@@ -76,6 +76,16 @@ public class AuthenticationControllerTest {
     public class PostSignUpTest {
 
         @Test
+        @DisplayName("returns 403 Forbidden when no csrf in post request")
+        public void shouldReturnForbiddenStatusCodeWhenNoCsrf() throws Exception {
+            mockMvc.perform(post("/signup")
+                            .with(csrf().useInvalidToken())
+                            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                            .content("fullname=john&username=john&password=&email=email@mail.org"))
+                    .andExpect(status().isForbidden());
+        }
+
+        @Test
         @DisplayName("contains no errors and redirects to / if all fields are filled correctly")
         public void shouldReturnNoErrorsIfAllFieldsAreFilledCorrectly() throws Exception {
             mockMvc.perform(post("/signup")
@@ -86,16 +96,6 @@ public class AuthenticationControllerTest {
                     .andExpect(model().attributeDoesNotExist("errors"))
                     .andExpect(model().errorCount(0))
                     .andExpect(view().name("redirect:/"));
-        }
-
-        @Test
-        @DisplayName("returns 403 Forbidden when no csrf in post request")
-        public void shouldReturnForbiddenStatusCodeWhenNoCsrf() throws Exception {
-            mockMvc.perform(post("/signup")
-                            .with(csrf().useInvalidToken())
-                            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                            .content("fullname=john&username=john&password=&email=email@mail.org"))
-                    .andExpect(status().isForbidden());
         }
 
         @Test
@@ -120,7 +120,7 @@ public class AuthenticationControllerTest {
             mockMvc.perform(post("/signup")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                            .content("fullname=john&username=john&password=passwor&email=email@mail.org"))
+                            .content("fullname=john&username=john&password=passwo&email=email@mail.org"))
                     .andExpect(status().is3xxRedirection())
                     .andExpect(model().attributeDoesNotExist("errors"))
                     .andExpect(model().errorCount(0))
