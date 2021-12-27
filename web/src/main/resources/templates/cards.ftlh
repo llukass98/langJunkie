@@ -51,7 +51,7 @@
 
 <div class="container-md mt-5">
     <!-- Add flash card form ================================-->
-    <form class="card shadow" id="add_form" method="POST" action="/add/card" enctype="multipart/form-data" hidden>
+    <form class="card shadow" id="add_form" method="POST" action="/card/add" enctype="multipart/form-data" hidden>
         <label for="card_word" class="h6">word</label>
         <div class="mb-3">
             <input id="word" type="text" name="word" class="form-control" placeholder="Enter the new word">

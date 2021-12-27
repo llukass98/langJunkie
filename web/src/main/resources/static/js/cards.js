@@ -51,7 +51,7 @@ const showEditForm = (e) => {
     editForm.children[7].firstElementChild.value = front;
     editForm.children[9].firstElementChild.value = back;
     document.querySelector("#update_card_id").setAttribute("value", cardId);
-    editForm.setAttribute("action", "/update/card");
+    editForm.setAttribute("action", "/card/update");
     editForm.removeAttribute("hidden");
 }
 
@@ -70,7 +70,7 @@ const hideAddForm = () => {
 const deleteCard = (e) => {
     const csrf = document.querySelector("#csrf");
     const cardId = e.target.parentElement.children[4].innerText;
-    const uri = "/delete/card/" + cardId + "?" +
+    const uri = "/card/delete/" + cardId + "?" +
         csrf.getAttribute("name") + "=" + csrf.getAttribute("value");
 
     fetch(uri, { method: "DELETE" })

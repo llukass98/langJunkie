@@ -12,8 +12,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-
 import org.springframework.test.web.servlet.MvcResult;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import ru.lukas.langjunkie.web.dto.CreateUserDto;
 import ru.lukas.langjunkie.web.service.UserService;
 
@@ -25,12 +31,6 @@ import org.hibernate.exception.ConstraintViolationException;
 import java.sql.SQLException;
 
 import static org.mockito.Mockito.doThrow;
-
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 /**
  * @author Dmitry Lukashevich
@@ -69,6 +69,22 @@ public class AuthenticationControllerTest {
                         .email("email@email.com")
                         .password("password")
                         .build());
+    }
+
+
+    @Nested
+    @DisplayName("GET /signup tests")
+    public class GetSignUpTest {
+
+        @Test
+        @DisplayName("successfully returns signup page")
+        public void shouldReturnSignUpPage() throws Exception {
+            mockMvc.perform(get("/signup"))
+                    .andExpect(status().isOk())
+                    .andExpect(model().attributeDoesNotExist("errors"))
+                    .andExpect(model().errorCount(0))
+                    .andExpect(view().name("signup"));
+        }
     }
 
     @Nested
@@ -354,5 +370,35 @@ public class AuthenticationControllerTest {
             );
         }
         // End of username and email unique constrains tests
+    }
+
+    @Nested
+    @DisplayName("GET /signin tests")
+    public class GetSignInTest {
+
+        @Test
+        @DisplayName("successfully returns signin page")
+        public void shouldReturnSignInPage() throws Exception {
+            mockMvc.perform(get("/signin"))
+                    .andExpect(status().isOk())
+                    .andExpect(model().attributeDoesNotExist("errors"))
+                    .andExpect(model().errorCount(0))
+                    .andExpect(view().name("signin"));
+        }
+    }
+
+    @Nested
+    @DisplayName("GET /signin-failure tests")
+    public class GetSignInFailureTest {
+
+        @Test
+        @DisplayName("successfully returns signin page")
+        public void shouldReturnSignInPage() throws Exception {
+            mockMvc.perform(get("/signin-failure"))
+                    .andExpect(status().isOk())
+                    .andExpect(model().attributeDoesNotExist("errors"))
+                    .andExpect(model().errorCount(0))
+                    .andExpect(view().name("signin"));
+        }
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import ru.lukas.langjunkie.web.dto.CreateCardDto;
@@ -19,6 +20,7 @@ import java.io.IOException;
  * @author Dmitry Lukashevich
  */
 @Controller
+@RequestMapping("/card")
 public class CardController {
 
     private final CardService cardService;
@@ -27,28 +29,28 @@ public class CardController {
         this.cardService = cardService;
     }
 
-    @PostMapping("/add/card")
+    @PostMapping("/add")
     public String addCard(CreateCardDto createCardDto, @RequestParam String username) throws IOException {
         cardService.saveCard(createCardDto, username);
 
         return "redirect:/cards";
     }
 
-    @PostMapping("/update/card")
+    @PostMapping("/update")
     public String updateCard(CreateCardDto createCardDto) throws IOException {
         cardService.updateCard(createCardDto);
 
         return "redirect:/cards";
     }
 
-    @DeleteMapping("/delete/card/{card-id}")
+    @DeleteMapping("/delete/{card-id}")
     public String deleteCard(@PathVariable("card-id") Long id) throws IOException {
         cardService.deleteCard(id);
 
         return "redirect:/cards";
     }
 
-    @GetMapping("/card/img/{card-id}")
+    @GetMapping("/img/{card-id}")
     public void getCardImage(@PathVariable("card-id") Long cardId, HttpServletResponse response) {
         cardService.addCardImageToResponse(cardId, response);
     }

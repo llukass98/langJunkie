@@ -33,11 +33,11 @@ public class AuthenticationController {
     @GetMapping("/signin")
     public String signIn() { return isSignedIn() ? "redirect:/" : "signin"; }
 
-    @GetMapping("/signin_failure")
+    @GetMapping("/signin-failure")
     public String signInFailure(ModelMap modelMap) {
         if (isSignedIn()) { return "redirect:/"; }
 
-        modelMap.put("signin_failure", true);
+        modelMap.put("signin-failure", true);
 
         return "signin";
     }

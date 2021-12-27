@@ -53,7 +53,7 @@ public class CardServiceImpl implements CardService {
         Card card = cardMapper.toCardModel(createCardDto);
         Optional<MultipartFile> picture = Optional.ofNullable(createCardDto.getPicture());
 
-        addPicture(picture, card);
+        addPictureIfPresent(picture, card);
         card.setUser(user);
 
         cardRepository.save(card);
@@ -81,7 +81,8 @@ public class CardServiceImpl implements CardService {
         Optional<ImageFileInfo> oldPicture = Optional.ofNullable(card.getImage());
 
         deletePicture(oldPicture);
-        addPicture(picture, card);
+        card.setImage(null);
+        addPictureIfPresent(picture, card);
 
         card.setLanguage(createCardDto.getLanguage());
         card.setFrontSide(createCardDto.getFrontSide());
@@ -120,7 +121,7 @@ public class CardServiceImpl implements CardService {
         return cardRepository.findAllCardViewDtoByUserId(id, pageable);
     }
 
-    private void addPicture(Optional<MultipartFile> picture, Card card) throws IOException {
+    private void addPictureIfPresent(Optional<MultipartFile> picture, Card card) throws IOException {
         if (picture.isPresent()) {
             if (!picture.get().isEmpty()) {
                 ImageFileInfo imageFileInfo = createImageFileInfo(

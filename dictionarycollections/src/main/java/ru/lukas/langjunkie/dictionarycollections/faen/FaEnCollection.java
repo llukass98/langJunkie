@@ -22,8 +22,10 @@ public class FaEnCollection extends Collection {
 		super(DictionaryCollection.FAEN, List.of(
 				new BAmoozDictionary(jsoupRequest),
 				new FarsidicDictionary(jsoupRequest),
-				new FarsidictionaryDictionary(jsoupRequest),
-				new FarsidicsDictionary(jsoupRequest)
+				new FarsidictionaryDictionary(jsoupRequest)
+
+				// TODO: website is down - account has been suspended
+				//new FarsidicsDictionary(jsoupRequest)
 
 				// TODO: html has changed, adjust jsoup parser
 				//new AbadisDictionary(jsoupRequest)
