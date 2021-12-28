@@ -39,6 +39,8 @@ import java.util.UUID;
 @Service
 public class CardServiceImpl implements CardService {
 
+    public static final String NO_CARD_WITH_SUCH_ID = "no card with such ID";
+
     private final UserRepository userRepository;
     private final CardRepository cardRepository;
     private final CardMapper cardMapper;
@@ -63,7 +65,7 @@ public class CardServiceImpl implements CardService {
     @Override
     public void deleteCard(Long id) throws IOException {
         Card card = cardRepository.findByIdEagerFetch(id)
-                .orElseThrow(() -> new CardNotFoundException("no card with such ID"));
+                .orElseThrow(() -> new CardNotFoundException(NO_CARD_WITH_SUCH_ID));
         User user = card.getUser();
         Optional<ImageFileInfo> picture = Optional.ofNullable(card.getImage());
 
@@ -76,7 +78,7 @@ public class CardServiceImpl implements CardService {
     @Override
     public void updateCard(CreateCardDto createCardDto) throws IOException {
         Card card = cardRepository.findById(createCardDto.getId())
-                .orElseThrow(() -> new CardNotFoundException("no card with such ID"));
+                .orElseThrow(() -> new CardNotFoundException(NO_CARD_WITH_SUCH_ID));
         Optional<MultipartFile> picture = Optional.ofNullable(createCardDto.getPicture());
         Optional<ImageFileInfo> oldPicture = Optional.ofNullable(card.getImage());
 
@@ -97,7 +99,7 @@ public class CardServiceImpl implements CardService {
     public void addCardImageToResponse(Long cardId, HttpServletResponse response) {
         if (cardRepository.hasImage(cardId)) {
             Card card = cardRepository.findById(cardId)
-                    .orElseThrow(() -> new CardNotFoundException("no card with such ID"));
+                    .orElseThrow(() -> new CardNotFoundException(NO_CARD_WITH_SUCH_ID));
             ImageFileInfo imageFileInfo = card.getImage();
             Path filePath = Paths.get(picturePath, imageFileInfo.getFilename());
 
@@ -122,17 +124,15 @@ public class CardServiceImpl implements CardService {
     }
 
     private void addPictureIfPresent(Optional<MultipartFile> picture, Card card) throws IOException {
-        if (picture.isPresent()) {
-            if (!picture.get().isEmpty()) {
-                ImageFileInfo imageFileInfo = createImageFileInfo(
-                        Optional.ofNullable(picture.get().getOriginalFilename()).orElse(""),
-                        picture.get()
-                );
+        if (picture.isPresent() && !picture.get().isEmpty()) {
+            ImageFileInfo imageFileInfo = createImageFileInfo(
+                    Optional.ofNullable(picture.get().getOriginalFilename()).orElse(""),
+                    picture.get()
+            );
 
-                Path filePath = Paths.get(picturePath).resolve(imageFileInfo.getFilename());
-                Files.write(filePath, picture.get().getBytes());
-                card.setImage(imageFileInfo);
-            }
+            Path filePath = Paths.get(picturePath).resolve(imageFileInfo.getFilename());
+            Files.write(filePath, picture.get().getBytes());
+            card.setImage(imageFileInfo);
         }
     }
 

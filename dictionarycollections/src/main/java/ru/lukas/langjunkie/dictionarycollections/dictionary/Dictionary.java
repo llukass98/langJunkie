@@ -16,13 +16,13 @@ public abstract class Dictionary {
 
 	private static final Pattern pattern = Pattern.compile("[\\\\\\[\\]{}?!.,\"'()؟،]");
 
-	public Dictionary(DictionaryCollection language, String name, String link) {
+	protected Dictionary(DictionaryCollection language, String name, String link) {
 		this.language = language;
 		this.name = name;
 		this.link = link;
 	}
 
-	abstract public SearchResult search(String word);
+	public abstract SearchResult search(String word);
 
 	protected String sanitizeInput(String input) throws IllegalArgumentException {
 		input = input.trim();

@@ -6,7 +6,7 @@ import ru.lukas.langjunkie.dictionarycollections.faen.FaEnCollection;
 
 import javax.xml.crypto.KeySelectorException;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -20,7 +20,7 @@ public class CollectionFactory {
 	private final Map<DictionaryCollection, Collection> cache;
 
 	public CollectionFactory() {
-		cache = new HashMap<>();
+		cache = new EnumMap<>(DictionaryCollection.class);
 		// Lazy init
 		collections = Map.of(
 				DictionaryCollection.FAEN, FaEnCollection::new

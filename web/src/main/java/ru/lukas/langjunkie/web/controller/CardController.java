@@ -23,6 +23,8 @@ import java.io.IOException;
 @RequestMapping("/card")
 public class CardController {
 
+    private static final String REDIRECT_TO_CARDS = "redirect:/cards";
+
     private final CardService cardService;
 
     public CardController(CardService cardService) {
@@ -33,21 +35,21 @@ public class CardController {
     public String addCard(CreateCardDto createCardDto, @RequestParam String username) throws IOException {
         cardService.saveCard(createCardDto, username);
 
-        return "redirect:/cards";
+        return REDIRECT_TO_CARDS;
     }
 
     @PostMapping("/update")
     public String updateCard(CreateCardDto createCardDto) throws IOException {
         cardService.updateCard(createCardDto);
 
-        return "redirect:/cards";
+        return REDIRECT_TO_CARDS;
     }
 
     @DeleteMapping("/delete/{card-id}")
     public String deleteCard(@PathVariable("card-id") Long id) throws IOException {
         cardService.deleteCard(id);
 
-        return "redirect:/cards";
+        return REDIRECT_TO_CARDS;
     }
 
     @GetMapping("/img/{card-id}")

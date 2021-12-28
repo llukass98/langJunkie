@@ -19,6 +19,7 @@ import ru.lukas.langjunkie.web.dto.UserViewDto;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
@@ -38,18 +39,18 @@ public class UserServiceImplTest {
 
     @Nested
     @DisplayName("loadUserByUsername() tests")
-    public class getUserByUsernameTests {
+    class getUserByUsernameTests {
 
         @Test
         @DisplayName("throws UsernameNotFoundException")
-        public void shouldThrowUsernameNotFoundException() {
+        void shouldThrowUsernameNotFoundException() {
             assertThrows(UsernameNotFoundException.class,
                     () -> userService.loadUserByUsername("non-existent_username"));
         }
 
         @Test
         @DisplayName("returns correct UserDetails")
-        public void shouldReturnCorrectUserDetails() {
+        void shouldReturnCorrectUserDetails() {
             UserDetails userDetails = userService.loadUserByUsername("admin");
 
             assertThat(userDetails.getUsername(), is("admin"));
@@ -58,7 +59,7 @@ public class UserServiceImplTest {
 
     @Nested
     @DisplayName("saveUser() tests")
-    public class saveUserTests {
+    class saveUserTests {
 
         private final CreateUserDto user = CreateUserDto.builder()
                 .username("username")
@@ -69,7 +70,7 @@ public class UserServiceImplTest {
 
         @Test
         @DisplayName("throws ConstrainViolationException when username exists")
-        public void shouldThrowConstraintViolationExceptionIfUsernameExists() {
+        void shouldThrowConstraintViolationExceptionIfUsernameExists() {
             user.setUsername("admin");
 
             assertThrows(DataIntegrityViolationException.class,
@@ -78,7 +79,7 @@ public class UserServiceImplTest {
 
         @Test
         @DisplayName("throws ConstrainViolationException when email exists")
-        public void shouldThrowConstraintViolationExceptionIfEmailExists() {
+        void shouldThrowConstraintViolationExceptionIfEmailExists() {
             user.setEmail("admin@admin.org");
 
             assertThrows(DataIntegrityViolationException.class,
@@ -87,25 +88,25 @@ public class UserServiceImplTest {
 
         @Test
         @DisplayName("throws no exception if all required data is present")
-        public void shouldThrowNoExceptionIfUserExists() {
-            userService.saveUser(user);
+        void shouldThrowNoExceptionIfUserExists() {
+            assertDoesNotThrow(() -> userService.saveUser(user), "should not throw any exception");
         }
     }
 
     @Nested
     @DisplayName("getUserViewByUsername() tests")
-    public class getUserViewByUsernameTests {
+    class getUserViewByUsernameTests {
 
         @Test
         @DisplayName("throws UsernameNotFoundException")
-        public void shouldThrowUsernameNotFoundException() {
+        void shouldThrowUsernameNotFoundException() {
             assertThrows(UsernameNotFoundException.class,
                     () -> userService.getUserViewByUsername("non-existent_username"));
         }
 
         @Test
         @DisplayName("returns correct UserViewDto")
-        public void shouldReturnCorrectUserViewDto() {
+        void shouldReturnCorrectUserViewDto() {
             UserViewDto userDto = userService.getUserViewByUsername("admin");
 
             assertThat(userDto.getId(), is(1L));

@@ -24,6 +24,10 @@ import javax.validation.Valid;
 @Controller
 public class AuthenticationController {
 
+    private static final String REDIRECT_TO_INDEX = "redirect:/";
+    private static final String SIGNUP_VIEW = "signup";
+    private static final String SIGNIN_VIEW = "signin";
+
     private final UserService userService;
 
     public AuthenticationController(UserService userService) {
@@ -31,19 +35,19 @@ public class AuthenticationController {
     }
 
     @GetMapping("/signin")
-    public String signIn() { return isSignedIn() ? "redirect:/" : "signin"; }
+    public String signIn() { return isSignedIn() ? REDIRECT_TO_INDEX : SIGNIN_VIEW; }
 
     @GetMapping("/signin-failure")
     public String signInFailure(ModelMap modelMap) {
-        if (isSignedIn()) { return "redirect:/"; }
+        if (isSignedIn()) { return REDIRECT_TO_INDEX; }
 
         modelMap.put("signin-failure", true);
 
-        return "signin";
+        return SIGNIN_VIEW;
     }
 
     @GetMapping("/signup")
-    public String signUp() { return "signup"; }
+    public String signUp() { return SIGNUP_VIEW; }
 
     @PostMapping("/signup")
     public String createUser(@Valid CreateUserDto createUserDto,
@@ -53,12 +57,12 @@ public class AuthenticationController {
         if (bindingResult.hasErrors()) {
             modelMap.put("errors", bindingResult.getAllErrors());
 
-            return "signup";
+            return SIGNUP_VIEW;
         }
 
         userService.saveUser(createUserDto);
 
-        return "redirect:/";
+        return REDIRECT_TO_INDEX;
     }
 
     @GetMapping("/logout")
@@ -71,13 +75,13 @@ public class AuthenticationController {
         ModelAndView modelAndView = new ModelAndView();
 
         modelAndView.addObject("error", e.getConstraintName());
-        modelAndView.setViewName("signup");
+        modelAndView.setViewName(SIGNUP_VIEW);
 
         return modelAndView;
     }
 
     // Helpers =====================================================================
-    private Boolean isSignedIn() {
+    private boolean isSignedIn() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         return !(authentication == null || authentication instanceof AnonymousAuthenticationToken);

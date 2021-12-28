@@ -22,7 +22,7 @@ import java.security.Principal;
 @Controller
 public class MainController {
 
-    private final static Integer DEFAULT_PAGE_SIZE = 50;
+    private static final Integer DEFAULT_PAGE_SIZE = 50;
 
     private final UserService userService;
     private final CardService cardService;

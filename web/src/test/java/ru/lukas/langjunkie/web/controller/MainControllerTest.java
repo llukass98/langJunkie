@@ -43,7 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 @ActiveProfiles("dev")
 @DisplayName("MainController tests")
-public class MainControllerTest {
+class MainControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -111,7 +111,7 @@ public class MainControllerTest {
 
     @Test
     @DisplayName("successfully returns index page")
-    public void shouldReturnIndexPage() throws Exception {
+    void shouldReturnIndexPage() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeDoesNotExist("errors"))
@@ -123,7 +123,7 @@ public class MainControllerTest {
 
     @Test
     @DisplayName("successfully returns dictionary page")
-    public void shouldReturnDictionaryPage() throws Exception {
+    void shouldReturnDictionaryPage() throws Exception {
         mockMvc.perform(get("/dictionary"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeDoesNotExist("errors"))
@@ -135,7 +135,7 @@ public class MainControllerTest {
 
     @Test
     @DisplayName("successfully returns cards page")
-    public void shouldReturnCardsPage() throws Exception {
+    void shouldReturnCardsPage() throws Exception {
         mockMvc.perform(get("/cards"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeDoesNotExist("errors"))

@@ -55,8 +55,8 @@ public class DictionaryFarsiDictionary extends Dictionary {
 			for (Element element : document.getElementsByAttribute("onmouseover")) {
 				String text = element.text().replace(")", "").trim();
 
-				if (text.contains("(")) { continue; } // skip trash data
-				if (definitions.contains(text)) { continue;} // skip duplicates
+				// skip trash data and duplicates
+				if (text.contains("(") || definitions.contains(text)) { continue; }
 				definitions.add(text);
 			}
 		}

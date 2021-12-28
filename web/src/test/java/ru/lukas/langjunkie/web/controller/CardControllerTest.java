@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 @ActiveProfiles("dev")
 @DisplayName("CardController tests")
-public class CardControllerTest {
+class CardControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -38,11 +38,11 @@ public class CardControllerTest {
 
     @Nested
     @DisplayName("POST /card/add tests")
-    public class PostCardAddTests {
+    class PostCardAddTests {
 
         @Test
         @DisplayName("successfully redirects to /cards")
-        public void postAddShouldRedirectToCards() throws Exception {
+        void postAddShouldRedirectToCards() throws Exception {
             mockMvc.perform(post("/card/add")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -55,7 +55,7 @@ public class CardControllerTest {
 
         @Test
         @DisplayName("returns 400 BAD_REQUEST when username is missing")
-        public void postAddReturnsBadRequestWhenUsernameIsMissing() throws Exception {
+        void postAddReturnsBadRequestWhenUsernameIsMissing() throws Exception {
             mockMvc.perform(post("/card/add")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -66,7 +66,7 @@ public class CardControllerTest {
 
     @Test
     @DisplayName("POST /card/update successfully redirects to /cards")
-    public void postUpdateShouldRedirectToCards() throws Exception {
+    void postUpdateShouldRedirectToCards() throws Exception {
         mockMvc.perform(post("/card/update")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -79,7 +79,7 @@ public class CardControllerTest {
 
     @Test
     @DisplayName("POST /card/delete/{card-id} successfully redirects to /cards")
-    public void deleteShouldRedirectToCards() throws Exception {
+    void deleteShouldRedirectToCards() throws Exception {
         mockMvc.perform(delete("/card/delete/1").with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(model().attributeDoesNotExist("errors"))

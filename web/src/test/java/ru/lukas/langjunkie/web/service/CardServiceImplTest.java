@@ -5,11 +5,10 @@ import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -51,65 +50,68 @@ public class CardServiceImplTest {
 
     @Nested
     @DisplayName("saveCard() tests")
-    public class SaveCardTests {
+    class SaveCardTests {
 
         @Test
         @DisplayName("throws UsernameNotFoundException")
-        public void shouldThrowUsernameNotFoundException() {
+        void shouldThrowUsernameNotFoundException() {
             assertThrows(UsernameNotFoundException.class,
                     () -> cardService.saveCard(card, "non-existent_username"));
         }
 
         @Test
         @DisplayName("throws no exception if user exists")
-        public void shouldThrowNoExceptionIfUserExists() throws IOException {
-            cardService.saveCard(card, "admin");
+        void shouldThrowNoExceptionIfUserExists() throws IOException {
+            assertDoesNotThrow(() -> cardService.saveCard(card, "admin"),
+                    "should not throw any exception");
         }
     }
 
     @Nested
     @DisplayName("deleteCard() tests")
-    public class DeleteCardTests {
+    class DeleteCardTests {
 
         @Test
         @DisplayName("throws CardNotFoundException")
-        public void shouldThrowCardNotFoundException() {
+        void shouldThrowCardNotFoundException() {
             assertThrows(CardNotFoundException.class,
                     () -> cardService.deleteCard(999L));
         }
 
         @Test
         @DisplayName("throws no exception if card exists")
-        public void shouldThrowNoExceptionIfCardExists() throws IOException {
-            cardService.deleteCard(1L);
+        void shouldThrowNoExceptionIfCardExists() throws IOException {
+            assertDoesNotThrow(() -> cardService.deleteCard(1L),
+                    "should not throw any exception");
         }
     }
 
     @Nested
     @DisplayName("updateCard() tests")
-    public class UpdateCardTests {
+    class UpdateCardTests {
 
         private final CreateCardDto card = CreateCardDto.builder().id(999L).build();
 
         @Test
         @DisplayName("throws CardNotFoundException when wrong ID")
-        public void shouldThrowCardNotFoundException() {
+        void shouldThrowCardNotFoundException() {
             assertThrows(CardNotFoundException.class,
                     () -> cardService.updateCard(card));
         }
 
         @Test
         @DisplayName("throws no exception if card exists")
-        public void shouldThrowNoExceptionIfCardExists() throws IOException {
+        void shouldThrowNoExceptionIfCardExists() throws IOException {
             card.setId(1L);
 
-            cardService.updateCard(card);
+            assertDoesNotThrow(() -> cardService.updateCard(card),
+                    "should not throw any exception");
         }
     }
 
     @Nested
     @DisplayName("getAllCardViewByUserId() tests")
-    public class getAllCardViewByUserIdTests {
+    class getAllCardViewByUserIdTests {
 
         private final Pageable pageable = PageRequest.of(0, 20);
 
@@ -117,7 +119,7 @@ public class CardServiceImplTest {
         @DisplayName(
                 "returns Page<CardViewDto> with all cards if specified user has cards" +
                 "and pageSize is gt number of cards")
-        public void shouldReturnPageOfCardViewDtoIfUserHasCards() {
+        void shouldReturnPageOfCardViewDtoIfUserHasCards() {
             Page<CardViewDto> cardViewDtos = cardService.getAllCardViewByUserId(1L, pageable);
 
             assertThat(cardViewDtos.getTotalElements(), is(8L));
@@ -129,7 +131,7 @@ public class CardServiceImplTest {
         @DisplayName(
                 "returns Page<CardViewDto> with specified number of cards per page " +
                 "if specified user has cards")
-        public void shouldReturnSpecifiedNumberOfCardViewDtoIfUserHasCards() {
+        void shouldReturnSpecifiedNumberOfCardViewDtoIfUserHasCards() {
             Page<CardViewDto> cardViewDtos =
                     cardService.getAllCardViewByUserId(1L, PageRequest.of(0, 4));
 
@@ -139,7 +141,7 @@ public class CardServiceImplTest {
 
         @Test
         @DisplayName("CardViewDto is mapped correctly")
-        public void shouldCorrectlyMapCardViewDto() {
+        void shouldCorrectlyMapCardViewDto() {
             Page<CardViewDto> cardViewDtos = cardService.getAllCardViewByUserId(1L, pageable);
             CardViewDto card = cardViewDtos.stream().findFirst().get();
 
@@ -154,7 +156,7 @@ public class CardServiceImplTest {
 
         @Test
         @DisplayName("returns an empty Page if no user found")
-        public void shouldReturnAnEmptyPageIfNoUserFound() {
+        void shouldReturnAnEmptyPageIfNoUserFound() {
             Page<CardViewDto> cardViewDtos = cardService.getAllCardViewByUserId(999L, pageable);
 
             assertThat(cardViewDtos.getTotalElements(), is(0L));
@@ -162,7 +164,7 @@ public class CardServiceImplTest {
 
         @Test
         @DisplayName("returns an empty Page if user has no cards")
-        public void shouldReturnAnEmptyPageIfUserHasNoCards() {
+        void shouldReturnAnEmptyPageIfUserHasNoCards() {
             Page<CardViewDto> cardViewDtos = cardService.getAllCardViewByUserId(2L, pageable);
 
             assertThat(cardViewDtos.getTotalElements(), is(0L));
