@@ -3,22 +3,21 @@ package ru.lukas.langjunkie.web.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection;
 import ru.lukas.langjunkie.web.dto.CardViewDto;
 import ru.lukas.langjunkie.web.dto.UserViewDto;
-
 import ru.lukas.langjunkie.web.model.Word;
 import ru.lukas.langjunkie.web.service.CardService;
 import ru.lukas.langjunkie.web.service.UserService;
@@ -38,10 +37,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * @author Dmitry Lukashevich
  */
-@SpringBootTest
-@AutoConfigureMockMvc
+@RunWith(SpringRunner.class)
+@WebMvcTest(MainController.class)
 @WithMockUser
-@ActiveProfiles("dev")
 @DisplayName("MainController tests")
 class MainControllerTest {
 
@@ -57,47 +55,31 @@ class MainControllerTest {
     private final UserViewDto userView = new UserViewDto() {
 
         @Override
-        public Long getId() {
-            return 1L;
-        }
+        public Long getId() { return 1L; }
 
         @Override
-        public String getUsername() {
-            return "admin";
-        }
+        public String getUsername() { return "admin"; }
 
         @Override
-        public String getFullName() {
-            return "Administrator";
-        }
+        public String getFullName() { return "Administrator"; }
     };
 
     private final CardViewDto cardView = new CardViewDto() {
 
         @Override
-        public Long getId() {
-            return 1L;
-        }
+        public Long getId() { return 1L; }
 
         @Override
-        public String getFrontSide() {
-            return "front side";
-        }
+        public String getFrontSide() { return "front side"; }
 
         @Override
-        public String getBackSide() {
-            return "back side";
-        }
+        public String getBackSide() { return "back side"; }
 
         @Override
-        public DictionaryCollection getLanguage() {
-            return DictionaryCollection.FAEN;
-        }
+        public DictionaryCollection getLanguage() { return DictionaryCollection.FAEN; }
 
         @Override
-        public Word getWord() {
-            return new Word("word");
-        }
+        public Word getWord() { return new Word("word"); }
     };
 
     private final Page<CardViewDto> page = new PageImpl<>(List.of(cardView));

@@ -18,7 +18,7 @@ import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = { "frontSide", "backSide", "language", "word" })
 @Builder
 public class CreateCardDto {
 

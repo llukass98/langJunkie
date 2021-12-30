@@ -69,7 +69,7 @@ INSERT INTO card
     (front_side, back_side, language, user_id, image_id, word)
 VALUES
     (E'This is what I\'m capable of', 'Back side', 'FAEN', 1, null, 'capable'),
-    (E'This is what I\'m capable of', 'Back side', 'FAEN', 1, null, 'capable'),
+    (E'This is what I\'m capable of', 'Back side', 'FAEN', 1, 1,    'capable'),
     (E'This is what I\'m capable of', 'Back side', 'FAEN', 1, null, 'capable'),
     (E'This is what I\'m capable of', 'Back side', 'FAEN', 1, null, 'capable'),
     (E'This is what I\'m capable of', 'Back side', 'FAEN', 1, null, 'capable'),

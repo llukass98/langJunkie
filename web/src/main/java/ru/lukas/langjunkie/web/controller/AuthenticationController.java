@@ -41,7 +41,7 @@ public class AuthenticationController {
     public String signInFailure(ModelMap modelMap) {
         if (isSignedIn()) { return REDIRECT_TO_INDEX; }
 
-        modelMap.put("signin-failure", true);
+        modelMap.put("signin_failure", true);
 
         return SIGNIN_VIEW;
     }
@@ -64,9 +64,6 @@ public class AuthenticationController {
 
         return REDIRECT_TO_INDEX;
     }
-
-    @GetMapping("/logout")
-    public String logout() { return "index"; }
 
     // Exception handlers ===========================================================
     // Unique username or email constraint violation

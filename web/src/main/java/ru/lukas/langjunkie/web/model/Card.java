@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+
 import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection;
 
 import javax.persistence.CascadeType;
@@ -66,11 +67,21 @@ public class Card {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
-        return Objects.equals(id, card.id);
+        return Objects.equals(frontSide, card.frontSide) && Objects.equals(backSide, card.backSide) && Objects.equals(word, card.word) && language == card.language;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(frontSide, backSide, word, language);
+    }
+
+    @Override
+    public String toString() {
+        return "Card{" +
+                "frontSide='" + frontSide + '\'' +
+                ", backSide='" + backSide + '\'' +
+                ", word=" + word +
+                ", language=" + language +
+                '}';
     }
 }

@@ -1,38 +1,28 @@
 package ru.lukas.langjunkie.web.service;
 
-import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
 
 import ru.lukas.langjunkie.web.dto.CreateUserDto;
 import ru.lukas.langjunkie.web.dto.UserViewDto;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author Dmitry Lukashevich
  */
-@SpringBootTest
-@AutoConfigureEmbeddedDatabase(
-        provider = AutoConfigureEmbeddedDatabase.DatabaseProvider.ZONKY,
-        type = AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)
-@Sql(value = {"classpath:schema.sql"})
-@ActiveProfiles("dev")
 @DisplayName("UserService tests")
-public class UserServiceImplTest {
+public class UserServiceImplTest extends AbstractServiceTest {
 
     @Autowired
     private UserService userService;

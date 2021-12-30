@@ -3,17 +3,18 @@ package ru.lukas.langjunkie.web.controller;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import ru.lukas.langjunkie.web.service.CardService;
+import ru.lukas.langjunkie.web.service.UserService;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -23,18 +24,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * @author Dmitry Lukashevich
  */
-@SpringBootTest
-@AutoConfigureMockMvc
+@RunWith(SpringRunner.class)
+@WebMvcTest(CardController.class)
 @WithMockUser
-@ActiveProfiles("dev")
+@MockBean({ CardService.class, UserService.class })
 @DisplayName("CardController tests")
 class CardControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @MockBean
-    private CardService cardService;
 
     @Nested
     @DisplayName("POST /card/add tests")

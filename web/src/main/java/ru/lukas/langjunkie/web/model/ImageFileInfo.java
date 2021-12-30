@@ -43,11 +43,11 @@ public class ImageFileInfo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ImageFileInfo that = (ImageFileInfo) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(filename, that.filename) && Objects.equals(size, that.size);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(filename, size);
     }
 }
