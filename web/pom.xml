@@ -12,7 +12,7 @@
 
     <groupId>ru.lukas.langjunkie.web</groupId>
     <artifactId>web</artifactId>
-    <version>0.2.4</version>
+    <version>0.3.0</version>
     <name>Application</name>
     <description>LangJunkie application</description>
 
@@ -98,7 +98,7 @@
         <dependency>
             <groupId>ru.lukas.langjunkie.dictionarycollections</groupId>
             <artifactId>dictionarycollections</artifactId>
-            <version>0.2.1</version>
+            <version>0.3.0</version>
         </dependency>
 
         <dependency>

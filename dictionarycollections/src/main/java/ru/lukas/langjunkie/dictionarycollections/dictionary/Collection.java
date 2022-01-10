@@ -21,50 +21,50 @@ import java.util.stream.Collectors;
 @Slf4j
 public abstract class Collection {
 
-	private final List<Dictionary> dictionaries;
-	private final DictionaryCollection collectionName;
-	private final ExecutorService executorService;
+    private final List<Dictionary> dictionaries;
+    private final DictionaryCollection collectionName;
+    private final ExecutorService executorService;
 
-	protected Collection(DictionaryCollection collectionName, List<Dictionary> dictionaries) {
-		this.collectionName = collectionName;
-		this.dictionaries = dictionaries;
-		executorService = Executors.newFixedThreadPool(10);
-	}
+    protected Collection(DictionaryCollection collectionName, List<Dictionary> dictionaries) {
+        this.collectionName = collectionName;
+        this.dictionaries = dictionaries;
+        executorService = Executors.newFixedThreadPool(10);
+    }
 
-	public List<SearchResult> search(String word) {
-		List<Callable<SearchResult>> tasks = new ArrayList<>();
-		List<SearchResult> results = new ArrayList<>();
+    public List<SearchResult> search(String word) {
+        List<Callable<SearchResult>> tasks = new ArrayList<>();
+        List<SearchResult> results = new ArrayList<>();
 
-		dictionaries.forEach(dictionary -> tasks.add(() -> dictionary.search(word)));
+        dictionaries.forEach(dictionary -> tasks.add(() -> dictionary.search(word)));
 
-		try {
-			results = executorService.invokeAll(tasks).stream()
-					.map(this::get)
-					.filter(optional -> optional.isPresent() && !optional.get().getResults().isEmpty())
-					.map(Optional::get)
-					.collect(Collectors.toList());
-		} catch (InterruptedException | CancellationException e) {
-			log.warn(e.getMessage(), e);
+        try {
+            results = executorService.invokeAll(tasks).stream()
+                    .map(this::get)
+                    .filter(optional -> optional.isPresent() && !optional.get().getResults().isEmpty())
+                    .map(Optional::get)
+                    .collect(Collectors.toList());
+        } catch (InterruptedException | CancellationException e) {
+            log.warn(e.getMessage(), e);
 
-			return results;
-		}
+            return results;
+        }
 
-		return results;
-	}
+        return results;
+    }
 
-	public void shutdown() { executorService.shutdown(); }
+    public void shutdown() { executorService.shutdown(); }
 
-	private Optional<SearchResult> get(Future<SearchResult> future) {
-		SearchResult result;
+    private Optional<SearchResult> get(Future<SearchResult> future) {
+        SearchResult result;
 
-		try {
-			result = future.get();
-		} catch (InterruptedException | ExecutionException e) {
-			log.warn(e.getMessage(), e);
+        try {
+            result = future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            log.warn(e.getMessage(), e);
 
-			return Optional.empty();
-		}
+            return Optional.empty();
+        }
 
-		return Optional.of(result);
-	}
+        return Optional.of(result);
+    }
 }

@@ -1,11 +1,8 @@
-package ru.lukas.langjunkie.dictionarycollections.faen;
+package ru.lukas.langjunkie.dictionarycollections;
 
 import org.jsoup.nodes.Document;
 
-import ru.lukas.langjunkie.dictionarycollections.dictionary.Dictionary;
-import ru.lukas.langjunkie.dictionarycollections.dictionary.JsoupRequest;
-import ru.lukas.langjunkie.dictionarycollections.dictionary.Request;
-import ru.lukas.langjunkie.dictionarycollections.dictionary.SearchResult;
+import ru.lukas.langjunkie.dictionarycollections.dictionary.*;
 
 import static org.mockito.Mockito.mock;
 
@@ -18,4 +15,5 @@ public abstract class AbstractDictionaryTest {
     protected SearchResult result;
     protected final String word = new StringBuilder("عشق").reverse().toString();
     protected final Request<Document> jsoupRequest = mock(JsoupRequest.class);
+    protected final Request<String> jsonRequest = mock(JsonRequest.class);
 }
