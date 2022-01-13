@@ -17,13 +17,12 @@ public class JsoupRequest extends AbstractRequest<Document> implements Request<D
     @Override
     public Document getRequest(String url) {
         String ref = url.split("\\?")[0];
-        Document response;
+        Document response = new Document("");
 
         try {
             response = constructConnection(url).referrer(ref).get();
         } catch (IOException e) {
-            log.warn(e.getMessage());
-            response = new Document("");
+            log.warn("{}, {}", url, e.getMessage());
         }
 
         return response;
@@ -31,7 +30,7 @@ public class JsoupRequest extends AbstractRequest<Document> implements Request<D
 
     @Override
     public Document postRequest(String url, String payload) {
-        Document response;
+        Document response = new Document("");
 
         try {
             response = constructConnection(url)
@@ -39,8 +38,7 @@ public class JsoupRequest extends AbstractRequest<Document> implements Request<D
                     .requestBody(payload)
                     .post();
         } catch (IOException e) {
-            log.warn(e.getMessage());
-            response = new Document("");
+            log.warn("{}, {}", url, e.getMessage());
         }
 
         return response;

@@ -30,9 +30,20 @@ public class FarsidictionaryDictionary extends Dictionary {
     @Override
     public SearchResult search(String word) {
         word = sanitizeInput(word);
-        List<String> definitions = new ArrayList<>();
         String requestUrl = getLink() + "/index.php?q=" + word;
         Document document= documentRequest.getRequest(requestUrl);
+
+        return SearchResult.builder()
+                .language(getLanguage())
+                .name(getName())
+                .link(getLink())
+                .searchedWord(word)
+                .results(parseDefinitions(document))
+                .build();
+    }
+
+    private List<String> parseDefinitions(Document document) {
+        List<String> definitions = new ArrayList<>();
         Elements elems = null;
 
         Element elements = document.getElementById("faen");
@@ -48,12 +59,6 @@ public class FarsidictionaryDictionary extends Dictionary {
             for (Element element : elems) { definitions.add(element.text().trim()); }
         }
 
-        return SearchResult.builder()
-                .language(getLanguage())
-                .name(getName())
-                .link(getLink())
-                .searchedWord(word)
-                .results(definitions)
-                .build();
+        return definitions;
     }
 }

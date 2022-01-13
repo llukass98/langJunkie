@@ -32,7 +32,7 @@ public abstract class Dictionary {
 
         // remove all undesired characters
         input = pattern.matcher(input).replaceAll("");
-        // replace two ot more spaces with one
+        // replace two or more spaces with one
         return input.replaceAll("\\s+", " ");
     }
 }

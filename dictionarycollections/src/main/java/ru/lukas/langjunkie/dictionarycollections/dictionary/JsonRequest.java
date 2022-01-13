@@ -24,18 +24,15 @@ public class JsonRequest extends AbstractRequest<String> implements Request<Stri
 
     @Override
     public String getRequest(String url) {
-        //String ref = url.split("\\?")[0];
         HttpRequest request = constructConnection(url).GET().build();
-        String response;
+        String response = "[]";
 
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8)).body();
         } catch (IOException e) {
-            log.warn(e.getMessage());
-            response = "[]";
+            log.warn("{}, {}", url, e.getMessage());
         } catch (InterruptedException e) {
             log.warn(e.getMessage(), e);
-            response = "[]";
             Thread.currentThread().interrupt();
         }
 

@@ -40,8 +40,7 @@ public class FarsidicDictionary extends Dictionary {
     @Override
     public SearchResult search(String word) {
         word = sanitizeInput(word);
-        List<String> definitions = new ArrayList<>();
-        Document document = null;
+        Document document = new Document("");
 
         try {
             String payload = "SearchWord="
@@ -53,28 +52,32 @@ public class FarsidicDictionary extends Dictionary {
             log.error(e.getMessage());
         }
 
-        if (document != null) {
-            for (Element block : document.getElementsByClass("farsi-mean")) {
-                for (String element : block.text().split(",")) {
-                    String trimmed = element.trim();
-                    // the word contains persian letters - cannot be a valid definition, skip it
-                    if (persianLetters.contains(trimmed.charAt(0))) { continue; }
-                    // add definitions ignoring duplicates
-                    if (!definitions.contains(trimmed)) {
-                        definitions.add(trimmed.charAt(0) == '[' ?
-                                trimmed.split("]")[1].trim() :
-                                trimmed);
-                    }
-                }
-            }
-        }
-
         return SearchResult.builder()
                 .language(getLanguage())
                 .name(getName())
                 .link(getLink())
                 .searchedWord(word)
-                .results(definitions)
+                .results(parseDefinitions(document))
                 .build();
+    }
+
+    private List<String> parseDefinitions(Document document) {
+        List<String> definitions = new ArrayList<>();
+
+        for (Element block : document.getElementsByClass("farsi-mean")) {
+            for (String element : block.text().split(",")) {
+                String trimmed = element.trim();
+                // the word contains persian letters - cannot be a valid definition, skip it
+                if (persianLetters.contains(trimmed.charAt(0))) { continue; }
+                // add definitions ignoring duplicates
+                if (!definitions.contains(trimmed)) {
+                    definitions.add(trimmed.charAt(0) == '[' ?
+                            trimmed.split("]")[1].trim() :
+                            trimmed);
+                }
+            }
+        }
+
+        return definitions;
     }
 }

@@ -30,14 +30,27 @@ public class AbadisDictionary extends Dictionary {
     @Override
     public SearchResult search(String word) {
         word = sanitizeInput(word);
-        List<String> definitions = new ArrayList<>();
         String requestUrl = getLink() + "/?lntype=fatoen&word=" + word;
         Document document = documentRequest.getRequest(requestUrl);
+
+        return SearchResult.builder()
+                .language(getLanguage())
+                .name(getName())
+                .link(getLink())
+                .searchedWord(word)
+                .results(parseDefinitions(document))
+                .build();
+    }
+
+    private List<String> parseDefinitions(Document document) {
+        List<String> definitions = new ArrayList<>();
         Element rawDefinitions = null;
 
-        if (document != null) { rawDefinitions = document.getElementById("Means"); }
+        if (document != null) {
+            rawDefinitions = document.getElementById("Means");
+        }
         if (rawDefinitions != null) {
-            for (Element element:rawDefinitions.getElementsByClass("NoLinkColor")) {
+            for (Element element : rawDefinitions.getElementsByClass("NoLinkColor")) {
                 String definition = element.text();
 
                 definitions.add(definition.charAt(0) == '[' ?
@@ -46,12 +59,6 @@ public class AbadisDictionary extends Dictionary {
             }
         }
 
-        return SearchResult.builder()
-                .language(getLanguage())
-                .name(getName())
-                .link(getLink())
-                .searchedWord(word)
-                .results(definitions)
-                .build();
+        return definitions;
     }
 }
