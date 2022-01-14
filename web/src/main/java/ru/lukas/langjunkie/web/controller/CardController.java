@@ -4,19 +4,20 @@ import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.*;
 
-import ru.lukas.langjunkie.web.dto.CardDto;
+import ru.lukas.langjunkie.web.dto.CreateCardDto;
 import ru.lukas.langjunkie.web.service.CardService;
-import ru.lukas.langjunkie.web.service.CardServiceImpl;
 
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 
 /**
  * @author Dmitry Lukashevich
  */
 @Controller
+@RequestMapping("/card")
 public class CardController {
+
+    private static final String REDIRECT_TO_CARDS = "redirect:/cards";
 
     private final CardService cardService;
 
@@ -24,27 +25,29 @@ public class CardController {
         this.cardService = cardService;
     }
 
-    @PostMapping("/add/card")
-    public String addCard(CardDto cardDto, @RequestParam String username) throws IOException {
-        cardService.saveCard(cardDto, username);
+    @PostMapping("/add")
+    public String addCard(CreateCardDto createCardDto, @RequestParam String username) throws IOException {
+        cardService.saveCard(createCardDto, username);
 
-        return "redirect:/cards";
+        return REDIRECT_TO_CARDS;
     }
 
-    @PostMapping("/update/card/{card-id}")
-    public String updateCard(CardDto cardDto, @PathVariable("card-id") Long id)
-            throws IOException
-    {
-        cardDto.setId(id);
-        cardService.updateCard(cardDto);
+    @PostMapping("/update")
+    public String updateCard(CreateCardDto createCardDto) throws IOException {
+        cardService.updateCard(createCardDto);
 
-        return "redirect:/cards";
+        return REDIRECT_TO_CARDS;
     }
 
-    @DeleteMapping("/delete/card/{card-id}")
+    @DeleteMapping("/delete/{card-id}")
     public String deleteCard(@PathVariable("card-id") Long id) throws IOException {
         cardService.deleteCard(id);
 
-        return "redirect:/cards";
+        return REDIRECT_TO_CARDS;
+    }
+
+    @GetMapping("/img/{card-id}")
+    public void getCardImage(@PathVariable("card-id") Long cardId, HttpServletResponse response) {
+        cardService.addCardImageToResponse(cardId, response);
     }
 }

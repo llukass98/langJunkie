@@ -21,13 +21,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public abstract class Collection {
 
-	private final List<Dictionary> collection;
+	private final List<Dictionary> dictionaries;
 	private final DictionaryCollection collectionName;
 	private final ExecutorService executorService;
 
-	public Collection(DictionaryCollection collectionName, List<Dictionary> collection) {
+	protected Collection(DictionaryCollection collectionName, List<Dictionary> dictionaries) {
 		this.collectionName = collectionName;
-		this.collection = collection;
+		this.dictionaries = dictionaries;
 		executorService = Executors.newFixedThreadPool(10);
 	}
 
@@ -35,7 +35,7 @@ public abstract class Collection {
 		List<Callable<SearchResult>> tasks = new ArrayList<>();
 		List<SearchResult> results = new ArrayList<>();
 
-		collection.forEach(dictionary -> tasks.add(() -> dictionary.search(word)));
+		dictionaries.forEach(dictionary -> tasks.add(() -> dictionary.search(word)));
 
 		try {
 			results = executorService.invokeAll(tasks).stream()

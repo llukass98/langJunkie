@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+
 import java.util.Objects;
 
 /**
@@ -29,9 +29,6 @@ public class ImageFileInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "image")
-    private Card card;
-
     @Column(name = "mime_type")
     private String mimeType;
 
@@ -46,11 +43,11 @@ public class ImageFileInfo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ImageFileInfo that = (ImageFileInfo) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(filename, that.filename) && Objects.equals(size, that.size);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(filename, size);
     }
 }

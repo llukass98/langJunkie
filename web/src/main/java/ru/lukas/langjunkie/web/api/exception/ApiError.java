@@ -4,6 +4,9 @@ import lombok.Data;
 
 import org.springframework.http.HttpStatus;
 
+/**
+ * @author Dmitry Lukashevich
+ */
 @Data
 class ApiError {
 

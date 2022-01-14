@@ -1,12 +1,12 @@
 package ru.lukas.langjunkie.web.api.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection;
 import ru.lukas.langjunkie.dictionarycollections.factory.CollectionFactory;
 import ru.lukas.langjunkie.web.api.component.DictionaryMapper;
+import ru.lukas.langjunkie.web.api.dto.DictionaryDto;
 import ru.lukas.langjunkie.web.api.model.Dictionary;
 import ru.lukas.langjunkie.web.api.repository.DictionaryRepository;
 
@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class DictionaryServiceImpl implements DictionaryService {
 
     private final DictionaryMapper dictionaryMapper;
@@ -29,15 +28,15 @@ public class DictionaryServiceImpl implements DictionaryService {
     private final CollectionFactory collectionFactory;
 
     @Override
-    public List<Dictionary> getDefinitions(String word, DictionaryCollection collection)
+    public DictionaryDto getDefinitions(String word, DictionaryCollection collection)
             throws KeySelectorException
     {
         word = word.trim();
         List<Dictionary> definitionsFromDB =
                 dictionaryRepository.findByWordAndLanguage(word, collection);
 
-        return definitionsFromDB.isEmpty() ?
-                saveAndGetDefinitions(word, collection) : definitionsFromDB;
+        return dictionaryMapper.toDto(definitionsFromDB.isEmpty() ?
+                saveAndGetDefinitions(word, collection) : definitionsFromDB);
     }
 
     private List<Dictionary> saveAndGetDefinitions(String word, DictionaryCollection collection)

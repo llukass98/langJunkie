@@ -102,7 +102,7 @@ const saveCardRequest = () => {
     const params = "word="+word+"&language="+language+"&backSide="
         +definition+"&username="+username+"&"+csrfName+"="+csrfValue;
 
-    request.open("POST", "/add/card");
+    request.open("POST", "/card/add");
     request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
     request.send(params);
     hideDefinitionsCard();
