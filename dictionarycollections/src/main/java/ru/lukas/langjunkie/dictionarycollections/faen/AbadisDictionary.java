@@ -44,19 +44,13 @@ public class AbadisDictionary extends Dictionary {
 
     private List<String> parseDefinitions(Document document) {
         List<String> definitions = new ArrayList<>();
-        Element rawDefinitions = null;
 
-        if (document != null) {
-            rawDefinitions = document.getElementById("Means");
-        }
-        if (rawDefinitions != null) {
-            for (Element element : rawDefinitions.getElementsByClass("NoLinkColor")) {
-                String definition = element.text();
+        for (Element element : document.getElementsByTag("l")) {
+            String definition = element.text();
 
-                definitions.add(definition.charAt(0) == '[' ?
-                        definition.split("]")[1].trim() :
-                        definition.trim());
-            }
+            definitions.add(definition.charAt(0) == '[' ?
+                    definition.split("]")[1].trim() :
+                    definition.trim());
         }
 
         return definitions;
