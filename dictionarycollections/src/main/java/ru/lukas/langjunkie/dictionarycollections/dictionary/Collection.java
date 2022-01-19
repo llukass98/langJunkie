@@ -28,7 +28,7 @@ public abstract class Collection {
     protected Collection(DictionaryCollection collectionName, List<Dictionary> dictionaries) {
         this.collectionName = collectionName;
         this.dictionaries = dictionaries;
-        executorService = Executors.newFixedThreadPool(10);
+        executorService = Executors.newFixedThreadPool(dictionaries.size());
     }
 
     public List<SearchResult> search(String word) {
@@ -43,10 +43,11 @@ public abstract class Collection {
                     .filter(optional -> optional.isPresent() && !optional.get().getResults().isEmpty())
                     .map(Optional::get)
                     .collect(Collectors.toList());
-        } catch (InterruptedException | CancellationException e) {
+        } catch (CancellationException e) {
             log.warn(e.getMessage(), e);
-
-            return results;
+        } catch (InterruptedException e) {
+            log.warn(e.getMessage(), e);
+            Thread.currentThread().interrupt();
         }
 
         return results;
@@ -55,16 +56,17 @@ public abstract class Collection {
     public void shutdown() { executorService.shutdown(); }
 
     private Optional<SearchResult> get(Future<SearchResult> future) {
-        SearchResult result;
+        SearchResult result = null;
 
         try {
             result = future.get();
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (ExecutionException e) {
             log.warn(e.getMessage(), e);
-
-            return Optional.empty();
+        } catch (InterruptedException e) {
+            log.warn(e.getMessage(), e);
+            Thread.currentThread().interrupt();
         }
 
-        return Optional.of(result);
+        return Optional.ofNullable(result);
     }
 }
