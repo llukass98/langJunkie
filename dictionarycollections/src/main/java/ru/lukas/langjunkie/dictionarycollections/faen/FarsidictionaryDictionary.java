@@ -11,9 +11,7 @@ import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection
 import ru.lukas.langjunkie.dictionarycollections.dictionary.Request;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.SearchResult;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,48 +20,45 @@ import java.util.List;
 @Slf4j
 public class FarsidictionaryDictionary extends Dictionary {
 
-	private final Request<Document> documentRequest;
+    private final Request<Document> documentRequest;
 
-	public FarsidictionaryDictionary(Request<Document> documentRequest) {
-		super(DictionaryCollection.FAEN, "farsidictionary", "https://www.farsidictionary.net");
-		this.documentRequest = documentRequest;
-	}
+    public FarsidictionaryDictionary(Request<Document> documentRequest) {
+        super(DictionaryCollection.FAEN, "farsidictionary", "https://www.farsidictionary.net");
+        this.documentRequest = documentRequest;
+    }
 
-	@Override
-	public SearchResult search(String word) {
-		word = sanitizeInput(word);
-		List<String> definitions = new ArrayList<>();
-		String requestUrl = getLink() + "/index.php?q=" + word;
-		Document document;
-		Elements elems = null;
+    @Override
+    public SearchResult search(String word) {
+        word = sanitizeInput(word);
+        String requestUrl = getLink() + "/index.php?q=" + word;
+        Document document= documentRequest.getRequest(requestUrl);
 
-		try {
-			document = documentRequest.getRequest(requestUrl);
-			Element elements = document.getElementById("faen");
+        return SearchResult.builder()
+                .language(getLanguage())
+                .name(getName())
+                .link(getLink())
+                .searchedWord(word)
+                .results(parseDefinitions(document))
+                .build();
+    }
 
-			if (elements != null) {
-				elems = elements.getElementsByAttributeValue("align", "left");
-			}
+    private List<String> parseDefinitions(Document document) {
+        List<String> definitions = new ArrayList<>();
+        Elements elems = null;
 
-			if (elems != null) {
-				elems.remove(0);
-				elems.remove(0);
+        Element elements = document.getElementById("faen");
 
-				for (Element element : elems) { definitions.add(element.text().trim()); }
-			}
-		} catch (IOException e) {
-			log.warn(e.getMessage());
-			return SearchResult.builder()
-					.language(getLanguage()).name(getName()).link(getLink())
-					.results(Collections.emptyList()).build();
-		}
+        if (elements != null) {
+            elems = elements.getElementsByAttributeValue("align", "left");
+        }
 
-		return SearchResult.builder()
-				.language(getLanguage())
-				.name(getName())
-				.link(getLink())
-				.searchedWord(word)
-				.results(definitions)
-				.build();
-	}
+        if (elems != null) {
+            elems.remove(0);
+            elems.remove(0);
+
+            for (Element element : elems) { definitions.add(element.text().trim()); }
+        }
+
+        return definitions;
+    }
 }

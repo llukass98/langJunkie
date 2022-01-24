@@ -16,24 +16,14 @@ import java.util.List;
  */
 public class FaEnCollection extends Collection {
 
-	private static final Request<Document> jsoupRequest = new JsoupRequest();
+    private static final Request<Document> jsoupRequest = new JsoupRequest();
 
-	public FaEnCollection() {
-		super(DictionaryCollection.FAEN, List.of(
-				new BAmoozDictionary(jsoupRequest),
-				new FarsidicDictionary(jsoupRequest),
-				new FarsidictionaryDictionary(jsoupRequest)
-
-				// TODO: website is down - account has been suspended
-				//new FarsidicsDictionary(jsoupRequest)
-
-				// TODO: html has changed, adjust jsoup parser
-				//new AbadisDictionary(jsoupRequest)
-				/*
-				 * TODO: website stopped working recently - status code 503.
-				 * Candidate for removal.
-				 */
-				//new DictionaryFarsiDictionary(jsoupRequest)
-		));
-	}
+    public FaEnCollection() {
+        super(DictionaryCollection.FAEN, List.of(
+                new BAmoozDictionary(jsoupRequest),
+                new FarsidicDictionary(jsoupRequest),
+                new FarsidictionaryDictionary(jsoupRequest),
+                new AbadisDictionary(jsoupRequest)
+        ));
+    }
 }

@@ -4,13 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import ru.lukas.langjunkie.dictionarycollections.dictionary.Dictionary;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.Request;
 import ru.lukas.langjunkie.dictionarycollections.dictionary.SearchResult;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,53 +21,55 @@ import java.util.List;
 @Slf4j
 public class BAmoozDictionary extends Dictionary {
 
-	private final Request<Document> documentRequest;
+    private final Request<Document> documentRequest;
 
-	public BAmoozDictionary(Request<Document> documentRequest) {
-		super(DictionaryCollection.FAEN, "b-amooz", "https://dic.b-amooz.com");
-		this.documentRequest = documentRequest;
-	}
+    public BAmoozDictionary(Request<Document> documentRequest) {
+        super(DictionaryCollection.FAEN, "b-amooz", "https://dic.b-amooz.com");
+        this.documentRequest = documentRequest;
+    }
 
-	@Override
-	public SearchResult search(String word) {
-		word = sanitizeInput(word);
-		List<String> definitions = new ArrayList<>();
-		String requestUrl = getLink() + "/en/dictionary/rw?word=" + word;
-		Document document;
+    @Override
+    public SearchResult search(String word) {
+        word = sanitizeInput(word);
+        String requestUrl = getLink() + "/en/dictionary/rw?word=" + word;
+        Document document = documentRequest.getRequest(requestUrl);
 
-		try {
-			document = documentRequest.getRequest(requestUrl);
-		} catch (IOException e) {
-			log.warn(e.getMessage());
-			return SearchResult.builder()
-					.language(getLanguage()).name(getName()).link(getLink())
-					.results(Collections.emptyList()).build();
-		}
+        return SearchResult.builder()
+                .language(getLanguage())
+                .name(getName())
+                .link(getLink())
+                .searchedWord(word)
+                .results(parseDefinitions(document))
+                .build();
+    }
 
-		if (document != null) {
-			for (Element element : document.getElementsByClass("word-row-side")) {
-				// if english word has been searched throw NullPointerException
-				// TODO: don't like it here, consider for refactoring
-				document.getElementsByClass("reverse-word-translation-desc").first().text();
-				// if no exception continue as usual
-				// skip first element
-				if (element.child(0).hasClass("py-4")) { continue; }
+    private List<String> parseDefinitions(Document document) {
+        List<String> definitions = new ArrayList<>();
 
-				for (Element span : element.getElementsByTag("span")) {
-					if (span.hasClass("reverse-translation-index")) { continue; } // skip numbers
-					if (span.hasClass("ml-n2")) { continue; } // skip commas
-					if (span.hasClass("text-muted")) { continue; } // skip spaces and other trash
-					definitions.add(span.text().trim());
-				}
-			}
-		}
+        if (document != null) {
+            for (Element element : document.getElementsByClass("word-row-side")) {
+                // if non-persian word has been searched return an empty List
+                if (!isPersianWord(document)) { return Collections.emptyList(); }
+                // skip first element
+                if (element.child(0).hasClass("py-4")) { continue; }
 
-		return SearchResult.builder()
-				.language(getLanguage())
-				.name(getName())
-				.link(getLink())
-				.searchedWord(word)
-				.results(definitions)
-				.build();
-	}
+                for (Element span : element.getElementsByTag("span")) {
+                    // skip numbers, commas, spaces and other trash
+                    if (span.hasClass("reverse-translation-index")
+                            || span.hasClass("ml-n2")
+                            || span.hasClass("text-muted")) { continue; }
+
+                    definitions.add(span.text().trim());
+                }
+            }
+        }
+
+        return definitions;
+    }
+
+    private boolean isPersianWord(Document document) {
+        Elements elements = document.getElementsByClass("reverse-word-translation-desc");
+
+        return elements.first() != null;
+    }
 }
