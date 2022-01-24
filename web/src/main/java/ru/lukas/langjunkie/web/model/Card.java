@@ -5,6 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection;
 
 import javax.persistence.CascadeType;
@@ -13,6 +17,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -43,12 +48,12 @@ public class Card {
     @Column(name = "back_side")
     private String backSide;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "image_id", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(FetchMode.JOIN)
     private ImageFileInfo image;
 
     @Embedded
@@ -62,11 +67,21 @@ public class Card {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
-        return Objects.equals(id, card.id);
+        return Objects.equals(frontSide, card.frontSide) && Objects.equals(backSide, card.backSide) && Objects.equals(word, card.word) && language == card.language;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(frontSide, backSide, word, language);
+    }
+
+    @Override
+    public String toString() {
+        return "Card{" +
+                "frontSide='" + frontSide + '\'' +
+                ", backSide='" + backSide + '\'' +
+                ", word=" + word +
+                ", language=" + language +
+                '}';
     }
 }

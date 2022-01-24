@@ -5,5 +5,6 @@ package ru.lukas.langjunkie.dictionarycollections.dictionary;
  */
 public enum DictionaryCollection {
 
-        FAEN
+    FAEN,
+    ENEN
 }

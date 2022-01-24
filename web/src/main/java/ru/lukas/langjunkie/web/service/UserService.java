@@ -3,14 +3,14 @@ package ru.lukas.langjunkie.web.service;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import ru.lukas.langjunkie.web.dto.CreateUserDto;
-import ru.lukas.langjunkie.web.dto.UserDto;
+import ru.lukas.langjunkie.web.dto.UserViewDto;
 
 /**
  * @author Dmitry Lukashevich
  */
 public interface UserService extends UserDetailsService {
 
-    UserDto getUserByUsernameAsDto(String username);
+    UserViewDto getUserViewByUsername(String username);
 
     void saveUser(CreateUserDto createUserDto);
 }

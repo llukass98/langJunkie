@@ -21,50 +21,52 @@ import java.util.stream.Collectors;
 @Slf4j
 public abstract class Collection {
 
-	private final List<Dictionary> collection;
-	private final DictionaryCollection collectionName;
-	private final ExecutorService executorService;
+    private final List<Dictionary> dictionaries;
+    private final DictionaryCollection collectionName;
+    private final ExecutorService executorService;
 
-	public Collection(DictionaryCollection collectionName, List<Dictionary> collection) {
-		this.collectionName = collectionName;
-		this.collection = collection;
-		executorService = Executors.newFixedThreadPool(10);
-	}
+    protected Collection(DictionaryCollection collectionName, List<Dictionary> dictionaries) {
+        this.collectionName = collectionName;
+        this.dictionaries = dictionaries;
+        executorService = Executors.newFixedThreadPool(dictionaries.size());
+    }
 
-	public List<SearchResult> search(String word) {
-		List<Callable<SearchResult>> tasks = new ArrayList<>();
-		List<SearchResult> results = new ArrayList<>();
+    public List<SearchResult> search(String word) {
+        List<Callable<SearchResult>> tasks = new ArrayList<>();
+        List<SearchResult> results = new ArrayList<>();
 
-		collection.forEach(dictionary -> tasks.add(() -> dictionary.search(word)));
+        dictionaries.forEach(dictionary -> tasks.add(() -> dictionary.search(word)));
 
-		try {
-			results = executorService.invokeAll(tasks).stream()
-					.map(this::get)
-					.filter(optional -> optional.isPresent() && !optional.get().getResults().isEmpty())
-					.map(Optional::get)
-					.collect(Collectors.toList());
-		} catch (InterruptedException | CancellationException e) {
-			log.warn(e.getMessage(), e);
+        try {
+            results = executorService.invokeAll(tasks).stream()
+                    .map(this::get)
+                    .filter(optional -> optional.isPresent() && !optional.get().getResults().isEmpty())
+                    .map(Optional::get)
+                    .collect(Collectors.toList());
+        } catch (CancellationException e) {
+            log.warn(e.getMessage(), e);
+        } catch (InterruptedException e) {
+            log.warn(e.getMessage(), e);
+            Thread.currentThread().interrupt();
+        }
 
-			return results;
-		}
+        return results;
+    }
 
-		return results;
-	}
+    public void shutdown() { executorService.shutdown(); }
 
-	public void shutdown() { executorService.shutdown(); }
+    private Optional<SearchResult> get(Future<SearchResult> future) {
+        SearchResult result = null;
 
-	private Optional<SearchResult> get(Future<SearchResult> future) {
-		SearchResult result;
+        try {
+            result = future.get();
+        } catch (ExecutionException e) {
+            log.warn(e.getMessage(), e);
+        } catch (InterruptedException e) {
+            log.warn(e.getMessage(), e);
+            Thread.currentThread().interrupt();
+        }
 
-		try {
-			result = future.get();
-		} catch (InterruptedException | ExecutionException e) {
-			log.warn(e.getMessage(), e);
-
-			return Optional.empty();
-		}
-
-		return Optional.of(result);
-	}
+        return Optional.ofNullable(result);
+    }
 }

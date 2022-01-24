@@ -1,5 +1,7 @@
 package ru.lukas.langjunkie.dictionarycollections.dictionary;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -9,21 +11,37 @@ import java.io.IOException;
 /**
  * @author Dmitry Lukashevich
  */
-public class JsoupRequest implements Request<Document> {
+@Slf4j
+public class JsoupRequest extends AbstractRequest<Document> implements Request<Document> {
 
     @Override
-    public Document getRequest(String url) throws IOException {
+    public Document getRequest(String url) {
         String ref = url.split("\\?")[0];
+        Document response = new Document("");
 
-        return constructConnection(url).referrer(ref).get();
+        try {
+            response = constructConnection(url).referrer(ref).get();
+        } catch (IOException e) {
+            log.warn("{}, {}", url, e.getMessage());
+        }
+
+        return response;
     }
 
     @Override
-    public Document postRequest(String url, String payload) throws IOException {
-        return constructConnection(url)
-                .referrer(url)
-                .requestBody(payload)
-                .post();
+    public Document postRequest(String url, String payload) {
+        Document response = new Document("");
+
+        try {
+            response = constructConnection(url)
+                    .referrer(url)
+                    .requestBody(payload)
+                    .post();
+        } catch (IOException e) {
+            log.warn("{}, {}", url, e.getMessage());
+        }
+
+        return response;
     }
 
     private Connection constructConnection(String url) {

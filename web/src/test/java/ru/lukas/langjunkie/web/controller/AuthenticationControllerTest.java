@@ -4,42 +4,42 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-
 import org.springframework.test.web.servlet.MvcResult;
+
 import ru.lukas.langjunkie.web.dto.CreateUserDto;
 import ru.lukas.langjunkie.web.service.UserService;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.sql.SQLException;
 
-import static org.mockito.Mockito.doThrow;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import static org.mockito.Mockito.doThrow;
+
 /**
  * @author Dmitry Lukashevich
  */
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("dev")
+@RunWith(SpringRunner.class)
+@WebMvcTest(AuthenticationController.class)
 @DisplayName("AuthenticationController tests")
-public class AuthenticationControllerTest {
+class AuthenticationControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -71,13 +71,39 @@ public class AuthenticationControllerTest {
                         .build());
     }
 
+
+    @Nested
+    @DisplayName("GET /signup tests")
+    class GetSignUpTest {
+
+        @Test
+        @DisplayName("successfully returns signup page")
+        void shouldReturnSignUpPage() throws Exception {
+            mockMvc.perform(get("/signup"))
+                    .andExpect(status().isOk())
+                    .andExpect(model().attributeDoesNotExist("errors"))
+                    .andExpect(model().errorCount(0))
+                    .andExpect(view().name("signup"));
+        }
+    }
+
     @Nested
     @DisplayName("POST /signup tests")
-    public class PostSignUpTest {
+    class PostSignUpTest {
+
+        @Test
+        @DisplayName("returns 403 Forbidden when no csrf in post request")
+        void shouldReturnForbiddenStatusCodeWhenNoCsrf() throws Exception {
+            mockMvc.perform(post("/signup")
+                            .with(csrf().useInvalidToken())
+                            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                            .content("fullname=john&username=john&password=&email=email@mail.org"))
+                    .andExpect(status().isForbidden());
+        }
 
         @Test
         @DisplayName("contains no errors and redirects to / if all fields are filled correctly")
-        public void shouldReturnNoErrorsIfAllFieldsAreFilledCorrectly() throws Exception {
+        void shouldReturnNoErrorsIfAllFieldsAreFilledCorrectly() throws Exception {
             mockMvc.perform(post("/signup")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -89,18 +115,8 @@ public class AuthenticationControllerTest {
         }
 
         @Test
-        @DisplayName("returns 403 Forbidden when no csrf in post request")
-        public void shouldReturnForbiddenStatusCodeWhenNoCsrf() throws Exception {
-            mockMvc.perform(post("/signup")
-                            .with(csrf().useInvalidToken())
-                            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                            .content("fullname=john&username=john&password=&email=email@mail.org"))
-                    .andExpect(status().isForbidden());
-        }
-
-        @Test
         @DisplayName("contains 4 errors if no fields are filled correctly")
-        public void shouldReturnFourErrorsIfNoFieldsAreFilledCorrectly() throws Exception {
+        void shouldReturnFourErrorsIfNoFieldsAreFilledCorrectly() throws Exception {
             mockMvc.perform(post("/signup")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -114,13 +130,13 @@ public class AuthenticationControllerTest {
         // Password constrains
         @Test
         @DisplayName("returns no errors and redirects to / if password length is 6")
-        public void shouldReturnNoErrorsAndRedirectsToIndexIfPasswordLengthIsSix()
+        void shouldReturnNoErrorsAndRedirectsToIndexIfPasswordLengthIsSix()
                 throws Exception
         {
             mockMvc.perform(post("/signup")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                            .content("fullname=john&username=john&password=passwor&email=email@mail.org"))
+                            .content("fullname=john&username=john&password=passwo&email=email@mail.org"))
                     .andExpect(status().is3xxRedirection())
                     .andExpect(model().attributeDoesNotExist("errors"))
                     .andExpect(model().errorCount(0))
@@ -129,7 +145,7 @@ public class AuthenticationControllerTest {
 
         @Test
         @DisplayName("returns no errors and redirects to / if password length is 15")
-        public void shouldReturnNoErrorsAndRedirectsToIndexIfPasswordLengthIsFifteen()
+        void shouldReturnNoErrorsAndRedirectsToIndexIfPasswordLengthIsFifteen()
                 throws Exception
         {
             mockMvc.perform(post("/signup")
@@ -144,7 +160,7 @@ public class AuthenticationControllerTest {
 
         @Test
         @DisplayName("returns no errors and redirects to / if password length is between 6 and 15")
-        public void shouldReturnNoErrorsAndRedirectsToIndexIfPasswordLengthIsBetweenSixAndFifteen()
+        void shouldReturnNoErrorsAndRedirectsToIndexIfPasswordLengthIsBetweenSixAndFifteen()
                 throws Exception
         {
             mockMvc.perform(post("/signup")
@@ -159,7 +175,7 @@ public class AuthenticationControllerTest {
 
         @Test
         @DisplayName("contains errors attribute in model when password is blank")
-        public void shouldReturnErrorsInModelIfPasswordIsBlank() throws Exception {
+        void shouldReturnErrorsInModelIfPasswordIsBlank() throws Exception {
             mockMvc.perform(post("/signup")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -172,7 +188,7 @@ public class AuthenticationControllerTest {
 
         @Test
         @DisplayName("contains errors attribute in model when password length is lt 6")
-        public void shouldReturnErrorsInModelIfPasswordLengthIsLessThanSix() throws Exception {
+        void shouldReturnErrorsInModelIfPasswordLengthIsLessThanSix() throws Exception {
             mockMvc.perform(post("/signup")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -185,7 +201,7 @@ public class AuthenticationControllerTest {
 
         @Test
         @DisplayName("contains errors attribute in model when password length is gt 15")
-        public void shouldReturnErrorsInModelIfPasswordLengthIsGreaterThanFifteen() throws Exception {
+        void shouldReturnErrorsInModelIfPasswordLengthIsGreaterThanFifteen() throws Exception {
             mockMvc.perform(post("/signup")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -198,7 +214,7 @@ public class AuthenticationControllerTest {
 
         @Test
         @DisplayName("contains errors attribute in model when password is null")
-        public void shouldReturnErrorsInModelIfPasswordIsNull() throws Exception {
+        void shouldReturnErrorsInModelIfPasswordIsNull() throws Exception {
             mockMvc.perform(post("/signup")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -213,7 +229,7 @@ public class AuthenticationControllerTest {
         // FullName constrains
         @Test
         @DisplayName("contains errors attribute in model when fullname is Blank")
-        public void shouldReturnErrorsInModelIfFullNameIsBlank() throws Exception {
+        void shouldReturnErrorsInModelIfFullNameIsBlank() throws Exception {
             mockMvc.perform(post("/signup")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -226,7 +242,7 @@ public class AuthenticationControllerTest {
 
         @Test
         @DisplayName("contains errors attribute in model when fullname is null")
-        public void shouldReturnErrorsInModelIfFullNameIsNull() throws Exception {
+        void shouldReturnErrorsInModelIfFullNameIsNull() throws Exception {
             mockMvc.perform(post("/signup")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -241,7 +257,7 @@ public class AuthenticationControllerTest {
         // UserName constrains
         @Test
         @DisplayName("contains errors attribute in model when username is Blank")
-        public void shouldReturnErrorsInModelIfUserNameIsBlank() throws Exception {
+        void shouldReturnErrorsInModelIfUserNameIsBlank() throws Exception {
             mockMvc.perform(post("/signup")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -254,7 +270,7 @@ public class AuthenticationControllerTest {
 
         @Test
         @DisplayName("contains errors attribute in model when username is null")
-        public void shouldReturnErrorsInModelIfUserNameIsNull() throws Exception {
+        void shouldReturnErrorsInModelIfUserNameIsNull() throws Exception {
             mockMvc.perform(post("/signup")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -269,7 +285,7 @@ public class AuthenticationControllerTest {
         // Email constrains
         @Test
         @DisplayName("contains errors attribute in model when email is Blank")
-        public void shouldReturnErrorsInModelIfEmailIsBlank() throws Exception {
+        void shouldReturnErrorsInModelIfEmailIsBlank() throws Exception {
             mockMvc.perform(post("/signup")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -282,7 +298,7 @@ public class AuthenticationControllerTest {
 
         @Test
         @DisplayName("contains errors attribute in model when email is null")
-        public void shouldReturnErrorsInModelIfEmailIsNull() throws Exception {
+        void shouldReturnErrorsInModelIfEmailIsNull() throws Exception {
             mockMvc.perform(post("/signup")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -295,7 +311,7 @@ public class AuthenticationControllerTest {
 
         @Test
         @DisplayName("contains errors attribute in model when email is not valid")
-        public void shouldReturnErrorsInModelIfEmailIsNotValid() throws Exception {
+        void shouldReturnErrorsInModelIfEmailIsNotValid() throws Exception {
             mockMvc.perform(post("/signup")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -313,7 +329,7 @@ public class AuthenticationControllerTest {
                 "returns error attribute with value \"email\" " +
                 "if ConstraintViolationException email is thrown"
         )
-        public void shouldReturnErrorEmailInModelIfConstrainViolationIsThrown()
+        void shouldReturnErrorEmailInModelIfConstrainViolationIsThrown()
                 throws Exception
         {
             MvcResult result = mockMvc.perform(post("/signup")
@@ -336,7 +352,7 @@ public class AuthenticationControllerTest {
                 "returns error attribute with value \"username\" " +
                 "if ConstraintViolationException username is thrown"
         )
-        public void shouldReturnErrorUsernameInModelIfConstrainViolationIsThrown()
+        void shouldReturnErrorUsernameInModelIfConstrainViolationIsThrown()
                 throws Exception
         {
             MvcResult result = mockMvc.perform(post("/signup")
@@ -354,5 +370,35 @@ public class AuthenticationControllerTest {
             );
         }
         // End of username and email unique constrains tests
+    }
+
+    @Nested
+    @DisplayName("GET /signin tests")
+    class GetSignInTest {
+
+        @Test
+        @DisplayName("successfully returns signin page")
+        void shouldReturnSignInPage() throws Exception {
+            mockMvc.perform(get("/signin"))
+                    .andExpect(status().isOk())
+                    .andExpect(model().attributeDoesNotExist("errors"))
+                    .andExpect(model().errorCount(0))
+                    .andExpect(view().name("signin"));
+        }
+    }
+
+    @Nested
+    @DisplayName("GET /signin-failure tests")
+    class GetSignInFailureTest {
+
+        @Test
+        @DisplayName("successfully returns signin page")
+        void shouldReturnSignInPage() throws Exception {
+            mockMvc.perform(get("/signin-failure"))
+                    .andExpect(status().isOk())
+                    .andExpect(model().attributeDoesNotExist("errors"))
+                    .andExpect(model().errorCount(0))
+                    .andExpect(view().name("signin"));
+        }
     }
 }

@@ -1,6 +1,11 @@
 package ru.lukas.langjunkie.web.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,9 +18,9 @@ import ru.lukas.langjunkie.dictionarycollections.dictionary.DictionaryCollection
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = { "frontSide", "backSide", "language", "word" })
 @Builder
-public class CardDto {
+public class CreateCardDto {
 
     private Long id;
     private String frontSide;
@@ -23,6 +28,4 @@ public class CardDto {
     private DictionaryCollection language;
     private String word;
     private MultipartFile picture;
-    private String picturePath;
-
 }

@@ -20,7 +20,7 @@ import javax.persistence.Id;
 @Setter
 public class Role implements GrantedAuthority {
 
-    public static String ROLE_PREFIX = "ROLE_";
+    public static final String ROLE_PREFIX = "ROLE_";
 
     @Id
     private Long id;
