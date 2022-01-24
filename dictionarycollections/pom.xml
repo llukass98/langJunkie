@@ -6,7 +6,7 @@
     <groupId>ru.lukas.langjunkie.dictionarycollections</groupId>
     <artifactId>dictionarycollections</artifactId>
     <packaging>jar</packaging>
-    <version>0.2.1</version>
+    <version>0.3.0</version>
 
     <name>Dictionary collections</name>
     <description>
@@ -38,6 +38,12 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.2.8</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.13.1</version>
         </dependency>
 
         <dependency>

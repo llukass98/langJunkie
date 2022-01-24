@@ -21,12 +21,12 @@ import javax.xml.crypto.KeySelectorException;
 @RequestMapping("/api/v1.0b")
 public class DictionaryController {
 
-	private final DictionaryService dictionaryService;
+    private final DictionaryService dictionaryService;
 
-	@GetMapping("/definitions")
-	public DictionaryDto definitions (@RequestParam String word, @RequestParam DictionaryCollection lang)
-			throws KeySelectorException
-	{
-		return dictionaryService.getDefinitions(word, lang);
-	}
+    @GetMapping("/definitions")
+    public DictionaryDto definitions (@RequestParam String word, @RequestParam DictionaryCollection lang)
+            throws KeySelectorException
+    {
+        return dictionaryService.getDefinitions(word, lang);
+    }
 }
